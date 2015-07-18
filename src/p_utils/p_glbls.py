@@ -5,6 +5,7 @@
 import  p_utils
 
 prog_name    = 'z_main'
+prog_path    = None
 
 prefix   = ''
 

@@ -94,7 +94,7 @@ __date__ = "$05.05.2015 21:55:22$"
 """
 ###
 
-# ad pytest
+# ad pytest:
 
 # ad decorator:
 # https://pythonconquerstheuniverse.wordpress.com/2012/04/29/python-decorators/
@@ -148,11 +148,12 @@ def create_ca_parser(prog_name):
     # start new ConfArgParser to create cfg-file for >y_main.py<
     subprocess.call([subprocess_path, cfg_path], shell=True)
 
-def create_main(prog_name):
+def create_main():
     """
     writes new y_main.py
     """
     p_log_this()
+    p_utils.p_main()
     # print 'p_glbls.dir_main = ', p_glbls.dir_main
     # print '-----------------'
     # p_glbls.print_p_cfg_vars()
@@ -174,7 +175,7 @@ if __name__ == "__main__":
     p_log_init(log_dir = 'p_log', log_fn = 'pyprogen')
     p_log_start()
     pyprogen()
-    prog_name = p_glbls.prog_name
-    create_main(prog_name)
+    #prog_name = p_glbls.prog_name
+    create_main()
     p_log_end()
     p_utils.p_exit()
