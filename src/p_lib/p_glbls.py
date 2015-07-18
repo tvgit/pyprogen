@@ -12,8 +12,9 @@ dir_log  = None
 cfg_fn   = None
 cfg_path = None
 
-CAParser_fn  = None
-CAParser_path= None
+CAParser_fn  = None  # filename
+CAParser_path= None  # path
+CAParser_func= None  # function name
 
 opt_arg_vars = None
 pos_arg_vars = None

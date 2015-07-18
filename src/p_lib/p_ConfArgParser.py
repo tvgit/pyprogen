@@ -102,7 +102,11 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
                         pos_arg_lines.append(line)
 
     virt_file = StringIO.StringIO()
-    virt_file.write(CA_Parser_02.replace("replace_w_program_name", p_glbls.prog_name))
+    # p_glbls.CAParser_func
+    func_name = p_glbls.prefix + 'parser'
+    CA_Parser_02 = CA_Parser_02.replace("xx_parser", func_name)
+    CA_Parser_02 = CA_Parser_02.replace("xx_program_name", p_glbls.prog_name)
+    virt_file.write(CA_Parser_02)
 
     for line in pos_arg_lines:
         virt_file.write('    ' + line)
@@ -113,8 +117,9 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     # virt_file.write(CA_Parser_98)
     CAParser_fn = p_glbls.prefix + 'CAParser.py'
     p_glbls.CAParser_fn = CAParser_fn
-    virt_file.write(CA_Parser_98.replace("xx_CAParser", CAParser_fn))
-
+    CA_Parser_98 = CA_Parser_98.replace("xx_parser", func_name)
+    CA_Parser_98 = CA_Parser_98.replace("xx_CAParser", CAParser_fn)
+    virt_file.write(CA_Parser_98)
 
     # log positional and optional arguments
     for arg in pos_args:
@@ -122,9 +127,7 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     for arg in opt_args:
         p_log_this('opt. arg: ' + arg)
 
-
     # write __CAParser.py == ConfArgParser for new program
-#    outfile_path = os.path.join(p_utils.p_glbls.dir_lib, CAParser_fn)
     outfile_path = os.path.join(p_glbls.dir_lib, CAParser_fn)
     p_glbls.CAParser_path = outfile_path
 

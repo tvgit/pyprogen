@@ -3,7 +3,7 @@
 # INFO       2015-07-18 20:36:05  p_log_end:  y_main.py Logging end
 
 y_main_02 = """
-import lib.xx_CAParser    # substituted by your CAParser
+from   lib.xx_CAParser  import  xx_parser
 import lib.p_utils as p_utils
 from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 
@@ -53,8 +53,8 @@ import confargparse
 import argparse
 import sys
 
-def m_parser(command = '', cfg_path=''):
-    parser = confargparse.ConfArgParser(description='Program: replace_w_program_name')
+def xx_parser(command = '', cfg_path=''):
+    parser = confargparse.ConfArgParser(description='Program: xx_program_name')
     # exclude positional args when exporting conf-file
     if (command <> '--export-conf-file'):
 """
@@ -81,7 +81,7 @@ if __name__ == "__main__":
         print ('| xx_CAParser: Setting config path to: ' + cfg_path)
     else:
         print '| conf_path= ', cfg_path
-    m_parser('--export-conf-file', cfg_path)
+    xx_parser('--export-conf-file', cfg_path)
     print '| xx_CAParser: end'
     print '-' * 20
 else:

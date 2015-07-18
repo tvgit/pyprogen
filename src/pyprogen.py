@@ -166,7 +166,7 @@ def create_main():
     """     writes new y_main.py     """
     p_log_this()
     p_code.p_main()
-    
+
 
 def pyprogen():
     """
