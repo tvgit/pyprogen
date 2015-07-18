@@ -103,7 +103,7 @@ import os
 import subprocess
 import p_lib.p_glbls as p_glbls  # share global values
 import p_lib.p_utils as p_utils
-from   p_lib.p_utils import p_read_ini
+import p_lib.p_code as p_code
 from   p_lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 from   p_lib.p_ConfArgParser import p_ConfArgParser
 
@@ -153,7 +153,7 @@ def create_main():
     writes new y_main.py
     """
     p_log_this()
-    p_utils.p_main()
+    p_code.p_main()
     # print 'p_glbls.dir_main = ', p_glbls.dir_main
     # print '-----------------'
     # p_glbls.print_p_cfg_vars()
@@ -163,10 +163,10 @@ def pyprogen():
     creates basic dir-structure
     creates basic python program according to >pyprogen.conf< and .....
     """
-    p_read_ini(".", "pyprogen.ini")  # dir relative to >.<
-    prog_name = p_glbls.prog_name
+    p_log_this()
+    # "pyprogen.ini" =>>>  basic.conf oä ??
+    p_code.p_read_ini(".", "pyprogen.ini")  # dir relative to >.<
     prog_path = p_glbls.prog_path
-    p_log_this('prog_path = ' + prog_path)
     create_maindir(prog_path)
     create_subdirs(prog_path)
     create_ca_parser(prog_path)   # create & start new ConfArgParser

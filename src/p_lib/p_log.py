@@ -49,7 +49,7 @@ def scriptinfo():
                 "name": scriptname,
                 "source": trc}
 
-    # from here on, we are in the interpreted case
+    # from p_here on, we are in the interpreted case
     scriptdir, trc = os.path.split(trc)
     # if trc did not contain directory information,
     # the current working directory is what we need
@@ -181,14 +181,14 @@ def p_log_status(txt=''):
 if __name__ == "__main__":
     print ('p_log.py')
     p_log_init(log_dir='', log_fn='p_log')
-    p_log_start('p_utils')
+    p_log_start('p_lib')
     p_log_this('test 01 ')
     p_log_this('debug', 'debug')
     p_log_this('info', 'info')
     p_log_this('warning', 'warning')
     p_log_this('error', 'error')
     p_log_this('critical', 'critical')
-    p_log_end ('p_utils')
+    p_log_end ('p_lib')
 
     sys.exit('Program gentle exiting')
 else:
