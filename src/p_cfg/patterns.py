@@ -1,21 +1,21 @@
 # -------------- y_main.py
 
 y_main_02 = """
-import xx_CAParser    # substituted by your CAParser
+#import lib.xx_CAParser    # substituted by your CAParser
+import lib.p_log
+
 import sys
 
 def m_parser(command = '', cfg_path=''):
     parser = confargparse.ConfArgParser(description='Program: replace_w_program_name')
     # exclude positional args when exporting conf-file
     if (command <> '--export-conf-file'):
+        pass
 
 
 if __name__ == "__main__":
-    p_log_init(log_dir = 'p_log', log_fn = 'pyprogen')
+    p_log_init(log_dir = 'log', log_fn = 'xx_main.log')
     p_log_start()
-    pyprogen()
-    #prog_name = p_glbls.prog_name
-    create_main()
     p_log_end()
     p_utils.p_exit()
 

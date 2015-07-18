@@ -100,6 +100,7 @@ __date__ = "$05.05.2015 21:55:22$"
 # https://pythonconquerstheuniverse.wordpress.com/2012/04/29/python-decorators/
 
 import os
+import shutil
 import subprocess
 import p_lib.p_glbls as p_glbls  # share global values
 import p_lib.p_utils as p_utils
@@ -113,6 +114,7 @@ def create_maindir(dir_name):
     p_glbls.dir_main = p_utils.p_subdir_make(dir_name)
     p_glbls.dir_main = os.path.join('.', p_glbls.dir_main)
 
+
 def create_subdirs(prog_name):
     """ """
     p_log_this()
@@ -125,6 +127,21 @@ def create_subdirs(prog_name):
     p_glbls.dir_log = p_utils.p_subdir_make(os.path.join(prog_name, 'log'))
     p_glbls.dir_log = os.path.join('.', p_glbls.dir_log)
 
+def copy_p_utils_p_log():
+    """ """
+    p_log_this()
+    p_utils_srce_path = os.path.join('.', 'p_lib', 'p_utils.py')
+    p_utils_srce_path = os.path.normpath(p_utils_srce_path )
+    p_utils_dest_path = os.path.join('.', p_glbls.dir_lib, 'p_utils.py')
+    p_utils_dest_path = os.path.normpath(p_utils_dest_path )
+    shutil.copy(p_utils_srce_path, p_utils_dest_path)
+
+    p_log_srce_path = os.path.join('.', 'p_lib', 'p_log.py')
+    p_log_srce_path = os.path.normpath(p_log_srce_path )
+    p_log_dest_path = os.path.join('.', p_glbls.dir_lib, 'p_log.py')
+    p_log_dest_path = os.path.normpath(p_log_dest_path )
+    shutil.copy(p_log_srce_path, p_log_dest_path)
+
 def create_ca_parser(prog_name):
     """ Writes via p_ConfArgParser() in ./y_main/lib a new
     confargparser == >y_CAParser.py< for the new program >y_main.py<.
@@ -136,9 +153,7 @@ def create_ca_parser(prog_name):
     """
     p_log_this()
     p_ConfArgParser('./pyprogen_001.conf') # create confargparser for >y_main.py<
-    loc_path = os.getcwd()
-    #print loc_path
-    #subprocess_path  = os.path.join(loc_path, p_glbls.CAParser_path)
+    # loc_path = os.getcwd()
     subprocess_path  = p_glbls.CAParser_path
     p_log_this("subprocess_path = " + subprocess_path)
     p_glbls.cfg_fn = prog_name + '.cfg'   # cfg-file of new y_main.py
@@ -149,14 +164,9 @@ def create_ca_parser(prog_name):
     subprocess.call([subprocess_path, cfg_path], shell=True)
 
 def create_main():
-    """
-    writes new y_main.py
-    """
+    """     writes new y_main.py     """
     p_log_this()
     p_code.p_main()
-    # print 'p_glbls.dir_main = ', p_glbls.dir_main
-    # print '-----------------'
-    # p_glbls.print_p_cfg_vars()
 
 def pyprogen():
     """
@@ -177,6 +187,7 @@ if __name__ == "__main__":
     p_log_start()
     pyprogen()
     #prog_name = p_glbls.prog_name
+    copy_p_utils_p_log()
     create_main()
     p_log_end()
     p_utils.p_exit()

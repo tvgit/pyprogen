@@ -48,6 +48,7 @@ def p_dir_check_isabs(dir):
 
 def p_dir_make(dir):
     """ makes dir if dir """
+    dir = os.path.normpath(dir)
     if not os.path.exists(dir):
         try:
             os.makedirs(dir)
