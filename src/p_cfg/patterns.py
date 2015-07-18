@@ -12,9 +12,7 @@ import sys
 def parse_args(command, cfg_path):
     if command:
         print command, cfg_path
-    args = xx_parser(command, cfg_path)
-    print args
-
+    xx_parser(command, cfg_path)
 """
 
 y_main_04 = """
@@ -59,11 +57,16 @@ CA_Parser_04 = """
         parser.parse_args(['--export-conf-file', cfg_path])
         # ConfArgParser obviously exits? Here! Why?
     elif cfg_path:
+        print '++++++++ read from: ', cfg_path
         args = parser.parse_args(['--conf-file', cfg_path])
     else:
         args = parser.parse_args()
 
-    print 'args: ' , args
+    args = vars(args)
+    for key, value in sorted(args.iteritems()):
+        print "%s  =  %s " % (key, value)
+
+    #print 'args: ' , args
 # http://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
 # https://parezcoydigo.wordpress.com/2012/08/04/from-argparse-to-dictionary-in-python-2-7/
 """
@@ -73,6 +76,7 @@ CA_Parser_96 = """
 
 CA_Parser_98 = """
 if __name__ == "__main__":
+    p_log_this('generating cfg-file')
     print '-' * 20
     print '| xx_CAParser: running'
     cfg_path = sys.argv[1]
