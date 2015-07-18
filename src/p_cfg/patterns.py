@@ -9,23 +9,11 @@ from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 
 import sys
 
-def m_parser(command = '', cfg_path=''):
-    parser = confargparse.ConfArgParser(description='Program: replace_w_program_name')
-    # exclude positional args when exporting conf-file
-    if (command <> '--export-conf-file'):
-        pass
+def parse_args(command):
+    if command:
+        print command
+    xx_parser(command)
 
-
-if __name__ == "__main__":
-    p_log_init(log_dir = 'log', log_fn = 'xx_main.log')
-    p_log_start()
-
-    prog_info = p_utils.scriptinfo()
-    prog_name = prog_info['name']
-    print '\\n' + '__main__ : ' + prog_name + '\\n'
-
-    p_log_end()
-    p_utils.p_exit()
 """
 
 y_main_04 = """
@@ -36,12 +24,16 @@ y_main_96 = """
 
 y_main_98 = """
 if __name__ == "__main__":
-    print '-' * 20
-    print '| xx_main: running'
-    print '| xx_CAParser: end'
-    print '-' * 20
-else:
-    pass
+    p_log_init(log_dir = 'log', log_fn = 'xx_main.log')
+    p_log_start()
+
+    prog_info = p_utils.scriptinfo()
+    prog_name = prog_info['name']
+    print '\\n' + '__main__ : ' + prog_name + '\\n'
+    parse_args('no_pos_args')
+
+    p_log_end()
+    p_utils.p_exit()
 """
 
 
@@ -56,13 +48,15 @@ import sys
 def xx_parser(command = '', cfg_path=''):
     parser = confargparse.ConfArgParser(description='Program: xx_program_name')
     # exclude positional args when exporting conf-file
-    if (command <> '--export-conf-file'):
+    if (command <> '--export-conf-file') and (command <> 'no_pos_args'):
 """
 
 CA_Parser_04 = """
     if (command == '--export-conf-file'):
         parser.parse_args(['--export-conf-file', cfg_path])
-        # ConfArgParser obviously exits? Why?
+        # ConfArgParser obviously exits? Here! Why?
+    else:
+        parser.parse_args()
 # http://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
 # https://parezcoydigo.wordpress.com/2012/08/04/from-argparse-to-dictionary-in-python-2-7/
 """

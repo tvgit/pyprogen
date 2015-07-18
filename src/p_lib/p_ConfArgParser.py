@@ -103,8 +103,8 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
 
     virt_file = StringIO.StringIO()
     # p_glbls.CAParser_func
-    func_name = p_glbls.prefix + 'parser'
-    CA_Parser_02 = CA_Parser_02.replace("xx_parser", func_name)
+    p_glbls.CAParser_func = p_glbls.prefix + 'parser'
+    CA_Parser_02 = CA_Parser_02.replace("xx_parser", p_glbls.CAParser_func)
     CA_Parser_02 = CA_Parser_02.replace("xx_program_name", p_glbls.prog_name)
     virt_file.write(CA_Parser_02)
 
@@ -117,7 +117,7 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     # virt_file.write(CA_Parser_98)
     CAParser_fn = p_glbls.prefix + 'CAParser.py'
     p_glbls.CAParser_fn = CAParser_fn
-    CA_Parser_98 = CA_Parser_98.replace("xx_parser", func_name)
+    CA_Parser_98 = CA_Parser_98.replace("xx_parser", p_glbls.CAParser_func)
     CA_Parser_98 = CA_Parser_98.replace("xx_CAParser", CAParser_fn)
     virt_file.write(CA_Parser_98)
 

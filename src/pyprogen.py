@@ -156,11 +156,11 @@ def create_ca_parser(prog_name):
     subprocess_path  = p_glbls.CAParser_path
     p_log_this("subprocess_path = " + subprocess_path)
     p_glbls.cfg_fn = prog_name + '.cfg'   # cfg-file of new y_main.py
-    cfg_path = os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn)
-    p_log_this("cfg_path = " + cfg_path)
+    p_glbls.cfg_path = os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn)
+    p_log_this("cfg_path = " + p_glbls.cfg_path)
     # http://pymotw.com/2/subprocess/
     # start new ConfArgParser to create cfg-file for >y_main.py<
-    subprocess.call([subprocess_path, cfg_path], shell=True)
+    subprocess.call([subprocess_path, p_glbls.cfg_path], shell=True)
 
 def create_main():
     """     writes new y_main.py     """
@@ -182,6 +182,7 @@ def pyprogen():
     create_ca_parser(prog_path)   # create & start new ConfArgParser
     copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
     create_main()                 # create new y_main.py
+    p_glbls.print_p_cfg_vars()
 
 
 if __name__ == "__main__":
