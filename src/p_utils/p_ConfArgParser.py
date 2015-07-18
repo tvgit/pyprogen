@@ -10,49 +10,63 @@ __date__ = "$02.07.2015 21:55:22$"
 import StringIO
 import re
 import os
+import sys
+
 import p_glbls
 import p_utils
 from   p_log   import p_log_this
 
-CA_Parser_02 = """
-import confargparse
-import argparse
-import sys
+#cfg_path = os.path.abspath(os.path.join('..', 'p_cfg'))
+cfg_path = os.path.join('.', 'p_cfg')
+cfg_path = os.path.normpath(cfg_path)
+cfg_path = os.path.abspath(cfg_path)
+sys.path.append(cfg_path)
+print '>>>>>>>>>'
+print cfg_path
+loc_path = os.getcwd()
+print loc_path
 
-def m_parser(command = '', cfg_path=''):
-    parser = confargparse.ConfArgParser(description='Program: replace_w_program_name')
-    # exclude positional args when exporting conf-file
-    if (command <> '--export-conf-file'):
-"""
+import patterns
 
-CA_Parser_04 = """
-    if (command == '--export-conf-file'):
-        parser.parse_args(['--export-conf-file', cfg_path])
-        # ConfArgParser obviously exits? Why?
-# http://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
-# https://parezcoydigo.wordpress.com/2012/08/04/from-argparse-to-dictionary-in-python-2-7/
-"""
-
-CA_Parser_96 = """
-"""
-
-CA_Parser_98 = """
-if __name__ == "__main__":
-    print '-' * 20
-    print '| xx_CAParser: running'
-    cfg_path = sys.argv[1]
-    if not cfg_path:
-        print '| xx_CAParser: No config path?? '
-        cfg_path = os.path.join('.', 'main\cfg', 'conf.ini')
-        print ('| xx_CAParser: Setting config path to: ' + cfg_path)
-    else:
-        print '| conf_path= ', cfg_path
-    m_parser('--export-conf-file', cfg_path)
-    print '| xx_CAParser: end'
-    print '-' * 20
-else:
-    pass
-"""
+# CA_Parser_02 = """
+# import confargparse
+# import argparse
+# import sys
+#
+# def m_parser(command = '', cfg_path=''):
+#     parser = confargparse.ConfArgParser(description='Program: replace_w_program_name')
+#     # exclude positional args when exporting conf-file
+#     if (command <> '--export-conf-file'):
+# """
+#
+# CA_Parser_04 = """
+#     if (command == '--export-conf-file'):
+#         parser.parse_args(['--export-conf-file', cfg_path])
+#         # ConfArgParser obviously exits? Why?
+# # http://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
+# # https://parezcoydigo.wordpress.com/2012/08/04/from-argparse-to-dictionary-in-python-2-7/
+# """
+#
+# CA_Parser_96 = """
+# """
+#
+# CA_Parser_98 = """
+# if __name__ == "__main__":
+#     print '-' * 20
+#     print '| xx_CAParser: running'
+#     cfg_path = sys.argv[1]
+#     if not cfg_path:
+#         print '| xx_CAParser: No config path?? '
+#         cfg_path = os.path.join('.', 'main\cfg', 'conf.ini')
+#         print ('| xx_CAParser: Setting config path to: ' + cfg_path)
+#     else:
+#         print '| conf_path= ', cfg_path
+#     m_parser('--export-conf-file', cfg_path)
+#     print '| xx_CAParser: end'
+#     print '-' * 20
+# else:
+#     pass
+# """
 
 def make_regex_opt_arg_minus():
     """ '-f' // thx to http://txt2re.com !"""
@@ -86,8 +100,21 @@ def make_regex_pos_arg():
     return rgx_pos_arg
 
 
+def p_read_pattern():
+    """ gets patterns fpr CA_Parser (from ./p_cfg/patterns.py<) """
+    CA_Parser_02 = patterns.CA_Parser_02
+    CA_Parser_04 = patterns.CA_Parser_04
+    CA_Parser_96 = patterns.CA_Parser_96
+    CA_Parser_98 = patterns.CA_Parser_98
+
+
 def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     p_log_this()
+    # p_read_pattern()
+    CA_Parser_02 = patterns.CA_Parser_02
+    CA_Parser_04 = patterns.CA_Parser_04
+    CA_Parser_96 = patterns.CA_Parser_96
+    CA_Parser_98 = patterns.CA_Parser_98
 
     opt_args             = []  # local list of opt-args
     pos_args             = []  # local list of pos-args
@@ -146,7 +173,6 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     # virt_file.write(CA_Parser_98)
     outfile_fn   = p_glbls.prefix + 'CAParser.py'
     virt_file.write(CA_Parser_98.replace("xx_CAParser", outfile_fn))
-
 
     # log positional and optional arguments
     for arg in pos_args:

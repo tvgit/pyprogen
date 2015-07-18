@@ -41,7 +41,7 @@ __date__ = "$05.05.2015 21:55:22$"
     line arguments and/or configuration files.
 
     Pyprogen itself is easily configured via its own configuration file:
-    >pyprogen.cfg<. Here You configure the name of the generated python
+    >pyprogen.ini<. Here You configure the name of the generated python
     script (default: >y_main.py<), the extent of its logging, its the
     commandline arguments and its configuration file.
 
@@ -103,17 +103,17 @@ import os
 import subprocess
 import p_utils.p_glbls as p_glbls  # share global values
 import p_utils.p_utils as p_utils
-from   p_utils.p_utils import p_read_cfg
+from   p_utils.p_utils import p_read_ini
 from   p_utils.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 from   p_utils.p_ConfArgParser import p_ConfArgParser
 
-def create_maindir(dir_name = 'y_main' ):
+def create_maindir(dir_name):
     """ """
     p_log_this()
     p_glbls.dir_main = p_utils.p_subdir_make(dir_name)
     p_glbls.dir_main = os.path.join('.', p_glbls.dir_main)
 
-def create_subdirs(prog_name = 'y_main'):
+def create_subdirs(prog_name):
     """ """
     p_log_this()
     p_glbls.dir_cfg = p_utils.p_subdir_make(os.path.join(prog_name, 'cfg'))
@@ -125,19 +125,20 @@ def create_subdirs(prog_name = 'y_main'):
     p_glbls.dir_log = p_utils.p_subdir_make(os.path.join(prog_name, 'log'))
     p_glbls.dir_log = os.path.join('.', p_glbls.dir_log)
 
-def create_ca_parser(prog_name = 'y_main'):
-    """ Writes via p_ConfArgParser() in ./main/lib a new
-    confargparser == >m_CAParser.py< for the new program >y_main.py<.
+def create_ca_parser(prog_name):
+    """ Writes via p_ConfArgParser() in ./y_main/lib a new
+    confargparser == >y_CAParser.py< for the new program >y_main.py<.
     Configure it according to >pyprogen_XXX.conf<
 
-    Then call >m_CAParser.py< via subprocess.
-    Since >m_CAParser.py< is prepared to write a conf file, if called as
+    Then call >y_CAParser.py< via subprocess.
+    Since >y_CAParser.py< is prepared to write a conf file, if called as
     script, it will write a config-file to ./y_main/cfg
     """
     p_log_this()
-    p_ConfArgParser('./pyprogen_001.conf')# create confargparser for >y_main.py<
+    p_ConfArgParser('./pyprogen_001.conf') # create confargparser for >y_main.py<
     loc_path = os.getcwd()
-    subprocess_path  = os.path.join(loc_path, p_glbls.CAParser_path)
+    #print loc_path
+    #subprocess_path  = os.path.join(loc_path, p_glbls.CAParser_path)
     subprocess_path  = p_glbls.CAParser_path
     p_log_this("subprocess_path = " + subprocess_path)
     p_glbls.cfg_fn = prog_name + '.cfg'   # cfg-file of new y_main.py
@@ -147,21 +148,21 @@ def create_ca_parser(prog_name = 'y_main'):
     # start new ConfArgParser to create cfg-file for >y_main.py<
     subprocess.call([subprocess_path, cfg_path], shell=True)
 
-def create_main(prog_name = 'y_main'):
+def create_main(prog_name):
     """
     writes new y_main.py
     """
     p_log_this()
-    print 'p_glbls.dir_main = ', p_glbls.dir_main
-    print '-----------------'
-    p_glbls.print_p_cfg_vars()
+    # print 'p_glbls.dir_main = ', p_glbls.dir_main
+    # print '-----------------'
+    # p_glbls.print_p_cfg_vars()
 
 def pyprogen():
     """
     creates basic dir-structure
     creates basic python program according to >pyprogen.conf< and .....
     """
-    p_read_cfg(".", "pyprogen.cfg")  # dir relative to >.<
+    p_read_ini(".", "pyprogen.ini")  # dir relative to >.<
     prog_name = p_glbls.prog_name
     p_log_this('prog_name = ' + prog_name)
     create_maindir(prog_name)
@@ -173,6 +174,7 @@ if __name__ == "__main__":
     p_log_init(log_dir = 'p_log', log_fn = 'pyprogen')
     p_log_start()
     pyprogen()
-    create_main()
+    prog_name = p_glbls.prog_name
+    create_main(prog_name)
     p_log_end()
     p_utils.p_exit()

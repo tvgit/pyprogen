@@ -20,17 +20,18 @@ import inspect
 import p_glbls  # share global values
 from   p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 
-# used in: def p_read_cfg():
-pyprogen_cfg = """
+# used in: def p_read_ini():
+pyprogen_ini = """
 [properties]
 prog_name = y_main
 """
 
-def p_read_cfg(dir_cfg='.', cfg_fn='pyprogen.cfg'):
+def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
     """ reads defaults for generated program: name ..."""
     cfg_path = os.path.join(dir_cfg, cfg_fn)
+    cfg_path = os.path.normpath(cfg_path)
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
-    # parser.readfp(io.BytesIO(pyprogen_cfg))
+    # parser.readfp(io.BytesIO(pyprogen_ini))
     p_log_this('cfg_path: ' + cfg_path)
     cfg_file = parser.read(cfg_path)
     p_log_this('cfg file: ' + str(cfg_file))
@@ -39,6 +40,10 @@ def p_read_cfg(dir_cfg='.', cfg_fn='pyprogen.cfg'):
         p_glbls.prog_name = 'z_main'
     p_glbls.prefix    = p_glbls.prog_name[0] + '_'  # prefix for generated program
     p_log_this("prog_name = " + p_glbls.prog_name)
+
+    p_glbls.patterns_fn   = parser.get("properties", "patterns")
+    p_glbls.patterns_path = os.path.join('.', 'p_cfg', p_glbls.patterns_fn)
+    p_glbls.patterns_path = os.path.normpath(p_glbls.patterns_path)
 
 def make_act_date_str():
     now = datetime.datetime.now()
@@ -125,7 +130,7 @@ if __name__ == "__main__":
     # logger = p_log_init(log_fn='p_utils')
     p_log_init(log_dir='', log_fn='p_utils')
     p_log_start()
-    p_read_cfg()
+    p_read_ini()
     print '\n' + '__main__ : ' + p_glbls.prog_name + '\n'
     p_log_end('p_utils')
     p_exit('Program gentle exiting')
