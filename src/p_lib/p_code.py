@@ -12,7 +12,7 @@ import p_utils
 from   p_log import p_log_this
 import p_cfg.patterns as patterns
 
-# used in: def p_read_ini():
+# may be used in: def p_read_ini():
 pyprogen_ini = """
 [properties]
 prog_name = y_main

@@ -130,6 +130,7 @@ def create_subdirs(prog_name):
 def copy_p_utils_p_log_init():
     """ """
     p_log_this()
+    # dammed '__init__.py'! 2 hrs of nirwana!
     fn_list = ['p_utils.py', 'p_log.py', '__init__.py']
     for fn in fn_list:
         p_utils_srce_path = os.path.join('.', 'p_lib', fn)
@@ -139,26 +140,6 @@ def copy_p_utils_p_log_init():
         shutil.copy(p_utils_srce_path, p_utils_dest_path)
         p_log_this( fn + 'copied')
 
-    # fn = 'p_utils.py'
-    # p_utils_srce_path = os.path.join('.', 'p_lib', fn)
-    # p_utils_srce_path = os.path.normpath(p_utils_srce_path )
-    # p_utils_dest_path = os.path.join('.', p_glbls.dir_lib, fn)
-    # p_utils_dest_path = os.path.normpath(p_utils_dest_path )
-    # shutil.copy(p_utils_srce_path, p_utils_dest_path)
-    #
-    # fn = 'p_log.py'
-    # p_log_srce_path = os.path.join('.', 'p_lib', fn)
-    # p_log_srce_path = os.path.normpath(p_log_srce_path )
-    # p_log_dest_path = os.path.join('.', p_glbls.dir_lib, fn)
-    # p_log_dest_path = os.path.normpath(p_log_dest_path )
-    # shutil.copy(p_log_srce_path, p_log_dest_path)
-    #
-    # fn = '__init__.py'
-    # p_log_srce_path = os.path.join('.', 'p_lib', fn)
-    # p_log_srce_path = os.path.normpath(p_log_srce_path )
-    # p_log_dest_path = os.path.join('.', p_glbls.dir_lib, '__init__.py')
-    # p_log_dest_path = os.path.normpath(p_log_dest_path )
-    # shutil.copy(p_log_srce_path, p_log_dest_path)
 
 def create_ca_parser(prog_name):
     """ Writes via p_ConfArgParser() in ./y_main/lib a new
@@ -185,6 +166,7 @@ def create_main():
     """     writes new y_main.py     """
     p_log_this()
     p_code.p_main()
+    
 
 def pyprogen():
     """
@@ -194,18 +176,17 @@ def pyprogen():
     p_log_this()
     # "pyprogen.ini" =>>>  basic.conf oä ??
     p_code.p_read_ini(".", "pyprogen.ini")  # dir relative to >.<
-    prog_path = p_glbls.prog_path
-    create_maindir(prog_path)
-    create_subdirs(prog_path)
+    prog_path = p_glbls.prog_path # ./y_main here will >y_main.py< live
+    create_maindir(prog_path)     # create dir
+    create_subdirs(prog_path)     # create subdirs ./y_main/lib, ./y_main/log ...
     create_ca_parser(prog_path)   # create & start new ConfArgParser
+    copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
+    create_main()                 # create new y_main.py
 
 
 if __name__ == "__main__":
     p_log_init(log_dir = 'p_log', log_fn = 'pyprogen')
     p_log_start()
     pyprogen()
-    #prog_name = p_glbls.prog_name
-    copy_p_utils_p_log_init()
-    create_main()
     p_log_end()
     p_utils.p_exit()

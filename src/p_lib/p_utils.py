@@ -10,18 +10,14 @@ __date__ = "$05.05.2015 21:55:22$"
 
 import os
 import sys
-import string
-
-import ConfigParser  # read configfile
 
 import datetime
 import inspect
 
-#import p_glbls  # share global values
 from   p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 
 def scriptinfo():
-    ''' returns name of script. See:
+    ''' returns name of running script. See:
     http://code.activestate.com/recipes/579018-python-determine-name-and-directory-of-the-top-lev/
     '''
 
@@ -129,10 +125,9 @@ def p_here(txt='', level=2):
     return mssge
 
 if __name__ == "__main__":
-    print p_here('', 1)
-    # logger = p_log_init(log_fn='p_lib')
     p_log_init(log_dir='', log_fn='p_lib')
     p_log_start()
+    print p_here('', 1)        # does not work
     prog_info = scriptinfo()
     prog_name = prog_info['name']
     print '\n' + '__main__ : ' + prog_name + '\n'

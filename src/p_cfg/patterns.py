@@ -1,13 +1,11 @@
 # -------------- y_main.py
-# INFO       2015-07-18 20:36:05  p_log_start:  y_main.py Logging started
+# INFO       2015-07-18 20:36:05  p_log_start:  y_main.py Logging started (first time!)
 # INFO       2015-07-18 20:36:05  p_log_end:  y_main.py Logging end
 
 y_main_02 = """
 import lib.xx_CAParser    # substituted by your CAParser
-
-from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 import lib.p_utils as p_utils
-
+from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 
 import sys
 
@@ -21,9 +19,13 @@ def m_parser(command = '', cfg_path=''):
 if __name__ == "__main__":
     p_log_init(log_dir = 'log', log_fn = 'xx_main.log')
     p_log_start()
+
+    prog_info = p_utils.scriptinfo()
+    prog_name = prog_info['name']
+    print '\\n' + '__main__ : ' + prog_name + '\\n'
+
     p_log_end()
     p_utils.p_exit()
-
 """
 
 y_main_04 = """
