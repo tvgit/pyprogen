@@ -29,9 +29,7 @@ __date__ = "$05.05.2015 21:55:22$"
 
 """
     0.
-
-    Do a >pip install ConfArgParse< (as admin in windows)
-
+    First do a >pip install ConfArgParse< (as admin in windows)
 
     pyprogen:
     generates a basic python program structure, that offers
@@ -56,13 +54,13 @@ __date__ = "$05.05.2015 21:55:22$"
     >ConfArgParse< is able to read and to write configuration files.
     If you want to generate a configuration file for later modification,
     add the desired options as arguments to your >ConfArgParse< - parser.
-    Then call your program with the "-n --export-conf-file > y_main.cfg"
+    Then call your program with the "-n --export-conf-file > y_main_test.cfg"
     argument and the configuration file will be written.
 
     The same procedure is followed by pyprogen, to produce the the
     configuration file for your >y_main.py<. Pyprogen writes firstly
     the program code for the parser >y_CAParser.py<, then executes
-    >y_CAParser.py< with the "--export-conf-file > ./y_main/cfg/y_main.cfg".
+    >y_CAParser.py< with the "--export-conf-file > ./y_main/cfg/y_main_test.cfg".
     Then you will find the new >y_main.conf< for your >y_main.py<
     in the ./y_main/cfg/ dir.  ,mnb
 
@@ -74,7 +72,7 @@ __date__ = "$05.05.2015 21:55:22$"
 
     4. howto log / ok
 
-    5.  howto config/ini / ok
+    5. howto config/ini / ok
     (http://martin-thoma.com/configuration-files-in-python/)
 
     6. python program schreiben, das als Input ein paar Parameter hat ...
@@ -179,8 +177,8 @@ def pyprogen():
     prog_path = p_glbls.prog_path # ./y_main here will >y_main.py< live
     create_maindir(prog_path)     # create dir
     create_subdirs(prog_path)     # create subdirs ./y_main/lib, ./y_main/log ...
-    create_ca_parser(prog_path)   # create & start new ConfArgParser
     copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
+    create_ca_parser(prog_path)   # create & start new ConfArgParser
     create_main()                 # create new y_main.py
     p_glbls.print_p_cfg_vars()
 
