@@ -17,8 +17,34 @@ import ConfigParser  # read configfile
 import datetime
 import inspect
 
-import p_glbls  # share global values
+#import p_glbls  # share global values
 from   p_log   import p_log_init, p_log_start, p_log_this, p_log_end
+
+def scriptinfo():
+    ''' returns name of script. See:
+    http://code.activestate.com/recipes/579018-python-determine-name-and-directory-of-the-top-lev/
+    '''
+
+    import os, sys, inspect
+    for part in inspect.stack():
+        if part[1].startswith("<"):
+            continue
+        if part[1].upper().startswith(sys.exec_prefix.upper()):
+            continue
+        trc = part[1]
+
+    if getattr(sys, 'frozen', False):
+        scriptdir, scriptname = os.path.split(sys.executable)
+        return {"dir": scriptdir,
+                "name": scriptname,
+                "source": trc}
+    scriptdir, trc = os.path.split(trc)
+    if not scriptdir:
+        scriptdir = os.getcwd()
+
+    scr_dict ={"name": trc, "source": trc, "dir": scriptdir}
+    return scr_dict
+
 
 def p_make_act_date_str():
     now     = datetime.datetime.now()
@@ -107,9 +133,10 @@ if __name__ == "__main__":
     # logger = p_log_init(log_fn='p_lib')
     p_log_init(log_dir='', log_fn='p_lib')
     p_log_start()
-    p_read_ini()
-    print '\n' + '__main__ : ' + p_glbls.prog_name + '\n'
-    p_log_end('p_lib')
+    prog_info = scriptinfo()
+    prog_name = prog_info['name']
+    print '\n' + '__main__ : ' + prog_name + '\n'
+    p_log_end('')
     p_exit('Program gentle exiting')
 else:
     # logger = p_log_init(log_fn='default')

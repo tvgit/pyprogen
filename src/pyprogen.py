@@ -127,20 +127,38 @@ def create_subdirs(prog_name):
     p_glbls.dir_log = p_utils.p_subdir_make(os.path.join(prog_name, 'log'))
     p_glbls.dir_log = os.path.join('.', p_glbls.dir_log)
 
-def copy_p_utils_p_log():
+def copy_p_utils_p_log_init():
     """ """
     p_log_this()
-    p_utils_srce_path = os.path.join('.', 'p_lib', 'p_utils.py')
-    p_utils_srce_path = os.path.normpath(p_utils_srce_path )
-    p_utils_dest_path = os.path.join('.', p_glbls.dir_lib, 'p_utils.py')
-    p_utils_dest_path = os.path.normpath(p_utils_dest_path )
-    shutil.copy(p_utils_srce_path, p_utils_dest_path)
+    fn_list = ['p_utils.py', 'p_log.py', '__init__.py']
+    for fn in fn_list:
+        p_utils_srce_path = os.path.join('.', 'p_lib', fn)
+        p_utils_srce_path = os.path.normpath(p_utils_srce_path )
+        p_utils_dest_path = os.path.join('.', p_glbls.dir_lib, fn)
+        p_utils_dest_path = os.path.normpath(p_utils_dest_path )
+        shutil.copy(p_utils_srce_path, p_utils_dest_path)
+        p_log_this( fn + 'copied')
 
-    p_log_srce_path = os.path.join('.', 'p_lib', 'p_log.py')
-    p_log_srce_path = os.path.normpath(p_log_srce_path )
-    p_log_dest_path = os.path.join('.', p_glbls.dir_lib, 'p_log.py')
-    p_log_dest_path = os.path.normpath(p_log_dest_path )
-    shutil.copy(p_log_srce_path, p_log_dest_path)
+    # fn = 'p_utils.py'
+    # p_utils_srce_path = os.path.join('.', 'p_lib', fn)
+    # p_utils_srce_path = os.path.normpath(p_utils_srce_path )
+    # p_utils_dest_path = os.path.join('.', p_glbls.dir_lib, fn)
+    # p_utils_dest_path = os.path.normpath(p_utils_dest_path )
+    # shutil.copy(p_utils_srce_path, p_utils_dest_path)
+    #
+    # fn = 'p_log.py'
+    # p_log_srce_path = os.path.join('.', 'p_lib', fn)
+    # p_log_srce_path = os.path.normpath(p_log_srce_path )
+    # p_log_dest_path = os.path.join('.', p_glbls.dir_lib, fn)
+    # p_log_dest_path = os.path.normpath(p_log_dest_path )
+    # shutil.copy(p_log_srce_path, p_log_dest_path)
+    #
+    # fn = '__init__.py'
+    # p_log_srce_path = os.path.join('.', 'p_lib', fn)
+    # p_log_srce_path = os.path.normpath(p_log_srce_path )
+    # p_log_dest_path = os.path.join('.', p_glbls.dir_lib, '__init__.py')
+    # p_log_dest_path = os.path.normpath(p_log_dest_path )
+    # shutil.copy(p_log_srce_path, p_log_dest_path)
 
 def create_ca_parser(prog_name):
     """ Writes via p_ConfArgParser() in ./y_main/lib a new
@@ -187,7 +205,7 @@ if __name__ == "__main__":
     p_log_start()
     pyprogen()
     #prog_name = p_glbls.prog_name
-    copy_p_utils_p_log()
+    copy_p_utils_p_log_init()
     create_main()
     p_log_end()
     p_utils.p_exit()

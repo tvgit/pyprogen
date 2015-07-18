@@ -1,8 +1,13 @@
 # -------------- y_main.py
+# INFO       2015-07-18 20:36:05  p_log_start:  y_main.py Logging started
+# INFO       2015-07-18 20:36:05  p_log_end:  y_main.py Logging end
 
 y_main_02 = """
-#import lib.xx_CAParser    # substituted by your CAParser
-import lib.p_log
+import lib.xx_CAParser    # substituted by your CAParser
+
+from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
+import lib.p_utils as p_utils
+
 
 import sys
 

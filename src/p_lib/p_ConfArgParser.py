@@ -124,7 +124,8 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
 
 
     # write __CAParser.py == ConfArgParser for new program
-    outfile_path = os.path.join(p_utils.p_glbls.dir_lib, CAParser_fn)
+#    outfile_path = os.path.join(p_utils.p_glbls.dir_lib, CAParser_fn)
+    outfile_path = os.path.join(p_glbls.dir_lib, CAParser_fn)
     p_glbls.CAParser_path = outfile_path
 
     now_str = p_utils.p_make_act_date_str()
@@ -136,7 +137,5 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
 
 if __name__ == "__main__":
     print 'p_ConfArgParser.py '
-    print p_utils.p_glbls.dir_cfg
-    print p_utils.p_glbls.dir_lib
 else:
     pass
