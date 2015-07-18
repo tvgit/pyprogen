@@ -101,11 +101,11 @@ __date__ = "$05.05.2015 21:55:22$"
 
 import os
 import subprocess
-import p_utils.p_glbls as p_glbls  # share global values
-import p_utils.p_utils as p_utils
-from   p_utils.p_utils import p_read_ini
-from   p_utils.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
-from   p_utils.p_ConfArgParser import p_ConfArgParser
+import p_lib.p_glbls as p_glbls  # share global values
+import p_lib.p_utils as p_utils
+from   p_lib.p_utils import p_read_ini
+from   p_lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
+from   p_lib.p_ConfArgParser import p_ConfArgParser
 
 def create_maindir(dir_name):
     """ """
@@ -165,10 +165,11 @@ def pyprogen():
     """
     p_read_ini(".", "pyprogen.ini")  # dir relative to >.<
     prog_name = p_glbls.prog_name
-    p_log_this('prog_name = ' + prog_name)
-    create_maindir(prog_name)
-    create_subdirs(prog_name)
-    create_ca_parser(prog_name)   # create & start new ConfArgParser
+    prog_path = p_glbls.prog_path
+    p_log_this('prog_path = ' + prog_path)
+    create_maindir(prog_path)
+    create_subdirs(prog_path)
+    create_ca_parser(prog_path)   # create & start new ConfArgParser
 
 
 if __name__ == "__main__":
