@@ -26,8 +26,8 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
     path = os.path.abspath(__file__)
     dir_path = os.path.dirname(path)
     print 'p_read_ini: dir_path = ', p_utils.p_act_dir_path()
-    print 'p_read_ini: dir_path = ',  dir_path
-
+    print 'p_read_ini: dir_path = ', dir_path
+    print p_glbls.__file__
     p_log_this()
     print p_glbls.my_name()
     # print '>>>>', p_glbls.prog_name

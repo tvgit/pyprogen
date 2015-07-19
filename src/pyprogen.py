@@ -192,6 +192,7 @@ def pyprogen():
 if __name__ == "__main__":
     p_log_init(log_dir = 'p_log', log_fn = 'pyprogen')
     p_log_start()
+    print p_glbls.__file__
     print p_glbls.my_name()
     print 'pyprogen __main__: p_glbls.prog_name= ', p_glbls.prog_name
     pyprogen()

@@ -42,10 +42,12 @@ def scriptinfo():
     return scr_dict
 
 def p_act_dir_path():
+    # http://www.karoltomala.com/blog/?p=622
     path = os.path.abspath(__file__)
     dir_path = os.path.dirname(path)
+    # see also:
+    # http://stackoverflow.com/questions/247770/retrieving-python-module-path
     return dir_path
-    print 'p_read_ini: dir_path = ',  dir_path
 
 
 def p_make_act_date_str():
