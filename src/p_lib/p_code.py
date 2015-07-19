@@ -22,6 +22,12 @@ prog_name = y_main
 
 def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
     """ reads defaults for generated program: name ..."""
+    # http://www.karoltomala.com/blog/?p=622
+    path = os.path.abspath(__file__)
+    dir_path = os.path.dirname(path)
+    print 'p_read_ini: dir_path = ', p_utils.p_act_dir_path()
+    print 'p_read_ini: dir_path = ',  dir_path
+
     p_log_this()
     print p_glbls.my_name()
     # print '>>>>', p_glbls.prog_name
@@ -109,3 +115,7 @@ def p_main():
         outfile.write(y_main_98)
 
         outfile.write('# ' + now_str)
+
+if __name__ == "__main__":
+    print p_glbls.my_name()
+    p_utils.p_exit()

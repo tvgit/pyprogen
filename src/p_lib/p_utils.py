@@ -41,6 +41,12 @@ def scriptinfo():
     scr_dict ={"name": trc, "source": trc, "dir": scriptdir}
     return scr_dict
 
+def p_act_dir_path():
+    path = os.path.abspath(__file__)
+    dir_path = os.path.dirname(path)
+    return dir_path
+    print 'p_read_ini: dir_path = ',  dir_path
+
 
 def p_make_act_date_str():
     now     = datetime.datetime.now()
