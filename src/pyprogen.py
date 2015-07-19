@@ -106,23 +106,23 @@ import p_lib.p_code as p_code
 from   p_lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 from   p_lib.p_ConfArgParser import p_ConfArgParser
 
-def create_maindir(dir_name):
+def create_maindir(prog_path):
     """ """
     p_log_this()
-    p_glbls.dir_main = p_utils.p_subdir_make(dir_name)
+    p_glbls.dir_main = p_utils.p_subdir_make(prog_path)
     p_glbls.dir_main = os.path.join('.', p_glbls.dir_main)
 
 
-def create_subdirs(prog_name):
+def create_subdirs(prog_path):
     """ """
     p_log_this()
-    p_glbls.dir_cfg = p_utils.p_subdir_make(os.path.join(prog_name, 'cfg'))
+    p_glbls.dir_cfg = p_utils.p_subdir_make(os.path.join(prog_path, 'cfg'))
     p_glbls.dir_cfg = os.path.join('.', p_glbls.dir_cfg)
 
-    p_glbls.dir_lib = p_utils.p_subdir_make(os.path.join(prog_name, 'lib'))
+    p_glbls.dir_lib = p_utils.p_subdir_make(os.path.join(prog_path, 'lib'))
     p_glbls.dir_lib = os.path.join('.', p_glbls.dir_lib)
 
-    p_glbls.dir_log = p_utils.p_subdir_make(os.path.join(prog_name, 'log'))
+    p_glbls.dir_log = p_utils.p_subdir_make(os.path.join(prog_path, 'log'))
     p_glbls.dir_log = os.path.join('.', p_glbls.dir_log)
 
 def copy_p_utils_p_log_init():
@@ -139,7 +139,7 @@ def copy_p_utils_p_log_init():
         p_log_this( fn + 'copied')
 
 
-def create_ca_parser(prog_name):
+def create_ca_parser(prog_path):
     """ Writes via p_ConfArgParser() in ./y_main/lib a new
     confargparser == >y_CAParser.py< for the new program >y_main.py<.
     Configure it according to >pyprogen_XXX.conf<
@@ -153,15 +153,20 @@ def create_ca_parser(prog_name):
     # loc_path = os.getcwd()
     subprocess_path  = p_glbls.CAParser_path
     p_log_this("subprocess_path = " + subprocess_path)
-    p_glbls.cfg_fn = prog_name + '.cfg'   # cfg-file of new y_main.py
+    p_glbls.cfg_fn = prog_path + '.cfg'   # cfg-file of new y_main.py
     p_glbls.cfg_path = os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn)
     p_log_this("cfg_path = " + p_glbls.cfg_path)
     # http://pymotw.com/2/subprocess/
     # start new ConfArgParser to create cfg-file for >y_main.py<
     subprocess.call([subprocess_path, p_glbls.cfg_path], shell=True)
 
+def create_glbls():
+    """ writes new y_glbls.py == vars shared across modules """
+    p_log_this()
+    p_code.p_glbls()
+
 def create_main():
-    """     writes new y_main.py     """
+    """ writes new y_main.py     """
     p_log_this()
     p_code.p_main()
 
@@ -174,7 +179,7 @@ def pyprogen():
     p_log_this()
     # "pyprogen.ini" =>>>  basic.conf oä ??
     p_code.p_read_ini(".", "pyprogen.ini")  # dir relative to >.<
-    prog_path = p_glbls.prog_path # ./y_main here will >y_main.py< live
+    prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
     create_maindir(prog_path)     # create dir
     create_subdirs(prog_path)     # create subdirs ./y_main/lib, ./y_main/log ...
     copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib

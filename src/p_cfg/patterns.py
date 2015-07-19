@@ -30,8 +30,8 @@ if __name__ == "__main__":
     prog_info = p_utils.scriptinfo()
     prog_name = prog_info['name']
     print '\\n' + '__main__ : ' + prog_name + '\\n'
-    #parse_args('no_pos_args', cfg_path='.\y_main\cfg\y_main_test.cfg')
-    parse_args('no_pos_args', cfg_path='./cfg/y_main_test.cfg')
+    # parse_args('no_pos_args', cfg_path='./cfg/xx_main_test.cfg')
+    parse_args('no_pos_args', cfg_path='./cfg/xx_main.cfg')
 
     p_log_end()
     p_utils.p_exit()
