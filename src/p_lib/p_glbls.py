@@ -23,7 +23,7 @@ patterns_fn  = None  # name of pattern file; usually: >patterns.py<
 patterns_path= None  # path of pattern file; usually: >./p_cfg/pattern.py<
 
 
-def my_name():
+def my_name(): 
     mssge = 'p_globals: my_name'
     return mssge
 
