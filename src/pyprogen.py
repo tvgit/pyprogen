@@ -85,10 +85,9 @@ __date__ = "$05.05.2015 21:55:22$"
     paramater Uebernahme (6.) (mit einer Untermenge der cfg - Paramter),
     ein subdir in dem sich die Module befinden:
     y_main
-        /cfg   # Konfiguration
-        /lib   # Moduls
-        /log   # Log
-
+        /cfg   # configuration
+        /lib   # modules
+        /log   # log
 """
 ###
 
