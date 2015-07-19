@@ -1,19 +1,19 @@
-# Sharing program wide information via this module
-prog_name    = 'def_main.py'   # default name of new program. Configure in ???
-prog_path    = None          # default path: >./z_main/z_main.py<
+# Sharing program wide information about >y_main.py< via this module
+prog_name= 'default_y_main.py' # default name of new program. Configure in ???
+prog_path= None                # default path: >./y_main/y_main.py<
 
-prefix   = None     # common prefix of z_main-specific dirs, paths, modules, functions, vars ...
+prefix   = None     # common prefix of y_main-specific dirs, paths, modules, functions, vars ...
 
-dir_main = None     # main dir: >./z_main<, where >z_main.py< lives in
-dir_cfg  = None     # subdir  : >./z_main/cfg<, config files for >z_main.py<
-dir_lib  = None     # subdir  : >./z_main/lib<, utilities for >z_main.py<
-dir_log  = None     # subdir  : >./z_main/log<, log-files for >z_main.py<
+dir_main = None     # main dir: >./y_main<, where >y_main.py< lives in
+dir_cfg  = None     # subdir  : >./y_main/cfg<, config files for >y_main.py<
+dir_lib  = None     # subdir  : >./y_main/lib<, utilities for >y_main.py<
+dir_log  = None     # subdir  : >./y_main/log<, log-files for >y_main.py<
 
 cfg_fn   = None
 cfg_path = None
 
-CAParser_fn  = None  # filename of arg-parser of 'z_main.py'  (y_ConfArgParser.py)
-CAParser_path= None  # path     of arg-parser of 'z_main.py'  (>./z_main/lib/...<)
+CAParser_fn  = None  # filename of arg-parser of 'y_main.py'  (y_ConfArgParser.py)
+CAParser_path= None  # path     of arg-parser of 'y_main.py'  (>./y_main/lib/...<)
 CAParser_func= None  # function name  (>def y_parser(): ...<)
 
 pos_arg_vars = None  # positional args
@@ -41,3 +41,4 @@ def print_p_cfg_vars(print_args=False):
             print '  opt. arg var: ' + arg
         for arg in pos_arg_vars:
             print '  pos.-arg var: ' + arg
+

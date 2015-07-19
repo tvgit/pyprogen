@@ -2,11 +2,10 @@ __author__ = 'rh'
 __date__ = "$18.07.2015 15:55:22$"
 
 import os
-import sys
 import string
-
 import ConfigParser  # read configfile
 
+#import p_lib.p_glbls as p_glbls  # share global values
 import p_glbls  # share global values
 import p_utils
 from   p_log import p_log_this
@@ -21,7 +20,7 @@ prog_name = y_main
 def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
     """ reads defaults for generated program: name ..."""
     p_log_this()
-    #print '>>>>', p_glbls.prog_name
+    print '>>>>', p_glbls.prog_name
     cfg_path = os.path.join(dir_cfg, cfg_fn)
     cfg_path = os.path.normpath(cfg_path)
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
@@ -45,7 +44,8 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
         p_log_this('          =>' + p_glbls.prog_name)
 
 
-    p_glbls.prog_path = p_glbls.prog_name[:-3]
+    p_glbls.prog_path = os.path.normpath(p_glbls.prog_name[:-3])
+    print 'p_read_ini: p_glbls.prog_path = ', p_glbls.prog_path
     p_log_this("prog_path = " + p_glbls.prog_path)
 
     p_glbls.prefix    = p_glbls.prog_name[0] + '_'  # prefix for generated program
@@ -90,7 +90,7 @@ def p_main():
 
     outfile_fn   = p_glbls.prog_name
     outfile_path = os.path.join(p_glbls.dir_main, outfile_fn)
-    p_glbls.prog_path = outfile_path
+    #p_glbls.prog_path = outfile_path
 
     now_str = p_utils.p_make_act_date_str()
     with open(outfile_path, 'w') as outfile:

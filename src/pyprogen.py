@@ -101,7 +101,7 @@ import shutil
 import subprocess
 import p_lib.p_glbls as p_glbls  # share global values
 import p_lib.p_utils as p_utils
-import p_lib.p_code as p_code
+import p_lib.p_code  as p_code
 from   p_lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 from   p_lib.p_ConfArgParser import p_ConfArgParser
 
@@ -192,6 +192,7 @@ def pyprogen():
 if __name__ == "__main__":
     p_log_init(log_dir = 'p_log', log_fn = 'pyprogen')
     p_log_start()
+    print 'pyprogen: p_glbls.prog_name= ', p_glbls.prog_name
     pyprogen()
     p_log_end()
     p_utils.p_exit()
