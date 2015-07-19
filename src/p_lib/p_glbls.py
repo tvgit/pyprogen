@@ -1,5 +1,5 @@
 # Sharing program wide information via this module
-prog_name    = 'z_main.py'   # default name of new program. Configure in ???
+prog_name    = 'def_main.py'   # default name of new program. Configure in ???
 prog_path    = None          # default path: >./z_main/z_main.py<
 
 prefix   = None     # common prefix of z_main-specific dirs, paths, modules, functions, vars ...

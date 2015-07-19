@@ -21,6 +21,7 @@ prog_name = y_main
 def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
     """ reads defaults for generated program: name ..."""
     p_log_this()
+    #print '>>>>', p_glbls.prog_name
     cfg_path = os.path.join(dir_cfg, cfg_fn)
     cfg_path = os.path.normpath(cfg_path)
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
@@ -33,7 +34,8 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
     p_log_this('prog_name = ' + p_glbls.prog_name)
     if not p_glbls.prog_name:
         p_glbls.prog_name = 'z_main'
-        p_log_this('prog_name = ' + p_glbls.prog_name)
+        p_log_this('no >prog_name< in: ' + cfg_path + ' !')
+        p_log_this('prog_name -> ' + p_glbls.prog_name)
 
     if (len(p_glbls.prog_name) < 4):
         p_glbls.prog_name = p_glbls.prog_name + '.py'
@@ -88,7 +90,7 @@ def p_main():
 
     outfile_fn   = p_glbls.prog_name
     outfile_path = os.path.join(p_glbls.dir_main, outfile_fn)
-    p_glbls.CAParser_path = outfile_path
+    p_glbls.prog_path = outfile_path
 
     now_str = p_utils.p_make_act_date_str()
     with open(outfile_path, 'w') as outfile:
