@@ -37,7 +37,20 @@ if __name__ == "__main__":
     p_utils.p_exit()
 """
 
+# -------------- y_glbls.py
 
+y_glbls_02 = """
+# Sharing program wide information via this module
+"""
+
+y_glbls_04 = """
+"""
+
+y_glbls_96 = """
+"""
+
+y_glbls_98 = """
+"""
 
 # -------------- y_CAParser.py
 

@@ -28,6 +28,7 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
     p_log_this('cfg_path: ' + cfg_path)
     cfg_file = parser.read(cfg_path)
     p_log_this('cfg file: ' + str(cfg_file))
+
     p_glbls.prog_name = parser.get("properties", "prog_name")
     p_log_this('prog_name = ' + p_glbls.prog_name)
     if not p_glbls.prog_name:
@@ -54,13 +55,14 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
 def p_glbls():
     """ creates y_glbls.py """
     p_log_this()
+    outfile_fn   = p_glbls.prefix + 'glbls.py'
+    outfile_path = os.path.join(p_glbls.dir_lib, outfile_fn)
+
     y_main_02 = patterns.y_main_02
     y_main_04 = patterns.y_main_04
     y_main_96 = patterns.y_main_96
     y_main_98 = patterns.y_main_98
 
-    outfile_fn   = p_glbls.prefix + 'glbls.py'
-    outfile_path = os.path.join(p_glbls.dir_lib, outfile_fn)
     p_glbls.CAParser_path = outfile_path
 
     now_str = p_utils.p_make_act_date_str()
