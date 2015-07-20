@@ -1,6 +1,6 @@
 # Sharing program wide information about >y_main.py< via this module
-prog_name= 'default_y_main.py' # default name of new program. Configure in ???
-prog_path= None                # default path: >./y_main/y_main.py<
+prog_name= 'def_y_main.py' # default name of new program. Configure in ???
+prog_path= None            # default path: >./y_main/y_main.py<
 
 prefix   = None     # common prefix of y_main-specific dirs, paths, modules, functions, vars ...
 
