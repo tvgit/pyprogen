@@ -40,7 +40,7 @@ if __name__ == "__main__":
 # -------------- y_glbls.py
 
 y_glbls_02 = """
-# Sharing program wide information via this module
+# Sharing program wide information about >xx_main.py< via this module'
 """
 
 y_glbls_04 = """
