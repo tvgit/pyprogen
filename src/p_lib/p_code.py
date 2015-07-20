@@ -19,7 +19,6 @@ pyprogen_ini = """
 prog_name = y_main
 """
 
-
 def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
     """ reads defaults for generated program: name ..."""
     # http://www.karoltomala.com/blog/?p=622
@@ -64,7 +63,7 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
     # p_glbls.patterns_path = os.path.normpath(p_glbls.patterns_path)
 
 
-def p_glbls():
+def p_globals():
     """ creates y_glbls.py """
     p_log_this()
     outfile_fn = p_glbls.prefix + 'glbls.py'
@@ -86,7 +85,7 @@ def p_glbls():
         outfile.write(y_glbls_02)
 
         y_glbls_98 = y_glbls_98.replace("xx_main", p_glbls.prog_name[:-3])
-        outfile.write(y_main_98)
+        outfile.write(y_glbls_98)
 
         outfile.write('# ' + now_str)
 

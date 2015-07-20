@@ -162,13 +162,12 @@ def create_ca_parser(prog_path):
 def create_glbls():
     """ writes new y_glbls.py == vars shared across modules """
     p_log_this()
-    p_code.p_glbls()
+    p_code.p_globals()   #
 
 def create_main():
     """ writes new y_main.py     """
     p_log_this()
     p_code.p_main()
-
 
 def pyprogen():
     """
@@ -186,15 +185,13 @@ def pyprogen():
     copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
     create_ca_parser(prog_path)   # create & start new ConfArgParser
     create_main()                 # create new y_main.py
+    p_code.p_globals()            # create ./y_main/lib/y_glbls.py
     p_glbls.print_p_cfg_vars()
 
 
 if __name__ == "__main__":
     p_log_init(log_dir = 'p_log', log_fn = 'pyprogen')
     p_log_start()
-    print p_glbls.__file__
-    print p_glbls.my_name()
-    print 'pyprogen __main__: p_glbls.prog_name= ', p_glbls.prog_name
     pyprogen()
     p_log_end()
     p_utils.p_exit()
