@@ -64,7 +64,7 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
 
 
 def p_globals():
-    """ creates y_glbls.py """
+    """ creates ./y_main/lib/y_glbls.py """
     p_log_this()
     outfile_fn = p_glbls.prefix + 'glbls.py'
     outfile_path = os.path.join(p_glbls.dir_lib, outfile_fn)
