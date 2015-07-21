@@ -3,8 +3,8 @@
 # INFO       2015-07-18 20:36:05  p_log_end:  y_main.py Logging end
 
 
-y_main = ()   # dict
-y_main_02 = """
+y_main = dict()
+y_main[02] = """
 from   lib.xx_CAParser  import  xx_parser
 import lib.p_utils as p_utils
 import lib.xx_glbls as xx_glbls
@@ -19,13 +19,13 @@ def parse_args(command, cfg_path):
     xx_parser(command, cfg_path)
 """
 
-y_main_04 = """
+y_main[04] = """
 """
 
-y_main_96 = """
+y_main[96] = """
 """
 
-y_main_98 = """
+y_main[98] = """
 if __name__ == "__main__":
     prog_info = p_utils.scriptinfo()
     prog_name = prog_info['name']
