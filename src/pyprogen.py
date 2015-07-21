@@ -124,6 +124,11 @@ def create_subdirs(prog_path):
     p_glbls.dir_log = p_utils.p_subdir_make(os.path.join(prog_path, 'log'))
     p_glbls.dir_log = os.path.join('.', p_glbls.dir_log)
 
+def create_various_path_names():
+    """# i.e.: glbls_path, """
+    p_code.create_various_path_names()
+
+
 def copy_p_utils_p_log_init():
     """ """
     p_log_this()
@@ -180,6 +185,7 @@ def pyprogen():
     prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
     create_maindir(prog_path)     # create dir
     create_subdirs(prog_path)     # create subdirs ./y_main/lib, ./y_main/log ...
+    create_various_path_names()   # i.e.: glbls_path,
     copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
     create_ca_parser(prog_path)   # create & start new ConfArgParser
     create_main()                 # create new y_main.py

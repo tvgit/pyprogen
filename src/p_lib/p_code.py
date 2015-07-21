@@ -70,14 +70,14 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
         p_glbls.prefix = p_glbls.prog_name[0] + '_'  # prefix for generated program
         p_log_this('prefix set to: ' + p_glbls.prefix)
 
-    glbls_fn = p_glbls.prefix + 'CAParser.py'
-    p_glbls.CAParser_fn = CAParser_fn
-
 
     p_glbls.patterns_fn = parser.get("properties", "patterns")
     p_glbls.patterns_path = os.path.join('.', 'p_cfg', p_glbls.patterns_fn)
     #p_glbls.patterns_path = os.path.normpath(p_glbls.patterns_path)
 
+def create_various_path_names():
+    p_glbls.glbls_fn   = p_glbls.prefix + 'glbls.py'
+    p_glbls.glbls_path = os.path.join('.', p_glbls.dir_cfg, p_glbls.glbls_fn)
 
 def p_globals():
     """ creates ./y_main/lib/y_glbls.py """
@@ -140,7 +140,7 @@ def p_main():
         y_main_02 = y_main_02.replace("xx_main", p_glbls.prog_name[:-3])
         y_main_02 = y_main_02.replace("xx_CAParser", p_glbls.CAParser_fn[:-3])
         y_main_02 = y_main_02.replace("xx_parser", p_glbls.CAParser_func)
-        y_main_02 = y_main_02.replace("xx_globals", p_glbls.CAParser_func)
+        y_main_02 = y_main_02.replace("xx_glbls", p_glbls.glbls_fn[:-3])
         outfile.write(y_main_02)
 
         y_main_98 = y_main_98.replace("xx_main", p_glbls.prog_name[:-3])

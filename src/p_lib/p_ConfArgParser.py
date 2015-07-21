@@ -121,6 +121,8 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
 
     CA_Parser_98 = CA_Parser_98.replace("xx_parser", p_glbls.CAParser_func)
     CA_Parser_98 = CA_Parser_98.replace("xx_CAParser", CAParser_fn)
+    CA_Parser_98 = CA_Parser_98.replace("xx_dir_log", p_glbls.dir_log)
+
     virt_file.write(CA_Parser_98)
 
     # log positional and optional arguments

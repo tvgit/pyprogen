@@ -61,6 +61,10 @@ CA_Parser_02 = """
 import confargparse
 import argparse
 import sys
+try:
+    from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
+except:
+    pass
 # from   p_log   import p_log_this
 
 def xx_parser(command = '', cfg_path=''):
@@ -98,9 +102,14 @@ CA_Parser_96 = """
 
 CA_Parser_98 = """
 if __name__ == "__main__":
-    # p_log_this('generating cfg-file')
+    from   p_log   import p_log_init, p_log_start, p_log_this, p_log_end
     print '-' * 20
     print '| xx_CAParser: running'
+    print '| ',
+    p_log_init(log_dir = 'xx_dir_log', log_fn = 'xx_CAParser')
+    print '| ',
+    p_log_start()
+    p_log_this('| generating cfg-file')
     cfg_path = sys.argv[1]
     if not cfg_path:
         print '| xx_CAParser: No output path for cfg-file?? '
@@ -111,6 +120,7 @@ if __name__ == "__main__":
     xx_parser('--export-conf-file', cfg_path)
     print '| xx_CAParser: end'
     print '-' * 20
+    p_log_end()
 else:
     pass
 """
