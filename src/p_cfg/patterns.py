@@ -6,20 +6,29 @@
 y_main = dict()
 y_main[02] = """
 from   lib.xx_CAParser  import  xx_parser
-import lib.p_utils as p_utils
 import lib.xx_glbls as xx_glbls
+# import lib.xx_my_code as my_code
+
+import lib.p_utils as p_utils
 from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 
 import sys
-
-def parse_args(command, cfg_path):
-    if command:
-        print command, cfg_path
-    p_log_this(str (command + ' ' + cfg_path))
-    xx_parser(command, cfg_path)
 """
 
 y_main[04] = """
+def use_args():
+    pass
+"""
+
+y_main[10] = """
+def parse_args(command, cfg_path):
+    if command:
+        mssge_1 = 'xx_main > parse_args: command  = ' + command
+        mssge_2 = 'xx_main > parse_args: cfg_path = ' + cfg_path
+        print mssge_1 + '\\n' + mssge_2
+    p_log_this(mssge_1)
+    p_log_this(mssge_2)
+    xx_parser(command, cfg_path)
 """
 
 y_main[96] = """
@@ -38,15 +47,35 @@ if __name__ == "__main__":
 
     p_log_end()
     p_utils.p_exit()
+"""
 
+# -------------- y_my_code.py
+
+y_my_code = dict()
+y_my_code[02] = """
+# In this module resides our code. Imported to >xx_main.py<. Is respected if changed.'
+import lib.xx_glbls as xx_glbls
+# import lib.xx_my_code as my_code
+
+import lib.p_utils as p_utils
+from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
+"""
+
+y_my_code[04] = """
+"""
+
+y_my_code[96] = """
+"""
+
+y_my_code[98] = """
 """
 
 # -------------- y_glbls.py
 
 y_glbls = dict()
-
 y_glbls[02] = """
-# Sharing program wide information about >xx_main.py< via this module'
+# Sharing information via this module across >xx_main.py< and its modules
+#
 """
 
 y_glbls[04] = """
