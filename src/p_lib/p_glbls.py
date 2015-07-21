@@ -23,10 +23,6 @@ glbls_path = None    # path of globals file (OF NEW PROGRAM!); usually: >./y_mai
 pos_arg_vars = None  # positional args
 opt_arg_vars = None  # optional args
 
-patterns_fn  = None  # name of pattern file; usually: >patterns.py<
-patterns_path= None  # path of pattern file; usually: >./p_cfg/pattern.py<
-
-
 def my_name():
     mssge = 'p_globals: my_name'
     return mssge
@@ -46,8 +42,6 @@ def print_p_cfg_vars(print_args=False):
     print ' glbls_fn      = ' + glbls_fn
     print ' glbls_path    = ' + glbls_path
 
-    print ' patterns_fn   = ' + patterns_fn
-    print ' patterns_path = ' + patterns_path
     if print_args:
         for arg in opt_arg_vars:
             print '  opt. arg var: ' + arg

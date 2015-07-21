@@ -71,9 +71,8 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
         p_log_this('prefix set to: ' + p_glbls.prefix)
 
 
-    p_glbls.patterns_fn = parser.get("properties", "patterns")
-    p_glbls.patterns_path = os.path.join('.', 'p_cfg', p_glbls.patterns_fn)
-    #p_glbls.patterns_path = os.path.normpath(p_glbls.patterns_path)
+    # p_glbls.patterns_fn   = parser.get("properties", "patterns")       # not used
+    # p_glbls.patterns_path = parser.get("properties", "patterns_path")  # not used
 
 def create_various_path_names():
     p_glbls.glbls_fn   = p_glbls.prefix + 'glbls.py'
