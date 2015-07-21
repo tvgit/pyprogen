@@ -3,7 +3,7 @@
 # INFO       2015-07-18 20:36:05  p_log_end:  y_main.py Logging end
 
 
-y_main = ()
+y_main = ()   # dict
 y_main_02 = """
 from   lib.xx_CAParser  import  xx_parser
 import lib.p_utils as p_utils
@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
     p_log_end()
     p_utils.p_exit()
-    
+
 """
 
 # -------------- y_glbls.py
