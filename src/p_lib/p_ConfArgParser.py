@@ -113,10 +113,12 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     for line in opt_arg_lines:
         virt_file.write(line)
 
-    virt_file.write(CA_Parser_04)
-    # virt_file.write(CA_Parser_98)
     CAParser_fn = p_glbls.prefix + 'CAParser.py'
     p_glbls.CAParser_fn = CAParser_fn
+
+    CA_Parser_04 = CA_Parser_04.replace("xx_CAParser", CAParser_fn)
+    virt_file.write(CA_Parser_04)
+
     CA_Parser_98 = CA_Parser_98.replace("xx_parser", p_glbls.CAParser_func)
     CA_Parser_98 = CA_Parser_98.replace("xx_CAParser", CAParser_fn)
     virt_file.write(CA_Parser_98)

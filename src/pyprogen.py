@@ -178,8 +178,6 @@ def pyprogen():
     # "pyprogen.ini" =>>>  basic.conf oä ??
     p_code.p_read_ini(".", "pyprogen.ini")  # dir relative to >.<
     prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
-    print 'pyprogen: p_glbls.prog_name= ', p_glbls.prog_name
-    print 'pyprogen: p_glbls.prog_path= ',p_glbls.prog_path
     create_maindir(prog_path)     # create dir
     create_subdirs(prog_path)     # create subdirs ./y_main/lib, ./y_main/log ...
     copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
