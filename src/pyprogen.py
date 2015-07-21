@@ -20,6 +20,8 @@
 # Filetypes association:
 # File > Settings > Editor > File Types ... (ie: *.cfg like *.ini)
 #
+# git-credential-winstore.exe
+#
 # äöüÄÖÜß
 #
 
