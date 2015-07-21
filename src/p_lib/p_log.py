@@ -173,24 +173,24 @@ def p_log_status(txt=''):
     global p_logger
     if p_logger:
         print '>> logger status:', txt
-        print '   logger        =', p_logger
-        print '   logger.level  =', p_logger.level
-        print '   logger.effect =', p_logger.getEffectiveLevel()
+        print '   logger = . . . . . ', p_logger
+        print '   logger.level = . . ', p_logger.level
+        print '   logger.eff level = ', p_logger.getEffectiveLevel()
 
 
 if __name__ == "__main__":
     print ('p_log.py')
     p_log_init(log_dir='', log_fn='p_log')
-    p_log_start('p_lib')
-    p_log_this('test 01 ')
-    p_log_this('debug', 'debug')
-    p_log_this('info', 'info')
-    p_log_this('warning', 'warning')
-    p_log_this('error', 'error')
-    p_log_this('critical', 'critical')
-    p_log_end ('p_lib')
+    p_log_start('p_log')
+    p_log_this ('test 01 ')
+    p_log_this ('level = debug', 'debug')
+    p_log_this ('level = info', 'info')
+    p_log_this ('level = warning', 'warning')
+    p_log_this ('level = error', 'error')
+    p_log_this ('level = critical', 'critical')
+    p_log_end  ('p_log')
 
-    sys.exit('Program gentle exiting')
+    sys.exit('Program gentle exiting.')
 else:
     # logger = p_log_init(log_fn='default')
     pass
