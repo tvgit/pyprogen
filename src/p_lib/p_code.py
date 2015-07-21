@@ -14,10 +14,10 @@ from   p_log import p_log_this
 import p_cfg.patterns as patterns
 
 # may be used in: def p_read_ini():
-pyprogen_ini = """
-[properties]
-prog_name = y_main
-"""
+# pyprogen_ini = """
+# [properties]
+# prog_name = y_main
+# """
 
 def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
     """ reads defaults for generated program: name ..."""
