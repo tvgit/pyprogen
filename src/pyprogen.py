@@ -183,14 +183,14 @@ def pyprogen():
     # "pyprogen.ini" =>>>  basic.conf oä ??
     p_code.p_read_ini(".", "pyprogen.ini")  # dir relative to >.<
     prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
-    create_maindir(prog_path)     # create dir
-    create_subdirs(prog_path)     # create subdirs ./y_main/lib, ./y_main/log ...
+    create_maindir(prog_path)     # create dir  ./y_main
+    create_subdirs(prog_path)     # create dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
     create_various_path_names()   # i.e.: glbls_path,
-    copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
-    create_ca_parser(prog_path)   # create & start new ConfArgParser
-    create_main()                 # create new y_main.py
-    p_code.p_globals()            # create ./y_main/lib/y_glbls.py
-    p_glbls.print_p_cfg_vars()
+    copy_p_utils_p_log_init()     # copy utilities to ./y_main/lib
+    create_ca_parser(prog_path)   # create/start ./y_main/lib/ConfArgParser.py
+    create_main()                 # create progr ./y_main/y_main.py
+    p_code.p_globals()            # create modul ./y_main/lib/y_glbls.py
+    p_glbls.print_p_cfg_vars()    # print variables in ./pyprogen/lib/p_glbls.
 
 
 if __name__ == "__main__":
