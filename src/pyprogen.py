@@ -105,7 +105,7 @@ import p_lib.p_code  as p_code
 from   p_lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 from   p_lib.p_ConfArgParser import p_ConfArgParser
 
-def create_maindir(prog_path):
+def create_maindir(prog_path) :
     """ """
     p_log_this()
     p_glbls.dir_main = p_utils.p_subdir_make(prog_path)
