@@ -192,7 +192,7 @@ def pyprogen():
     create_ca_parser(prog_path)   # create/start ./y_main/lib/ConfArgParser.py
     create_main()                 # create progr ./y_main/y_main.py
     p_code.p_globals()            # create modul ./y_main/lib/y_glbls.py
-    p_glbls.print_p_cfg_vars()    # print variables in ./pyprogen/lib/p_glbls.
+    # p_glbls.print_p_cfg_vars()    # print variables in ./pyprogen/lib/p_glbls.
 
 
 if __name__ == "__main__":
