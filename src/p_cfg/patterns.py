@@ -43,17 +43,19 @@ if __name__ == "__main__":
 
 # -------------- y_glbls.py
 
-y_glbls_02 = """
+y_glbls = dict()
+
+y_glbls[02] = """
 # Sharing program wide information about >xx_main.py< via this module'
 """
 
-y_glbls_04 = """
+y_glbls[04] = """
 """
 
-y_glbls_96 = """
+y_glbls[96] = """
 """
 
-y_glbls_98 = """
+y_glbls[98] = """
 """
 
 # -------------- y_CAParser.py
