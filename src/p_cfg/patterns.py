@@ -27,17 +27,18 @@ y_main_96 = """
 
 y_main_98 = """
 if __name__ == "__main__":
+    prog_info = p_utils.scriptinfo()
+    prog_name = prog_info['name']
+    print '--------\\n' + prog_name + '\\n--------'
+
     p_log_init(log_dir = 'log', log_fn = 'xx_main.log')
     p_log_start()
 
-    prog_info = p_utils.scriptinfo()
-    prog_name = prog_info['name']
-    print '\\n' + '__main__ : ' + prog_name + '\\n'
-    # parse_args('no_pos_args', cfg_path='./cfg/xx_main_test.cfg')
     parse_args('no_pos_args', cfg_path='./cfg/xx_main.cfg')
 
     p_log_end()
     p_utils.p_exit()
+    
 """
 
 # -------------- y_glbls.py
@@ -105,9 +106,8 @@ if __name__ == "__main__":
     from   p_log   import p_log_init, p_log_start, p_log_this, p_log_end
     print '-' * 20
     print '| xx_CAParser: running'
-    print '| ',
+    print '|',
     p_log_init(log_dir = 'xx_dir_log', log_fn = 'xx_CAParser')
-    print '| ',
     p_log_start()
     p_log_this('| generating cfg-file')
     cfg_path = sys.argv[1]
