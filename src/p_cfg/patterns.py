@@ -98,7 +98,32 @@ try:
     from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 except:
     pass
-# from   p_log   import p_log_this
+
+args = None
+
+def get_args():
+    global args
+    return args
+
+def print_args(command = False):
+    # http://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
+    # https://parezcoydigo.wordpress.com/2012/08/04/from-argparse-to-dictionary-in-python-2-7/
+    # http://stackoverflow.com/questions/295028/inplace-substitution-from-configparser
+    # http://stackoverflow.com/questions/295058/convert-a-string-to-preexisting-variable-names
+    # http://stackoverflow.com/questions/11553721/using-a-string-variable-as-a-variable-name
+    global args
+    # print 'y_CAParser.py: setting global vars:'
+    print '*' * 30
+    print 'This is: >xx_CAParser<'
+    print 'args are: '
+    if command:
+        args = vars(args)
+        for key, value in sorted(args.iteritems()):
+            print "  %s  =  %s " % (key, value)
+        print '*' * 30
+    else:
+        pass
+
 
 def xx_parser(command = '', cfg_path=''):
     # p_log_this()
@@ -108,6 +133,7 @@ def xx_parser(command = '', cfg_path=''):
 """
 
 CA_Parser_04 = """
+    global args
     if (command == '--export-conf-file'):
         print '| xx_CAParser: generating: ', cfg_path
         print '| xx_CAParser: end'
@@ -121,17 +147,7 @@ CA_Parser_04 = """
     else:
         args = parser.parse_args()
 
-# http://stackoverflow.com/questions/295028/inplace-substitution-from-configparser
-# http://stackoverflow.com/questions/295058/convert-a-string-to-preexisting-variable-names
-# http://stackoverflow.com/questions/11553721/using-a-string-variable-as-a-variable-name
-    print 'xx_CAParser: setting global vars:'
-    args = vars(args)
-    for key, value in sorted(args.iteritems()):
-        print "%s  =  %s " % (key, value)
-
-    #print 'args: ' , args
-# http://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
-# https://parezcoydigo.wordpress.com/2012/08/04/from-argparse-to-dictionary-in-python-2-7/
+    print_args(True)
 """
 
 CA_Parser_96 = """

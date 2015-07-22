@@ -17,10 +17,7 @@ CAParser_path= None  # path     of arg-parser of 'y_main.py'  (>./y_main/lib/...
 CAParser_func= None  # function name  (>def y_parser(): ...<)
 
 glbls_fn   = None    # name of globals file (OF NEW PROGRAM!); usually: >y_glbls.py<
-glbls_path = None    # path of globals file (OF NEW PROGRAM!); usually: >./y_main/lib/y_glbls.py<
-
 my_code_fn   = None  # name of your code; usually: >y_my_code.py<
-my_code_path = None  # path of your code; usually: >./y_main/lib/y_my_code.py<
 
 pos_arg_vars = None  # positional args
 opt_arg_vars = None  # optional args
@@ -33,14 +30,12 @@ def print_p_cfg_args(print_args=False):
     print ' dir_lib   = '     + dir_lib
     print ' dir_log   = '     + dir_log
     print ' cfg_fn    = '     + cfg_fn
-    print ' cfg_path  = '     + cfg_path
+    #print ' cfg_path  = '     + cfg_path
     print ' CAParser_fn   = ' + CAParser_fn
     print ' CAParser_path = ' + CAParser_path
     print ' CAParser_func = ' + CAParser_func
     print ' glbls_fn      = ' + glbls_fn
-    print ' glbls_path    = ' + glbls_path
-    print ' my_code_fn  = '   + my_code_fn
-    print ' my_code_path= '   + my_code_path
+    print ' my_code_fn    = '   + my_code_fn
 
     if print_args:
         for arg in opt_arg_vars:

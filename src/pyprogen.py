@@ -135,12 +135,16 @@ def copy_p_utils_p_log_init():
     """ """
     p_log_this()
     # dammed '__init__.py'! 2 hrs of nirwana!
+    # for every file in fn_list:
     fn_list = ['p_utils.py', 'p_log.py', '__init__.py']
     for fn in fn_list:
+        # create an normalize source path:
         p_utils_srce_path = os.path.join('.', 'p_lib', fn)
         p_utils_srce_path = os.path.normpath(p_utils_srce_path )
+        # create an normalize destination path:
         p_utils_dest_path = os.path.join('.', p_glbls.dir_lib, fn)
         p_utils_dest_path = os.path.normpath(p_utils_dest_path )
+        # copy from source to dest
         shutil.copy(p_utils_srce_path, p_utils_dest_path)
         p_log_this( fn + 'copied')
 
@@ -159,22 +163,13 @@ def create_ca_parser(prog_path):
     # loc_path = os.getcwd()
     subprocess_path  = p_glbls.CAParser_path
     p_log_this("subprocess_path = " + subprocess_path)
-    p_glbls.cfg_fn = prog_path + '.cfg'   # cfg-file of new y_main.py
-    p_glbls.cfg_path = os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn)
-    p_log_this("cfg_path = " + p_glbls.cfg_path)
+    cfg_fn = prog_path + '.cfg'   # cfg-file of new y_main.py
+    cfg_path = os.path.join(p_glbls.dir_cfg, cfg_fn)
+    p_log_this("cfg_path = " + cfg_path)
+    p_glbls.cfg_fn = cfg_fn
     # http://pymotw.com/2/subprocess/
-    # start new ConfArgParser to create cfg-file for >y_main.py<
-    subprocess.call([subprocess_path, p_glbls.cfg_path], shell=True)
-
-def create_glbls():
-    """ writes new y_glbls.py == vars shared across modules """
-    p_log_this()
-    p_code.p_globals()   #
-
-def create_main():
-    """ writes new y_main.py     """
-    p_log_this()
-    p_code.p_main()
+    # start new ConfArgParser to create cfg-file (aka >cfg_path<) for >y_main.py<
+    subprocess.call([subprocess_path, cfg_path], shell=True)
 
 def pyprogen():
     """
@@ -185,14 +180,15 @@ def pyprogen():
     # "pyprogen.ini" =>>>  umbenennen nach: basic.conf oä ???
     p_code.p_read_ini(".", "pyprogen.ini")  # dir relative to >.<
     prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
+    create_various_path_names()   # i.e.: glbls_path,
     create_maindir(prog_path)     # create dir  ./y_main
     create_subdirs(prog_path)     # create dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
-    create_various_path_names()   # i.e.: glbls_path,
-    copy_p_utils_p_log_init()     # copy utilities to ./y_main/lib
-    create_ca_parser(prog_path)   # create/start ./y_main/lib/ConfArgParser.py
-    create_main()                 # create progr ./y_main/y_main.py
+    create_ca_parser(prog_path)   # create & start ./y_main/lib/ConfArgParser.py
+    copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
+    p_code.p_main()               # create progr ./y_main/y_main.py
     p_code.p_globals()            # create modul ./y_main/lib/y_glbls.py
-    p_glbls.print_p_cfg_args(True)    # print variables in ./pyprogen/lib/p_glbls.
+    p_code.p_my_code()            # create modul ./y_main/lib/y_my_code.py  == YOUR code
+    p_glbls.print_p_cfg_args()    # print variables in ./pyprogen/lib/p_glbls.
 
 
 if __name__ == "__main__":
