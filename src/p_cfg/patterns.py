@@ -44,6 +44,7 @@ if __name__ == "__main__":
     p_log_start()
 
     parse_args('no_pos_args', cfg_path='./cfg/xx_main.cfg')
+    xx_glbls.print_cfg_args()
 
     p_log_end()
     p_utils.p_exit()
@@ -93,6 +94,7 @@ CA_Parser_02 = """
 import confargparse
 import argparse
 import sys
+import lib.y_glbls as y_glbls
 try:
     from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 except:
@@ -120,6 +122,10 @@ CA_Parser_04 = """
     else:
         args = parser.parse_args()
 
+# http://stackoverflow.com/questions/295028/inplace-substitution-from-configparser
+# http://stackoverflow.com/questions/295058/convert-a-string-to-preexisting-variable-names
+# http://stackoverflow.com/questions/11553721/using-a-string-variable-as-a-variable-name
+    print 'xx_CAParser: setting global vars:'
     args = vars(args)
     for key, value in sorted(args.iteritems()):
         print "%s  =  %s " % (key, value)

@@ -28,8 +28,6 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
     print 'p_read_ini: dir_path = ', dir_path
     print p_glbls.__file__
     p_log_this()
-    print p_glbls.my_name()
-    # print '>>>>', p_glbls.prog_name
     cfg_path = os.path.join(dir_cfg, cfg_fn)
     cfg_path = os.path.normpath(cfg_path)
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
@@ -101,7 +99,6 @@ def p_subst(input_dict, outfile_fn, outfile_path):
             outfile.write(patt)
         outfile.write('# ' + now_str)
 
-
 def p_globals():
     """ creates ./y_main/lib/y_glbls.py """
     p_log_this(' begin')
@@ -117,7 +114,18 @@ def p_globals():
     for arg in p_glbls.pos_arg_vars:
         txt = txt + arg + ' = None\n'
 
+    txt = txt + '\ndef print_cfg_args():\n'
+    txt = txt + '    # optional args:\n'
+    for arg in p_glbls.opt_arg_vars:
+        txt = txt + '    print \'' + str(arg) + ' = \' + str(' + arg + ')\n'
+    txt = txt + '\n'
+    txt = txt + '    # positional args:\n'
+    for arg in p_glbls.pos_arg_vars:
+        txt = txt + '    print \'' + str(arg) + ' = \' + str(' + arg + ')\n'
+    txt = txt + '\n\n'
+
     patterns.y_glbls[04] = txt
+
     p_subst(patterns.y_glbls, outfile_fn, outfile_path)
     p_log_this(' end' )
 

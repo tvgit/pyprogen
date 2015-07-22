@@ -25,11 +25,7 @@ my_code_path = None  # path of your code; usually: >./y_main/lib/y_my_code.py<
 pos_arg_vars = None  # positional args
 opt_arg_vars = None  # optional args
 
-def my_name():
-    mssge = 'p_globals: my_name'
-    return mssge
-
-def print_p_cfg_vars(print_args=False):
+def print_p_cfg_args(print_args=False):
     print ' prog_name = '     + prog_name
     print ' prefix    = '     + prefix
     print ' dir_main  = '     + dir_main
