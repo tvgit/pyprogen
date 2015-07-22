@@ -94,7 +94,6 @@ CA_Parser_02 = """
 import confargparse
 import argparse
 import sys
-import lib.y_glbls as y_glbls
 try:
     from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 except:
@@ -159,6 +158,7 @@ if __name__ == "__main__":
     print '-' * 20
     p_log_end()
 else:
+    import lib.y_glbls as y_glbls
     pass
 """
 
