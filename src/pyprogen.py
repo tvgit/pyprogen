@@ -182,7 +182,7 @@ def pyprogen():
     creates basic python program according to >pyprogen.conf< and .....
     """
     p_log_this()
-    # "pyprogen.ini" =>>>  basic.conf oä ??
+    # "pyprogen.ini" =>>>  umbenennen nach: basic.conf oä ???
     p_code.p_read_ini(".", "pyprogen.ini")  # dir relative to >.<
     prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
     create_maindir(prog_path)     # create dir  ./y_main

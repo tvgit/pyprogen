@@ -39,8 +39,8 @@ def print_p_cfg_args(print_args=False):
     print ' CAParser_func = ' + CAParser_func
     print ' glbls_fn      = ' + glbls_fn
     print ' glbls_path    = ' + glbls_path
-    print ' my_code_fn  = ' + my_code_fn
-    print ' my_code_path= ' + my_code_path
+    print ' my_code_fn  = '   + my_code_fn
+    print ' my_code_path= '   + my_code_path
 
     if print_args:
         for arg in opt_arg_vars:

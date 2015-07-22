@@ -130,6 +130,17 @@ def p_globals():
     p_log_this(' end' )
 
 
+def p_my_code():
+    """ creates y_main.py """
+    p_log_this(' begin')
+    # fn and path of  >y_main.py<
+    outfile_fn = p_glbls.prog_name
+    outfile_path = os.path.join(p_glbls.dir_main, outfile_fn)
+    # write code of  >y_main.py<
+    p_subst(patterns.y_main, outfile_fn, outfile_path)
+    p_log_this(' end' )
+
+
 def p_main():
     """ creates y_main.py """
     p_log_this(' begin')
