@@ -49,6 +49,19 @@ def make_regex_pos_arg():
     rgx_pos_arg = re.compile(re1+re4+re5,re.IGNORECASE|re.DOTALL)
     return rgx_pos_arg
 
+def p_subst_vars_in_patterns (input_dict):
+    """ substitutes in code parts (input_dict) some words (xx_....) with variable names """
+    p_log_this()
+    patts = dict()
+    for key, patt in input_dict.iteritems():
+        txt = patt.replace("xx_CAParser", p_glbls.CAParser_fn[:-3])
+        txt =  txt.replace("xx_main",     p_glbls.prog_name[:-3])
+        txt =  txt.replace("xx_parser",   p_glbls.CAParser_func)
+        txt =  txt.replace("xx_program_name", p_glbls.prog_name)
+        txt =  txt.replace("xx_dir_log",  p_glbls.dir_log)
+        patts[key] = txt
+    return patts
+
 
 def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     p_log_this()

@@ -43,7 +43,7 @@ if __name__ == "__main__":
     p_log_start()
 
     parse_args('ignore_pos_args', cfg_path='./cfg/xx_main.cfg')
-    xx_glbls.print_cfg_args()
+    # xx_glbls.print_cfg_args()
 
     # Here YOUR code is called.
     xx_my_code.main()
