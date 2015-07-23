@@ -7,7 +7,7 @@ y_main = dict()
 y_main[02] = """
 from   lib.xx_CAParser  import  xx_parser
 import lib.xx_glbls as xx_glbls
-# import lib.xx_my_code as my_code
+import lib.xx_my_code as y_my_code
 
 import lib.p_utils as p_utils
 from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
@@ -25,9 +25,8 @@ def parse_args(command, cfg_path):
     if command:
         mssge_1 = 'xx_main > parse_args: command  = ' + command
         mssge_2 = 'xx_main > parse_args: cfg_path = ' + cfg_path
-        print mssge_1 + '\\n' + mssge_2
-    p_log_this(mssge_1)
-    p_log_this(mssge_2)
+        p_log_this(mssge_1)
+        p_log_this(mssge_2)
     xx_parser(command, cfg_path)
 """
 
@@ -43,8 +42,10 @@ if __name__ == "__main__":
     p_log_init(log_dir = 'log', log_fn = 'xx_main.log')
     p_log_start()
 
-    parse_args('no_pos_args', cfg_path='./cfg/xx_main.cfg')
+    parse_args('ignore_pos_args', cfg_path='./cfg/xx_main.cfg')
     xx_glbls.print_cfg_args()
+
+    y_my_code
 
     p_log_end()
     p_utils.p_exit()
@@ -56,13 +57,14 @@ y_my_code = dict()
 y_my_code[02] = """
 # In this module resides our code. Imported to >xx_main.py<. Is respected if changed.'
 import lib.xx_glbls as xx_glbls
-# import lib.xx_my_code as my_code
+import lib.xx_CAParser as xx_CAParser
 
 import lib.p_utils as p_utils
 from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 """
 
 y_my_code[04] = """
+args = xx_CAParser.get_args()
 """
 
 y_my_code[96] = """
@@ -129,7 +131,7 @@ def xx_parser(command = '', cfg_path=''):
     # p_log_this()
     parser = confargparse.ConfArgParser(description='Program: xx_program_name')
     # exclude positional args when exporting conf-file
-    if (command <> '--export-conf-file') and (command <> 'no_pos_args'):
+    if (command <> '--export-conf-file') and (command <> 'ignore_pos_args'):
 """
 
 CA_Parser_04 = """
