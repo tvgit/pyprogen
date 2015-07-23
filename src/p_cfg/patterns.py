@@ -56,7 +56,9 @@ if __name__ == "__main__":
 
 y_my_code = dict()
 y_my_code[02] = """
-# In this module resides our code. Imported to >xx_main.py<. Is respected if changed.'
+# Hash = xx_hash
+# Your code resides in this module. Imported to >xx_main.py<. Is respected if changed.'
+#
 import lib.xx_glbls as xx_glbls
 import lib.xx_CAParser as xx_CAParser
 
@@ -70,10 +72,18 @@ def evaluate_args():
     # http://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
     # http://stackoverflow.com/questions/1602934/check-if-a-given-key-already-exists-in-a-dictionary?rq=1
     p_log_this()
+    print '--------------- evaluate_args(): '
     args = vars(xx_CAParser.get_args())
     for key, value in sorted(args.iteritems()):
         print "  %s  =  %s " % (key, value)
     print '*' * 30
+
+    # for i in xrange(100):
+    # key = i % 10
+    # if key in d:
+    #     d[key] += 1
+    # else:
+    #     d[key] = 1
 
 """
 
@@ -103,9 +113,11 @@ y_glbls[96] = """
 y_glbls[98] = """
 """
 
-# -------------- y_CAParser.py
+# - NEW ------------- y_CAParser.py
 
-CA_Parser_02 = """
+CA_Parser = dict()
+
+CA_Parser[02] = """
 import confargparse
 import argparse
 import sys
@@ -143,17 +155,21 @@ def xx_parser(command = '', cfg_path=''):
     if (command <> '--export-conf-file') and (command <> 'ignore_pos_args'):
 """
 
-CA_Parser_04 = """
+CA_Parser[04] = """
+"""
+
+
+CA_Parser[10] = """
     global args
     if (command == '--export-conf-file'):
-        print '| xx_CAParser: generating: ', cfg_path
-        print '| xx_CAParser: end'
+        print '| xx_CAParser.py: generating: ', cfg_path
+        print '| xx_CAParser.py: end'
         print '-' * 20
         # ConfArgParser obviously exits? Here! Why?
         parser.parse_args(['--export-conf-file', cfg_path])
         # ConfArgParser obviously exits? Here! Why?
     elif cfg_path:
-        print '++++++++ read from: ', cfg_path
+        print 'xx_parser.py reading config from: >', cfg_path, '<'
         args = parser.parse_args(['--conf-file', cfg_path])
     else:
         args = parser.parse_args()
@@ -161,10 +177,11 @@ CA_Parser_04 = """
     print_args(False)
 """
 
-CA_Parser_96 = """
+
+CA_Parser[96] = """
 """
 
-CA_Parser_98 = """
+CA_Parser[98] = """
 if __name__ == "__main__":
     from   p_log   import p_log_init, p_log_start, p_log_this, p_log_end
     print '-' * 20
