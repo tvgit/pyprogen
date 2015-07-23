@@ -126,10 +126,6 @@ def create_subdirs(prog_path):
     p_glbls.dir_log = p_utils.p_subdir_make(os.path.join(prog_path, 'log'))
     p_glbls.dir_log = os.path.join('.', p_glbls.dir_log)
 
-def create_various_path_names():
-    """# i.e.: glbls_path, """
-    p_code.create_various_path_names()
-
 
 def copy_p_utils_p_log_init():
     """ """
@@ -180,7 +176,7 @@ def pyprogen():
     # "pyprogen.ini" =>>>  umbenennen nach: basic.conf oä ???
     p_code.p_read_ini(".", "pyprogen.ini")  # dir relative to >.<
     prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
-    create_various_path_names()   # i.e.: glbls_path,
+    p_code.create_some_file_names() # i.e.: glbls_path,
     create_maindir(prog_path)     # create dir  ./y_main
     create_subdirs(prog_path)     # create dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
     create_ca_parser(prog_path)   # create & start ./y_main/lib/ConfArgParser.py

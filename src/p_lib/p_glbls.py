@@ -30,12 +30,11 @@ def print_p_cfg_args(print_args=False):
     print ' dir_lib   = '     + dir_lib
     print ' dir_log   = '     + dir_log
     print ' cfg_fn    = '     + cfg_fn
-    #print ' cfg_path  = '     + cfg_path
     print ' CAParser_fn   = ' + CAParser_fn
     print ' CAParser_path = ' + CAParser_path
     print ' CAParser_func = ' + CAParser_func
     print ' glbls_fn      = ' + glbls_fn
-    print ' my_code_fn    = '   + my_code_fn
+    print ' my_code_fn    = ' + my_code_fn
 
     if print_args:
         for arg in opt_arg_vars:

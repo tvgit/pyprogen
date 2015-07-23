@@ -7,7 +7,7 @@ y_main = dict()
 y_main[02] = """
 from   lib.xx_CAParser  import  xx_parser
 import lib.xx_glbls as xx_glbls
-import lib.xx_my_code as y_my_code
+import lib.xx_my_code as xx_my_code
 
 import lib.p_utils as p_utils
 from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
@@ -45,7 +45,8 @@ if __name__ == "__main__":
     parse_args('ignore_pos_args', cfg_path='./cfg/xx_main.cfg')
     xx_glbls.print_cfg_args()
 
-    y_my_code
+    # Here YOUR code is called.
+    xx_my_code.main()
 
     p_log_end()
     p_utils.p_exit()
@@ -64,10 +65,22 @@ from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 """
 
 y_my_code[04] = """
-args = xx_CAParser.get_args()
+def evaluate_args():
+    # http://stackoverflow.com/questions/295058/convert-a-string-to-preexisting-variable-names
+    # http://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
+    # http://stackoverflow.com/questions/1602934/check-if-a-given-key-already-exists-in-a-dictionary?rq=1
+    p_log_this()
+    args = vars(xx_CAParser.get_args())
+    for key, value in sorted(args.iteritems()):
+        print "  %s  =  %s " % (key, value)
+    print '*' * 30
+
 """
 
-y_my_code[96] = """
+y_my_code[10] = """
+def main():
+    p_log_this()
+    evaluate_args()
 """
 
 y_my_code[98] = """
@@ -108,13 +121,9 @@ def get_args():
     return args
 
 def print_args(command = False):
-    # http://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
-    # https://parezcoydigo.wordpress.com/2012/08/04/from-argparse-to-dictionary-in-python-2-7/
-    # http://stackoverflow.com/questions/295028/inplace-substitution-from-configparser
-    # http://stackoverflow.com/questions/295058/convert-a-string-to-preexisting-variable-names
-    # http://stackoverflow.com/questions/11553721/using-a-string-variable-as-a-variable-name
+
     global args
-    # print 'y_CAParser.py: setting global vars:'
+    # print 'xx_CAParser.py: setting global vars:'
     print '*' * 30
     print 'This is: >xx_CAParser<'
     print 'args are: '
@@ -149,7 +158,7 @@ CA_Parser_04 = """
     else:
         args = parser.parse_args()
 
-    print_args(True)
+    print_args(False)
 """
 
 CA_Parser_96 = """

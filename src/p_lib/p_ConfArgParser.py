@@ -11,6 +11,7 @@ import StringIO
 import re
 import os
 
+import p_code
 import p_glbls
 import p_utils
 from   p_log   import p_log_this
@@ -51,11 +52,6 @@ def make_regex_pos_arg():
 
 def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     p_log_this()
-    CA_Parser_02 = patterns.CA_Parser_02
-    CA_Parser_04 = patterns.CA_Parser_04
-    CA_Parser_96 = patterns.CA_Parser_96
-    CA_Parser_98 = patterns.CA_Parser_98
-
     opt_args             = []  # local list of opt-args
     pos_args             = []  # local list of pos-args
     p_glbls.opt_arg_vars = []  # list (in p_glbls) of opt-args
@@ -70,6 +66,11 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     rgx_minus_minus = make_regex_opt_arg_minus_minus()   # regex vs. >('--foo',<
     # regex: searching for optional (== non-positional) args:
     rgx_pos_arg     = make_regex_pos_arg()               # regex vs. >('bar',<
+
+    CA_Parser_02 = patterns.CA_Parser_02
+    CA_Parser_04 = patterns.CA_Parser_04
+    CA_Parser_96 = patterns.CA_Parser_96
+    CA_Parser_98 = patterns.CA_Parser_98
 
     with open(conf_file_fn, 'r') as infile:
         for line in infile:
@@ -103,7 +104,8 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
 
     virt_file = StringIO.StringIO()
     # p_glbls.CAParser_func
-    p_glbls.CAParser_func = p_glbls.prefix + 'parser'
+    # p_glbls.CAParser_func = p_glbls.prefix + 'parser'
+
     CA_Parser_02 = CA_Parser_02.replace("xx_parser", p_glbls.CAParser_func)
     CA_Parser_02 = CA_Parser_02.replace("xx_program_name", p_glbls.prog_name)
     virt_file.write(CA_Parser_02)
