@@ -2,7 +2,6 @@
 # INFO       2015-07-18 20:36:05  p_log_start:  y_main.py Logging started (first time!)
 # INFO       2015-07-18 20:36:05  p_log_end:  y_main.py Logging end
 
-
 y_main = dict()
 y_main[02] = """
 from   lib.xx_CAParser  import  xx_parser
@@ -66,26 +65,17 @@ import lib.p_utils as p_utils
 from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 """
 
-y_my_code[04] = """
+y_my_code[04] = ("""
 def evaluate_args():
     # http://stackoverflow.com/questions/295058/convert-a-string-to-preexisting-variable-names
     # http://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
     # http://stackoverflow.com/questions/1602934/check-if-a-given-key-already-exists-in-a-dictionary?rq=1
     p_log_this()
-    print '--------------- evaluate_args(): '
-    args = vars(xx_CAParser.get_args())
-    for key, value in sorted(args.iteritems()):
-        print "  %s  =  %s " % (key, value)
     print '*' * 30
-
-    # for i in xrange(100):
-    # key = i % 10
-    # if key in d:
-    #     d[key] += 1
-    # else:
-    #     d[key] = 1
-
-"""
+    print '- y_my_code > evaluate_args(): '
+    xx_glbls.print_cfg_args()
+    print '*' * 30
+""")
 
 y_my_code[10] = """
 def main():
@@ -113,7 +103,7 @@ y_glbls[96] = """
 y_glbls[98] = """
 """
 
-# - NEW ------------- y_CAParser.py
+# -------------- y_CAParser.py
 
 CA_Parser = dict()
 
@@ -133,20 +123,14 @@ def get_args():
     return args
 
 def print_args(command = False):
-
     global args
-    # print 'xx_CAParser.py: setting global vars:'
     print '*' * 30
     print 'This is: >xx_CAParser<'
     print 'args are: '
-    if command:
-        args = vars(args)
-        for key, value in sorted(args.iteritems()):
-            print "  %s  =  %s " % (key, value)
-        print '*' * 30
-    else:
-        pass
-
+    args = vars(args)
+    for key, value in sorted(args.iteritems()):
+        print "  %s  =  %s " % (key, value)
+    print '*' * 30
 
 def xx_parser(command = '', cfg_path=''):
     # p_log_this()
@@ -170,11 +154,11 @@ CA_Parser[10] = """
         # ConfArgParser obviously exits? Here! Why?
     elif cfg_path:
         print 'xx_parser.py reading config from: >', cfg_path, '<'
-        args = parser.parse_args(['--conf-file', cfg_path])
+        args = parser.parse_args(['--conf-file', cfg_path], namespace = y_glbls.arg)
     else:
-        args = parser.parse_args()
+        args = parser.parse_args(namespace = y_glbls.arg)
 
-    print_args(False)
+    # print_args(False)
 """
 
 

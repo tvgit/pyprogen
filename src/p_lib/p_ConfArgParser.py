@@ -71,6 +71,7 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     p_log_this()
     opt_args             = []  # local list of opt-args
     pos_args             = []  # local list of pos-args
+    # >p_ConfArgParser< sets vars in p_glbls. ... for later use in >p_code.p_globals<
     p_glbls.opt_arg_vars = []  # list (in p_glbls) of opt-args
     p_glbls.pos_arg_vars = []  # list (in p_glbls) of pos-args
 
@@ -98,22 +99,26 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
                     if match_minus_minus:
                         group_0 = match_minus_minus.group(0)[:-1].lstrip()
                         if len (group_0) > 2:
-                            p_glbls.opt_arg_vars.append(group_0[3:])
+                            # p_glbls.opt_arg_vars.append(group_0[3:])
                             opt_args.append(group_0[1:])
                         opt_arg_lines.append(line)
                     elif match_minus:
                         group_0 = match_minus.group(0)[:-1].lstrip()
                         if len (group_0) > 1:
-                            p_glbls.opt_arg_vars.append(group_0[2:])
+                            # p_glbls.opt_arg_vars.append(group_0[2:])
                             opt_args.append(group_0[1:])
                         opt_arg_lines.append(line)
                     elif match_pos_arg:
                         group_0 = match_pos_arg.group(0)[:-1].lstrip()
                         if len (group_0) > 2:
-                            p_glbls.pos_arg_vars.append(group_0[1:])
+                            # p_glbls.pos_arg_vars.append(group_0[1:])
                             pos_args.append(group_0[1:])
                         pos_arg_lines.append(line)
 
+    for arg in opt_args:
+        p_glbls.opt_arg_vars.append(p_glbls.arg_prefix + arg.lstrip('-'))
+    for arg in pos_args:
+        p_glbls.pos_arg_vars.append(p_glbls.arg_prefix + arg)
 
     # generate lines with pos args like: >parser.add_argument('bar', type=file)<
     txt = ''
