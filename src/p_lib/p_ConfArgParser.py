@@ -116,9 +116,9 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
                         pos_arg_lines.append(line)
 
     for arg in opt_args:
-        p_glbls.opt_arg_vars.append(p_glbls.arg_prefix + arg.lstrip('-'))
+        p_glbls.opt_arg_vars.append(arg.lstrip('-'))
     for arg in pos_args:
-        p_glbls.pos_arg_vars.append(p_glbls.arg_prefix + arg)
+        p_glbls.pos_arg_vars.append(arg)
 
     # generate lines with pos args like: >parser.add_argument('bar', type=file)<
     txt = ''

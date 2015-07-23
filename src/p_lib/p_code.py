@@ -68,18 +68,6 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
         p_glbls.prefix = p_glbls.prog_name[0] + '_'  # prefix for generated program
         p_log_this('prefix set to: ' + p_glbls.prefix)
 
-    # p_glbls.arg_prefix
-    try:
-        p_glbls.arg_prefix = parser.get("properties", "arg_prefix")
-        p_log_this('arg_prefix = ' + p_glbls.arg_prefix)
-        if (len(p_glbls.arg_prefix) < 2):
-            p_log_this('arg_prefix = ' + p_glbls.arg_prefix)
-            p_glbls.arg_prefix = 'arg_'  # arg_prefix
-            p_log_this('arg_prefix set to: ' + p_glbls.arg_prefix)
-    except ConfigParser.NoOptionError:
-        p_glbls.arg_prefix = 'arg_'  # arg_prefix
-        p_log_this('arg_prefix set to: ' + p_glbls.prefix)
-
     # p_glbls.my_code_fn
     try:
         p_glbls.my_code_fn = parser.get("properties", "my_code_fn")
@@ -133,8 +121,6 @@ def p_globals():
     p_log_this(' begin')
 
     txt ="class arg:\n"
-
-
     txt = txt + '#   - optional args (ConfArgParser):\n'
     for arg in p_glbls.opt_arg_vars:
         txt = txt + '    ' + arg + ' = None\n'
@@ -146,11 +132,11 @@ def p_globals():
     txt = txt + '\ndef print_cfg_args():\n'
     txt = txt + '    # optional args (ConfArgParser):\n'
     for arg in p_glbls.opt_arg_vars:
-        txt = txt + '    print \'' + str(arg) + ' = \' + str(' + arg + ')\n'
+        txt = txt + '    print \'' + str(arg) + ' = \' + str(arg.' + arg + ')\n'
     txt = txt + '\n'
     txt = txt + '    # positional args (ConfArgParser):\n'
     for arg in p_glbls.pos_arg_vars:
-        txt = txt + '    print \'' + str(arg) + ' = \' + str(' + arg + ')\n'
+        txt = txt + '    print \'' + str(arg) + ' = \' + str(arg.' + arg + ')\n'
     txt = txt + '\n'
 
     patterns.y_glbls[04] = txt
