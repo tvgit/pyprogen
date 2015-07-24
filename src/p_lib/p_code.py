@@ -117,7 +117,16 @@ def p_write_code (input_dict, outfile_fn, outfile_path):
         outfile.write('# ' + now_str)
 
 def p_globals():
-    """ creates ./y_main/lib/y_glbls.py """
+    """
+    creates ./y_main/lib/y_glbls.py
+    DO:
+     - create args as an >argparse.Namespace<
+       =>  import >argparse< etc ....
+     args = argparse.Namespace()
+     - access vars via: args.arg_name
+       i.e. args.foo = ....
+     - how to find out, if args.foo exists ?
+    """
     p_log_this(' begin')
 
     txt ="class Args:\n"
