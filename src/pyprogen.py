@@ -90,6 +90,31 @@ __date__ = "$05.05.2015 21:55:22$"
         /cfg   # configuration
         /lib   # modules
         /log   # log
+
+    100.
+    Dark sides of py:
+    py can not protect vars inside a module from being modified from outside.
+    [
+    module want_be_private
+    var_priv = 66
+
+    module outside
+    import want_be_private
+    want_be_private.var_priv = 99   !!!
+    ]
+
+
+    py can not prevent creating attributes to this module from outside.
+    [
+    module want_be_private
+    var_priv = 100
+
+    module outside
+    import want_be_private
+    want_be_private.var_NEW = 1 # but inside >module want_be_private< you know nothing
+      about >var_NEW<!!!
+    ]
+
 """
 ###
 
