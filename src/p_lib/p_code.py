@@ -145,7 +145,11 @@ def p_globals():
     txt = txt + '    print "arg.__dict__:"\n'
     txt = txt + '    print arg.__dict__\n'
     txt = txt + '    print "vars(arg):"\n'
-    txt = txt + '    print vars(arg)'
+    txt = txt + '    print vars(arg)\n'
+    txt = txt + '    print "dir(arg):"\n'
+    txt = txt + '    print dir(arg)\n'
+    txt = txt + '    print "locals():"\n'
+    txt = txt + '    print locals()\n'
     txt = txt + '\n'
 
     patterns.y_glbls[96] = txt

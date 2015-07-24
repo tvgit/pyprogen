@@ -153,8 +153,9 @@ CA_Parser[10] = """
         parser.parse_args(['--export-conf-file', cfg_path])
         # ConfArgParser obviously exits? Here! Why?
     elif cfg_path:
-        print 'xx_parser.py reading config from: >', cfg_path, '<'
+        print 'xx_CAParser.py > xx_parser.py: reading config from: >', cfg_path, '<'
         args = parser.parse_args(['--conf-file', cfg_path], namespace = y_glbls.arg)
+        print_args(False)
     else:
         args = parser.parse_args(namespace = y_glbls.arg)
 
