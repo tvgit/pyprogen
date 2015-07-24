@@ -101,6 +101,9 @@ y_glbls[96] = """
 """
 
 y_glbls[98] = """
+if __name__ == "__main__":
+    args = self.arg
+else:
 """
 
 # -------------- y_CAParser.py
@@ -154,10 +157,12 @@ CA_Parser[10] = """
         # ConfArgParser obviously exits? Here! Why?
     elif cfg_path:
         print 'xx_CAParser.py > xx_parser.py: reading config from: >', cfg_path, '<'
-        args = parser.parse_args(['--conf-file', cfg_path], namespace = y_glbls.arg)
+        # args = parser.parse_args(['--conf-file', cfg_path], namespace = y_glbls.arg)
+        args = parser.parse_args(['--conf-file', cfg_path])
         print_args(False)
     else:
-        args = parser.parse_args(namespace = y_glbls.arg)
+        # args = parser.parse_args(namespace = y_glbls.arg)
+        args = parser.parse_args()
 
     # print_args(False)
 """
