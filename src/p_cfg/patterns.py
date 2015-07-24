@@ -42,7 +42,7 @@ if __name__ == "__main__":
     p_log_start()
 
     parse_args('ignore_pos_args', cfg_path='./cfg/xx_main.cfg')
-    # xx_glbls.print_cfg_args()
+    xx_glbls.print_cfg_args(xx_glbls.args)
 
     # Here YOUR code is called.
     xx_my_code.main()
@@ -73,7 +73,7 @@ def evaluate_args():
     p_log_this()
     print '*' * 30
     print '- y_my_code > evaluate_args(): '
-    xx_glbls.print_cfg_args()
+    xx_glbls.print_cfg_args((xx_glbls.args))
     print '*' * 30
 """)
 
@@ -91,6 +91,7 @@ y_my_code[98] = """
 y_glbls = dict()
 y_glbls[02] = """
 # Sharing information via this module across >xx_main.py< and its modules
+# http://stackoverflow.com/questions/13034496/using-global-variables-between-files-in-python
 #
 """
 
@@ -101,9 +102,24 @@ y_glbls[96] = """
 """
 
 y_glbls[98] = """
+
+global args
+
+def make_args(origin = 'xx_glbls.py'):
+    args = Args('xx_glbls.py')
+    return args
+
+def get_args(origin):
+    if args:
+        return args
+    else:
+        args = make_args(origin = 'unknown !?')
+        return args
+
 if __name__ == "__main__":
-    args = self.arg
+    args = Args('xx_glbls.py')
 else:
+    pass
 """
 
 # -------------- y_CAParser.py
@@ -125,7 +141,7 @@ def get_args():
     global args
     return args
 
-def print_args(command = False):
+def print_args():
     global args
     print '*' * 30
     print 'This is: >xx_CAParser<'
@@ -152,19 +168,20 @@ CA_Parser[10] = """
         print '| xx_CAParser.py: generating: ', cfg_path
         print '| xx_CAParser.py: end'
         print '-' * 20
-        # ConfArgParser obviously exits? Here! Why?
         parser.parse_args(['--export-conf-file', cfg_path])
-        # ConfArgParser obviously exits? Here! Why?
+        # ConfArgParser obviously exits? Here! Why? ? ? ?
     elif cfg_path:
         print 'xx_CAParser.py > xx_parser.py: reading config from: >', cfg_path, '<'
         # args = parser.parse_args(['--conf-file', cfg_path], namespace = y_glbls.arg)
         args = parser.parse_args(['--conf-file', cfg_path])
-        print_args(False)
+        g_args = y_glbls.make_args()
+        y_glbls.args = args
+        # print_args(False)
     else:
         # args = parser.parse_args(namespace = y_glbls.arg)
         args = parser.parse_args()
 
-    # print_args(False)
+    # print_args()
 """
 
 

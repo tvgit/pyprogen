@@ -56,13 +56,13 @@ __date__ = "$05.05.2015 21:55:22$"
     >ConfArgParse< is able to read and to write configuration files.
     If you want to generate a configuration file for later modification,
     add the desired options as arguments to your >ConfArgParse< - parser.
-    Then call your program with the "-n --export-conf-file > y_main_test.cfg"
+    Then call your program with the "-n --export-conf-file > y_main.cfg"
     argument and the configuration file will be written.
 
     The same procedure is followed by pyprogen, to produce the the
     configuration file for your >y_main.py<. Pyprogen writes firstly
     the program code for the parser >y_CAParser.py<, then executes
-    >y_CAParser.py< with the "--export-conf-file > ./y_main/cfg/y_main_test.cfg".
+    >y_CAParser.py< with the "--export-conf-file > ./y_main/cfg/y_main.cfg".
     Then you will find the new >y_main.conf< for your >y_main.py<
     in the ./y_main/cfg/ dir.  ,mnb
 

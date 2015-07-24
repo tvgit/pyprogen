@@ -113,8 +113,10 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
                             pos_args.append(group_0[1:])
                         pos_arg_lines.append(line)
 
+    # strip '-' or '--' from opt_args and copy them to >p_glbls.opt_arg_vars<
     for arg in opt_args:
         p_glbls.opt_arg_vars.append(arg.lstrip('-'))
+    # copy opt_args to >p_glbls.opt_arg_vars<
     for arg in pos_args:
         p_glbls.pos_arg_vars.append(arg)
 

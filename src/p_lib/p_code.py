@@ -120,38 +120,49 @@ def p_globals():
     """ creates ./y_main/lib/y_glbls.py """
     p_log_this(' begin')
 
-    txt ="class arg:\n"
-    txt = txt + '#   - optional args (ConfArgParser):\n'
-    for arg in p_glbls.opt_arg_vars:
-        txt = txt + '    ' + arg + ' = None\n'
-    txt = txt + '#   - positional args(ConfArgParser):\n'
-    for arg in p_glbls.pos_arg_vars:
-        txt = txt + '    ' + arg + ' = None\n'
-    txt = txt + '    pass\n'
+    txt ="class Args:\n"
+    txt = txt + ' '*4 + 'def __init__(self, origin):\n'
+    txt = txt + ' '*8 + '__origin__ =  str(origin) \n'
+    txt = txt + ' '*8 + '# optional args (ConfArgParser):\n'
 
-    txt = txt + '\ndef print_cfg_args():\n'
-    txt = txt + '    # optional args (ConfArgParser):\n'
     for arg in p_glbls.opt_arg_vars:
-        txt = txt + '    print \'' + str(arg) + ' = \' + str(arg.' + arg + ')\n'
-    txt = txt + '\n'
-    txt = txt + '    # positional args (ConfArgParser):\n'
+        txt = txt + ' '*8 + arg + ' = None\n'
+    txt = txt + ' '*8 + '# positional args(ConfArgParser):\n'
     for arg in p_glbls.pos_arg_vars:
-        txt = txt + '    print \'' + str(arg) + ' = \' + str(arg.' + arg + ')\n'
+        txt = txt + ' '*8 + arg + ' = None\n'
+    txt = txt + ' '*8 + 'pass\n'
+
+    txt = txt + ' '*4 + '\ndef print_cfg_args(self):\n'
+#    txt = txt + ' '*8 + 'print \'origin  = \' + str(self.__origin__)\n'
+    txt = txt + ' '*8 + 'print "vars(arg):"\n'
+    # txt = txt + ' '*8 + 'print sorted(vars(arg))\n'
+    txt = txt + ' '*8 + 'print sorted(vars(self))\n'
+
+    txt = txt + ' '*8 + '# optional args (ConfArgParser):\n'
+    for arg in p_glbls.opt_arg_vars:
+        # txt = txt + ' '*8 + 'print \'' + str(arg) + ' = \' + str(args.' + arg + ')\n'
+        txt = txt + ' '*8 + 'print \'' + str(arg) + ' = \' + str(self.' + arg + ')\n'
+    txt = txt + '\n'
+    txt = txt + ' '*8 + '# positional args (ConfArgParser):\n'
+    for arg in p_glbls.pos_arg_vars:
+        # txt = txt + ' '*8 + 'print \'' + str(arg) + ' = \' + str(args.' + arg + ')\n'
+        txt = txt + ' '*8 + 'print \'' + str(arg) + ' = \' + str(self.' + arg + ')\n'
     txt = txt + '\n'
 
     patterns.y_glbls[04] = txt
 
-    txt = '\n# ----- args (arg.__dict__):\n'
-    txt = txt + '    print "arg.__dict__:"\n'
-    txt = txt + '    print arg.__dict__\n'
-    txt = txt + '    print "vars(arg):"\n'
-    txt = txt + '    print vars(arg)\n'
-    txt = txt + '    print "dir(arg):"\n'
-    txt = txt + '    print dir(arg)\n'
-    txt = txt + '    print "locals():"\n'
-    txt = txt + '    print locals()\n'
-    txt = txt + '\n'
+    # txt = '\n# ----- args (arg.__dict__):\n'
+    # txt = txt + '    print "arg.__dict__:"\n'
+    # txt = txt + '    print arg.__dict__\n'
+    # txt = txt + '    print "vars(arg):"\n'
+    # txt = txt + '    print vars(arg)\n'
+    # txt = txt + '    print "dir(arg):"\n'
+    # txt = txt + '    print dir(arg)\n'
+    # txt = txt + '    print "locals():"\n'
+    # txt = txt + '    print locals()\n'
+    # txt = txt + '\n'
 
+    txt = ''
     patterns.y_glbls[96] = txt
 
 
