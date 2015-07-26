@@ -126,7 +126,6 @@ def p_globals():
     txt = txt + ' '*4 + '# positional args(ConfArgParser):\n'
     for arg in p_glbls.pos_arg_vars:
         txt = txt + ' '*4 + 'arg_ns.' + arg + ' = None\n'
-    txt = txt + ' '*4 + 'pass\n'
     txt = txt + ' '*4 + 'return arg_ns\n'
     patterns.y_glbls[04] = txt
 

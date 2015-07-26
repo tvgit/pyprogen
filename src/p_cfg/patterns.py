@@ -95,15 +95,12 @@ def make_arg_ns(origin = 'unknown !?'):
 
     arg_ns = argparse.Namespace()
     arg_ns.__origin__ =  str(origin)
-    # ab hier: p_code ...
-
 """
 
 y_glbls[04] = """
 """
 
 y_glbls[10] = """
-    return arg_ns
 
 def print_arg_ns():
     global arg_ns
