@@ -144,6 +144,11 @@ def p_globals():
 
 def p_my_code():
     """ creates y_my_code.py """
+    txt =       ' '*4 + '# optional args(ConfArgParser):\n'
+    for arg in p_glbls.opt_arg_vars:
+        txt = txt + ' '*4 + 'arg_ns.' + arg + ' = None\n'
+
+
     p_log_this(' begin')
     # fn and path of  >y_main.py<
     outfile_fn = p_glbls.my_code_fn
