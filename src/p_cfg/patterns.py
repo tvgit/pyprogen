@@ -4,9 +4,9 @@
 
 y_main = dict()
 y_main[02] = """
-from   lib.xx_CAParser  import  xx_parser
-import lib.xx_glbls as xx_glbls
-import lib.xx_my_code as xx_my_code
+import lib.xx_CAParser as xx_CAParser
+import lib.xx_glbls    as xx_glbls
+import lib.xx_my_code  as xx_my_code
 
 import lib.p_utils as p_utils
 from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
@@ -20,13 +20,6 @@ def use_args():
 """
 
 y_main[10] = """
-def parse_args(command='', cfg_path=''):
-    if command:
-        mssge_1 = 'xx_main > parse_args: command  = ' + command
-        mssge_2 = 'xx_main > parse_args: cfg_path = ' + cfg_path
-        p_log_this(mssge_1)
-        p_log_this(mssge_2)
-    xx_parser(command, cfg_path)
 """
 
 y_main[96] = """
@@ -41,8 +34,8 @@ if __name__ == "__main__":
     p_log_init(log_dir = 'log', log_fn = 'xx_main.log')
     p_log_start()
 
-    # parse_args('ignore_pos_args', '')
-    parse_args()
+    # xx_CAParser.xx_parser('ignore_pos_args', '')
+    xx_CAParser.xx_parser()
 
     # Here YOUR code is called.
     xx_my_code.main()
@@ -158,9 +151,9 @@ CA_Parser[10] = """
         parser.parse_args(['--export-conf-file', cfg_path])
         print '| y_CAParser.py: end'
         # ConfArgParser obviously exits? Here! Why? ? ? ?
-    # when reading conf-file +/- opt.args +- pos.args
     else:
-        args = parser.parse_args()  # reads command line
+        # read +/- conf-file +- pos.args +/- opt.args
+        args = parser.parse_args()
         # set values in >y_glbls.arg_ns<
         for key, value in vars(args).iteritems():
             if hasattr(y_glbls.arg_ns, key):
