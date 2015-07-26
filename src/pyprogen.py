@@ -77,8 +77,6 @@ __date__ = "$05.05.2015 21:55:22$"
     5. howto config/ini / ok
     (http://martin-thoma.com/configuration-files-in-python/)
 
-    6. python program schreiben, das als Input ein paar Parameter hat ...
-
     7.
     Ein python Program schreiben, das das ein parametrierbares Grundgeruest
     fuer Obiges (6.) erledigt, und
@@ -181,7 +179,6 @@ def create_ca_parser(prog_path):
     """
     p_log_this()
     p_ConfArgParser('./pyprogen_001.conf') # create confargparser for >y_main.py<
-    # loc_path = os.getcwd()
     subprocess_path  = p_glbls.CAParser_path
     p_log_this("subprocess_path = " + subprocess_path)
     cfg_fn = prog_path + '.cfg'   # cfg-file of new y_main.py

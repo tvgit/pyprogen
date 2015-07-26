@@ -120,8 +120,6 @@ def p_globals():
     """ creates ./y_main/lib/y_glbls.py  """
     p_log_this(' begin')
 
-
-
     txt =       ' '*4 + '# optional args(ConfArgParser):\n'
     for arg in p_glbls.opt_arg_vars:
         txt = txt + ' '*4 + 'arg_ns.' + arg + ' = None\n'
@@ -135,12 +133,9 @@ def p_globals():
     txt = ''
     patterns.y_glbls[96] = txt
 
-
     # fn and path of  >y_glbls.py<
     outfile_fn   = p_glbls.glbls_fn
     outfile_path = os.path.join(p_glbls.dir_lib, p_glbls.glbls_fn)
-
-    # write code of  >y_glbls.py<
 
     # p_subst(patterns.y_glbls, outfile_fn, outfile_path)
     code = p_subst_vars_in_patterns (patterns.y_glbls)

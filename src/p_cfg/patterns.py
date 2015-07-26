@@ -64,12 +64,12 @@ import lib.p_utils as p_utils
 from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 """
 
-y_my_code[04] = ("""
+y_my_code[04] = """
 def evaluate_args():
     # print '- y_my_code > evaluate_args(): '
     p_log_this()
     xx_glbls.print_arg_ns()
-""")
+"""
 
 y_my_code[10] = """
 def main():
