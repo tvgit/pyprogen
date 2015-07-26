@@ -64,7 +64,7 @@ __date__ = "$05.05.2015 21:55:22$"
     the program code for the parser >y_CAParser.py<, then executes
     >y_CAParser.py< with the "--export-conf-file > ./y_main/cfg/y_main.cfg".
     Then you will find the new >y_main.conf< for your >y_main.py<
-    in the ./y_main/cfg/ dir.  ,mnb
+    in the ./y_main/cfg/ dir.
 
     1. confargparse verstehen / ok
 
