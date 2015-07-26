@@ -77,22 +77,23 @@ def here(txt='', level=2):
 
 def p_log_dir_make(log_dir):
     """ checks, eventually creates sub_dir """
-    print ('checking log_dir:  >' + log_dir + '<'),
+    mssge_00 = 'checking log_dir:  >' + log_dir + '<'
     log_dir = os.path.normpath(log_dir)
     if (os.path.isabs(log_dir)):
-        print ( '< is absolute, should be relative (i.e. ./log).')
+        print ( mssge_00  + '< is absolute, should be relative (i.e. ./log).')
         sys.exit() # exit !
     if (log_dir == ''):
         log_dir = '.'
     if not os.path.exists(log_dir):
-        print 'creating dir: >' + log_dir + '<',
+        print mssge_00 + 'creating dir: >' + log_dir + '<',
         try:
             os.makedirs(log_dir)
             print '  ok'
         except IOError:
             print '  failed!'
     else:
-        print ' -> dir exists.'
+        #print ' -> dir exists.'
+        pass
     return log_dir
 
 def p_log_fn_check(log_fn):
