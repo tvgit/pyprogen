@@ -20,7 +20,7 @@ def use_args():
 """
 
 y_main[10] = """
-def parse_args(command, cfg_path):
+def parse_args(command='', cfg_path=''):
     if command:
         mssge_1 = 'xx_main > parse_args: command  = ' + command
         mssge_2 = 'xx_main > parse_args: cfg_path = ' + cfg_path
@@ -41,7 +41,8 @@ if __name__ == "__main__":
     p_log_init(log_dir = 'log', log_fn = 'xx_main.log')
     p_log_start()
 
-    parse_args('ignore_pos_args', cfg_path='./cfg/xx_main.cfg')
+    # parse_args('ignore_pos_args', '')
+    parse_args()
 
     # Here YOUR code is called.
     xx_my_code.main()
@@ -160,15 +161,13 @@ CA_Parser[10] = """
         parser.parse_args(['--export-conf-file', cfg_path])
         print '| y_CAParser.py: end'
         # ConfArgParser obviously exits? Here! Why? ? ? ?
-    # when reading conf-file:
-    elif cfg_path:
-        print 'xx_CAParser.py > xx_parser.py: reading config from: >', cfg_path, '<'
-        args = parser.parse_args(['--conf-file', cfg_path])
+    # when reading conf-file +/- opt.args +- pos.args
+    else:
+        args = parser.parse_args()  # reads command line
+        # set values in >y_glbls.arg_ns<
         for key, value in vars(args).iteritems():
             if hasattr(y_glbls.arg_ns, key):
                 setattr(y_glbls.arg_ns, key, value)
-    else:
-        args = parser.parse_args()
 """
 
 
