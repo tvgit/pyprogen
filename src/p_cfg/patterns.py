@@ -47,12 +47,10 @@ if __name__ == "__main__":
 # -------------- y_my_code.py
 
 y_my_code = dict()
-y_my_code[01] = """
-# Hash = xx_hash
-"""
 
-y_my_code[02] = """
-# YOUR code resides in this module. Imported to >xx_main.py<. Is respected if changed.'
+y_my_code[02] = """# -
+
+# YOUR code resides in THIS module. Imported to >xx_main.py<. Is respected if changed.'
 
 import lib.xx_glbls as xx_glbls
 import lib.p_utils as p_utils
@@ -60,6 +58,9 @@ from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 """
 
 y_my_code[04] = """
+def eval_arg(arg):
+    return arg
+
 def evaluate_args():
     p_log_this()
     print '- y_my_code > evaluate_args(): '
@@ -67,6 +68,9 @@ def evaluate_args():
 """
 
 y_my_code[10] = """
+"""
+
+y_my_code[96] = """
 def main():
     p_log_this()
     evaluate_args()
