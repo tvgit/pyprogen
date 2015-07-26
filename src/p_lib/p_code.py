@@ -7,6 +7,7 @@ __date__ = "$18.07.2015 15:55:22$"
 import os
 import string
 import ConfigParser  # read configfile
+import hashlib
 
 import p_glbls  # share global values
 import p_utils
@@ -142,9 +143,41 @@ def p_globals():
     p_log_this(' end' )
 
 
+def check_my_code_modified(outfile_path):
+    my_code_file = p_utils.p_file_open(outfile_path, mode = 'r')
+    # if my_code_file:
+    #     print outfile_path + ' opened.'
+    # else:
+    #     print outfile_path + ' does not exist!'
+
+    code_to_hash = ''
+    with my_code_file:
+        cnt = 1
+        for line in my_code_file:
+            if cnt == 1:
+                line_first = line
+                cnt = cnt + 1
+            elif cnt == 2:
+                line_hash = line
+                cnt = cnt + 1
+            else:
+                code_to_hash = code_to_hash + line
+
+    # code = myfile.read().replace('\n', '')
+    # line_first = my_code_file.readline()
+    # line_hash  = my_code_file.readline()
+    # print line_hash
+    # code_to_hash   = my_code_file.readlines()
+    hash_md5       = hashlib.md5()
+    code_to_hash   = str (code_to_hash)
+    hash_md5.update(code_to_hash)
+    hash_of_code   = hash_md5.hexdigest()
+    print hash_of_code
+    p_utils.p_file_close(my_code_file)
+    return code_to_hash
+
 def p_my_code():
     """ creates y_my_code.py """
-    import hashlib
 
     p_log_this(' begin')
     # fn and path of  >y_main.py<
@@ -160,20 +193,37 @@ def p_my_code():
 
     patterns.y_my_code[10] = txt
 
-    code_to_hash = ''
-    for key, chunk in sorted(patterns.y_my_code.iteritems()):
-        code_to_hash = code_to_hash + chunk
-    print code_to_hash
+    y_my_code = p_subst_vars_in_patterns (patterns.y_my_code)
 
-    patterns.y_my_code[01] = """ # """
+    code_to_hash = ''
+    for key, chunk in sorted(y_my_code.iteritems()):
+        code_to_hash = code_to_hash + chunk
+
+    print '=' *40
+    print len(code_to_hash)
+    print '=' *40
 
     hash_md5 = hashlib.md5()
     hash_md5.update(code_to_hash)
     hash_of_mytext = hash_md5.hexdigest()
 
+    y_my_code[01] = '# >' + hash_of_mytext + '< \n'
 
-    code = p_subst_vars_in_patterns (patterns.y_my_code)
-    p_write_code (code, outfile_fn, outfile_path)
+    code_of_file = check_my_code_modified(outfile_path)
+    print '*' *40
+    print len(code_of_file)
+    print '*' *40
+    # hash_of_mytext
+    # print code_of_file
+
+    import difflib
+    #differ = difflib.Differ()
+    diff = difflib.ndiff(code_of_file, code_to_hash )
+    # print '\n'.join(diff)
+    print ''.join(list(diff))
+
+    p_write_code (y_my_code, outfile_fn, outfile_path)
+
     p_log_this(' end' )
 
 

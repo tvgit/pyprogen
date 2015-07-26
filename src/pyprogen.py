@@ -206,7 +206,7 @@ def pyprogen():
     p_code.p_main()               # create progr ./y_main/y_main.py
     p_code.p_globals()            # create modul ./y_main/lib/y_glbls.py
     p_code.p_my_code()            # create modul ./y_main/lib/y_my_code.py  == YOUR code
-    p_glbls.print_p_cfg_args()    # print variables in ./pyprogen/lib/p_glbls.
+    # p_glbls.print_p_cfg_args()    # print variables in ./pyprogen/lib/p_glbls.
 
 
 if __name__ == "__main__":
