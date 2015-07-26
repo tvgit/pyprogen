@@ -42,7 +42,6 @@ if __name__ == "__main__":
     p_log_start()
 
     parse_args('ignore_pos_args', cfg_path='./cfg/xx_main.cfg')
-    xx_glbls.print_cfg_args(xx_glbls.args)
 
     # Here YOUR code is called.
     xx_my_code.main()
@@ -67,14 +66,9 @@ from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 
 y_my_code[04] = ("""
 def evaluate_args():
-    # http://stackoverflow.com/questions/295058/convert-a-string-to-preexisting-variable-names
-    # http://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
-    # http://stackoverflow.com/questions/1602934/check-if-a-given-key-already-exists-in-a-dictionary?rq=1
+    # print '- y_my_code > evaluate_args(): '
     p_log_this()
-    print '*' * 30
-    print '- y_my_code > evaluate_args(): '
-    xx_glbls.print_cfg_args((xx_glbls.args))
-    print '*' * 30
+    xx_glbls.print_arg_ns()
 """)
 
 y_my_code[10] = """
@@ -93,32 +87,40 @@ y_glbls[02] = """
 # Sharing information via this module across >xx_main.py< and its modules
 # http://stackoverflow.com/questions/13034496/using-global-variables-between-files-in-python
 #
+import argparse
+
+def make_arg_ns(origin = 'unknown !?'):
+    global arg_ns
+
+    arg_ns = argparse.Namespace()
+    arg_ns.__origin__ =  str(origin)
+    # ab hier: p_code ...
+
 """
 
 y_glbls[04] = """
+"""
+
+y_glbls[10] = """
+    return arg_ns
+
+def print_arg_ns():
+    global arg_ns
+    for key, value in sorted (vars(arg_ns).iteritems()):
+        #print "key / value =  " + key, ' * ' , value
+        print "arg_ns." + str(key) + ' = ' + str(value)
 """
 
 y_glbls[96] = """
 """
 
 y_glbls[98] = """
-
-global args
-
-def make_args(origin = 'xx_glbls.py'):
-    args = Args('xx_glbls.py')
-    return args
-
-def get_args(origin):
-    if args:
-        return args
-    else:
-        args = make_args(origin = 'unknown !?')
-        return args
-
 if __name__ == "__main__":
     args = Args('xx_glbls.py')
+    arg_ns = make_arg_ns('xx_glbls.py')
+    print_arg_ns()
 else:
+    arg_ns = make_arg_ns('xx_glbls.py')
     pass
 """
 
@@ -137,20 +139,6 @@ except:
 
 args = None
 
-def get_args():
-    global args
-    return args
-
-def print_args():
-    global args
-    print '*' * 30
-    print 'This is: >xx_CAParser<'
-    print 'args are: '
-    args = vars(args)
-    for key, value in sorted(args.iteritems()):
-        print "  %s  =  %s " % (key, value)
-    print '*' * 30
-
 def xx_parser(command = '', cfg_path=''):
     # p_log_this()
     parser = confargparse.ConfArgParser(description='Program: xx_program_name')
@@ -164,24 +152,23 @@ CA_Parser[04] = """
 
 CA_Parser[10] = """
     global args
+    # export conf-file:
     if (command == '--export-conf-file'):
-        print '| xx_CAParser.py: generating: ', cfg_path
-        print '| xx_CAParser.py: end'
+        print '| y_CAParser.py: generating: ', cfg_path
+        print '| y_CAParser.py: generating & writing: ', cfg_path
         print '-' * 20
         parser.parse_args(['--export-conf-file', cfg_path])
+        print '| y_CAParser.py: end'
         # ConfArgParser obviously exits? Here! Why? ? ? ?
+    # when reading conf-file:
     elif cfg_path:
         print 'xx_CAParser.py > xx_parser.py: reading config from: >', cfg_path, '<'
-        # args = parser.parse_args(['--conf-file', cfg_path], namespace = y_glbls.arg)
         args = parser.parse_args(['--conf-file', cfg_path])
-        g_args = y_glbls.make_args()
-        y_glbls.args = args
-        # print_args(False)
+        for key, value in vars(args).iteritems():
+            if hasattr(y_glbls.arg_ns, key):
+                setattr(y_glbls.arg_ns, key, value)
     else:
-        # args = parser.parse_args(namespace = y_glbls.arg)
         args = parser.parse_args()
-
-    # print_args()
 """
 
 
