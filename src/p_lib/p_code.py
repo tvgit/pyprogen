@@ -152,16 +152,9 @@ def check_my_code_modified(outfile_path):
 
     code_to_hash = ''
     with my_code_file:
-        cnt = 1
-        for line in my_code_file:
-            if cnt == 1:
-                line_first = line
-                cnt = cnt + 1
-            elif cnt == 2:
-                line_hash = line
-                cnt = cnt + 1
-            else:
-                code_to_hash = code_to_hash + line
+        code_to_hash = my_code_file.readlines()
+
+    code_to_hash = str(code_to_hash).splitlines(3)
 
     # code = myfile.read().replace('\n', '')
     # line_first = my_code_file.readline()
@@ -208,21 +201,27 @@ def p_my_code():
     hash_of_mytext = hash_md5.hexdigest()
 
     y_my_code[01] = '# >' + hash_of_mytext + '< \n'
+    p_write_code (y_my_code, outfile_fn, outfile_path)
 
     code_of_file = check_my_code_modified(outfile_path)
     print '*' *40
     print len(code_of_file)
+    # print '*' *40
+    # for key, patt in sorted(y_my_code.iteritems()):
+    #     print (patt)
     print '*' *40
-    # hash_of_mytext
     # print code_of_file
+    # print '*' *40
+    print code_of_file[2:40]
+    print '*' *40
+    print code_to_hash[2:40]
+    print '*' *40
 
     import difflib
-    #differ = difflib.Differ()
-    diff = difflib.ndiff(code_of_file, code_to_hash )
-    # print '\n'.join(diff)
-    print ''.join(list(diff))
+    diff = difflib.ndiff(code_to_hash, code_of_file)
+    # print ''.join(list(diff))
+    # print ''.join(list(diff))
 
-    p_write_code (y_my_code, outfile_fn, outfile_path)
 
     p_log_this(' end' )
 
