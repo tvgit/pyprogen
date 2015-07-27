@@ -89,16 +89,20 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
 
 def p_inform_about_paths_and_filenames():
 
+    print
+    print '-' *60
     print 'You will find your program in: ' + os.path.join(p_glbls.dir_main, '')
     print 'Start it via:                  ' + os.path.join(p_glbls.dir_main, p_glbls.prog_name)
-    print 'Your code should reside in:    ' + os.path.join(p_glbls.dir_lib, p_glbls.my_code_fn)
+    print 'YOUR CODE should reside in:    ' + os.path.join(p_glbls.dir_lib, p_glbls.my_code_fn)
     print 'It will be preserved, if changed.'
     print 'Beware of modifying the other *.py files.'
     # TODO rename 'pyprogen_001.conf'
     print 'Configure the comand line args via: ' + 'pyprogen_001.conf'
     print 'Configure the comand line defaults via: ' + os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn)
     # TODO rename pyprogen ?
-    print 'Note that this file is changed every time you run ' + 'pyprogen'
+    print 'Note that >' + p_glbls.cfg_fn + '< is changed every time you run >' + 'pyprogen.py' + '<'
+    print '-' *60
+    print
 
 
 
