@@ -13,6 +13,7 @@ import sys
 
 import datetime
 import inspect
+import difflib
 
 from   p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 
@@ -131,6 +132,12 @@ def p_here(txt='', level=2):
     mssge = inspect.stack()[level][3] + ': '
     if txt: print txt, mssge
     return mssge
+
+def show_diff (txt_1, txt_2):
+    diff = difflib.ndiff(code.splitlines(), code_of_file.splitlines())
+    print '\n'.join(list(diff))
+
+
 
 if __name__ == "__main__":
     p_log_init(log_dir='', log_fn='p_lib')
