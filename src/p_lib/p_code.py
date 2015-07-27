@@ -8,6 +8,7 @@ import os
 import string
 import ConfigParser  # read configfile
 import hashlib
+import shutil
 import re
 
 import p_glbls  # share global values
@@ -20,6 +21,8 @@ import p_cfg.patterns as patterns
 # [properties]
 # prog_name = y_main
 # """
+# read it via:
+# parser.readfp(io.BytesIO(pyprogen_ini))
 
 def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
     """ reads defaults for generated program: name ..."""
@@ -33,7 +36,6 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
     cfg_path = os.path.join(dir_cfg, cfg_fn)
     cfg_path = os.path.normpath(cfg_path)
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
-    # parser.readfp(io.BytesIO(pyprogen_ini))
     p_log_this('cfg_path: ' + cfg_path)
     cfg_file = parser.read(cfg_path)
     p_log_this('cfg file: ' + str(cfg_file))
@@ -87,9 +89,9 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
 
 
 def create_some_file_names():
-    p_glbls.glbls_fn   = p_glbls.prefix + 'glbls.py'    # globals of >y_main.py< !
-    p_glbls.my_code_fn = p_glbls.prefix + p_glbls.my_code_fn
-    p_glbls.CAParser_func = p_glbls.prefix + 'parser'
+    p_glbls.glbls_fn   = p_glbls.prefix + 'glbls.py'          # globals of >y_main.py< !
+    p_glbls.my_code_fn = p_glbls.prefix + p_glbls.my_code_fn  # path globals
+    p_glbls.CAParser_func = p_glbls.prefix + 'parser'         # name of parser func in >y_CAParser<
 
 
 def p_subst_vars_in_patterns (input_dict):
@@ -104,7 +106,6 @@ def p_subst_vars_in_patterns (input_dict):
         txt =  txt.replace("xx_my_code",  p_glbls.my_code_fn[:-3])
         patts[key] = txt
     return patts
-
 
 def p_write_code (input_dict, outfile_fn, outfile_path):
     """ writes >input_dict< to outfile """
@@ -154,9 +155,7 @@ def get_old_hash_strg(hash_line):
         c1=m.group(1)
         alphanum1=m.group(2)
         c2=m.group(3)
-        print c1
-        print alphanum1
-        print c2
+        # print c1 ; print alphanum1 ; print c2
         old_hash_str = alphanum1
     else:
         old_hash_str = 'NO_HASH_FOUND'
@@ -229,8 +228,9 @@ def save_modified_my_code(outfile_path):
         # print 'date_line =', date_line
         date_time = get_datetime_str(date_line)  # date_line == first line of y_my_code-py
         dest_path = outfile_path[:-3] + date_time + '.py'
-        print dest_path
-        # shutil.move(outfile_path, dest_path)
+        # print dest_path
+        p_log_this ( '>' + outfile_path + '< renamed to: >' + dest_path + '<')
+        shutil.move(outfile_path, dest_path)
     return hash_of_old_code
 
 def p_my_code():

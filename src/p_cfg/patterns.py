@@ -61,7 +61,7 @@ y_my_code[04] = """
 def eval_arg(arg):
     return arg
 
-def evaluate_args():
+def evaluate_opt_args():
     p_log_this()
     print '- y_my_code > evaluate_args(): '
     xx_glbls.print_arg_ns()
@@ -73,7 +73,8 @@ y_my_code[10] = """
 y_my_code[96] = """
 def main():
     p_log_this()
-    evaluate_args()
+    evaluate_opt_args()
+
 """
 
 y_my_code[98] = """
