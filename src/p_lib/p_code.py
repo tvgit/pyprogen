@@ -29,9 +29,9 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
     # http://www.karoltomala.com/blog/?p=622
     path = os.path.abspath(__file__)
     dir_path = os.path.dirname(path)
-    print 'p_read_ini: dir_path = ', p_utils.p_act_dir_path()
-    print 'p_read_ini: dir_path = ', dir_path
-    print p_glbls.__file__
+    # print 'p_read_ini: dir_path = ', p_utils.p_act_dir_path()
+    # print 'p_read_ini: dir_path = ', dir_path
+    # print p_glbls.__file__
     p_log_this()
     cfg_path = os.path.join(dir_cfg, cfg_fn)
     cfg_path = os.path.normpath(cfg_path)
@@ -57,7 +57,7 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
 
     # p_glbls.prog_path
     p_glbls.prog_path = os.path.normpath(p_glbls.prog_name[:-3])
-    print 'p_read_ini: p_glbls.prog_path = ', p_glbls.prog_path
+    # print 'p_read_ini: p_glbls.prog_path = ', p_glbls.prog_path
     p_log_this("prog_path = " + p_glbls.prog_path)
 
     # p_glbls.prefix
@@ -87,10 +87,26 @@ def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
         p_log_this('no >my_code_fn< in: ' + cfg_path + ' !')
         p_log_this('my_code_fn set to: ' + p_glbls.my_code_fn)
 
+def p_inform_about_paths_and_filenames():
+
+    print 'You will find your program in: ' + os.path.join(p_glbls.dir_main, '')
+    print 'Start it via:                  ' + os.path.join(p_glbls.dir_main, p_glbls.prog_name)
+    print 'Your code should reside in:    ' + os.path.join(p_glbls.dir_lib, p_glbls.my_code_fn)
+    print 'It will be preserved, if changed.'
+    print 'Beware of modifying the other *.py files.'
+    # TODO rename 'pyprogen_001.conf'
+    print 'Configure the comand line args via: ' + 'pyprogen_001.conf'
+    print 'Configure the comand line defaults via: ' + os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn)
+    # TODO rename pyprogen ?
+    print 'Note that this file is changed every time you run ' + 'pyprogen'
+
+
+
+
 
 def create_some_file_names():
-    p_glbls.glbls_fn   = p_glbls.prefix + 'glbls.py'          # globals of >y_main.py< !
-    p_glbls.my_code_fn = p_glbls.prefix + p_glbls.my_code_fn  # path globals
+    p_glbls.glbls_fn      = p_glbls.prefix + 'glbls.py'          # globals of >y_main.py< !
+    # p_glbls.my_code_fn    = p_glbls.prefix + p_glbls.my_code_fn  # path globals
     p_glbls.CAParser_func = p_glbls.prefix + 'parser'         # name of parser func in >y_CAParser<
 
 

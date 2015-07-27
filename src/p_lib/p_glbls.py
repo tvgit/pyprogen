@@ -19,7 +19,7 @@ CAParser_fn  = None  # filename of arg-parser of 'y_main.py'  (y_ConfArgParser.p
 CAParser_path= None  # path     of arg-parser of 'y_main.py'  (>./y_main/lib/...<)
 CAParser_func= None  # function name  (>def y_parser(): ...<)
 
-glbls_fn   = None    # name of globals file (OF NEW PROGRAM!); usually: >y_glbls.py<
+glbls_fn     = None  # name of globals file (OF NEW PROGRAM!); usually: >y_glbls.py<
 my_code_fn   = None  # name of your code; usually: >y_my_code.py<
 
 pos_arg_vars = None  # positional args

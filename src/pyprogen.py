@@ -141,10 +141,10 @@ def create_subdirs(prog_path):
     """ """
     p_log_this()
     p_glbls.dir_cfg = p_utils.p_subdir_make(os.path.join(prog_path, 'cfg'))
-    p_glbls.dir_cfg = os.path.join(p_glbls.dir_cfg)
+    p_glbls.dir_cfg = os.path.join('.', p_glbls.dir_cfg)
 
     p_glbls.dir_lib = p_utils.p_subdir_make(os.path.join(prog_path, 'lib'))
-    p_glbls.dir_lib = os.path.join(p_glbls.dir_lib)
+    p_glbls.dir_lib = os.path.join('.', p_glbls.dir_lib)
 
     p_glbls.dir_log = p_utils.p_subdir_make(os.path.join(prog_path, 'log'))
     p_glbls.dir_log = os.path.join('.', p_glbls.dir_log)
@@ -207,6 +207,8 @@ def pyprogen():
     p_code.p_globals()            # create modul ./y_main/lib/y_glbls.py
     p_code.p_my_code()            # create modul ./y_main/lib/y_my_code.py  == YOUR code
     # p_glbls.print_p_cfg_args()    # print variables in ./pyprogen/lib/p_glbls.
+    p_code.p_inform_about_paths_and_filenames()  # Do what your name says
+
 
 
 if __name__ == "__main__":
