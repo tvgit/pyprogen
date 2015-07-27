@@ -193,7 +193,7 @@ if __name__ == "__main__":
     print '-' * 20
     p_log_end()
 else:
-    import lib.y_glbls as y_glbls
+    import lib.xx_glbls as xx_glbls
     pass
 """
 
