@@ -24,7 +24,7 @@ import p_cfg.patterns as patterns
 # read it via:
 # parser.readfp(io.BytesIO(pyprogen_ini))
 
-def p_read_ini(dir_cfg='.', cfg_fn='pyprogen.ini'):
+def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
     """ reads defaults for generated program: name ..."""
     # http://www.karoltomala.com/blog/?p=622
     path = os.path.abspath(__file__)
@@ -96,10 +96,8 @@ def p_inform_about_paths_and_filenames():
     print 'YOUR CODE should reside in:    ' + os.path.join(p_glbls.dir_lib, p_glbls.my_code_fn)
     print 'It will be preserved, if changed.'
     print 'Beware of modifying the other *.py files.'
-    # TODO rename 'pyprogen_001.conf'
-    print 'Configure the comand line args via: ' + 'pyprogen_001.conf'
+    print 'Configure the comand line args via: ' + 'new_prog_args.conf'
     print 'Configure the comand line defaults via: ' + os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn)
-    # TODO rename pyprogen ?
     print 'Note that >' + p_glbls.cfg_fn + '< is changed every time you run >' + 'pyprogen.py' + '<'
     print '-' *60
     print
@@ -266,8 +264,8 @@ def p_my_code():
     # make txt for >if<'s for >opt_arg_vars< of commandline
     txt =       ' '*4 + '# optional args(ConfArgParser):\n'
     for arg in p_glbls.opt_arg_vars:
-        txt = txt + ' '*4 + 'if ' + 'y_glbls.arg_ns.' + arg + ' == "something":\n'
-        txt = txt + ' '*8 + 'eval_arg(y_glbls.arg_ns.' + arg +')\n'
+        txt = txt + ' '*4 + 'if ' + 'xx_glbls.arg_ns.' + arg + ' == "something":\n'
+        txt = txt + ' '*8 + 'eval_arg(xx_glbls.arg_ns.' + arg +')\n'
         txt = txt + '\n'
     # add this txt to pattern:
     patterns.y_my_code[10] = txt

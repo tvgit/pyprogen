@@ -65,7 +65,7 @@ def eval_arg(arg):
 
 def evaluate_opt_args():
     p_log_this()
-    print '- y_my_code > evaluate_args(): '
+    print '- xx_my_code > evaluate_args(): '
     xx_glbls.print_arg_ns()
 """
 
@@ -153,19 +153,19 @@ CA_Parser[10] = """
     global args
     # export conf-file:
     if (command == '--export-conf-file'):
-        print '| y_CAParser.py: generating: ', cfg_path
-        print '| y_CAParser.py: generating & writing: ', cfg_path
+        print '| xx_CAParser.py: generating: ', cfg_path
+        print '| xx_CAParser.py: generating & writing: ', cfg_path
         print '-' * 20
         parser.parse_args(['--export-conf-file', cfg_path])
-        print '| y_CAParser.py: end'
+        print '| xx_CAParser.py: end'
         # ConfArgParser obviously exits? Here! Why? ? ? ?
     else:
         # read +/- conf-file +- pos.args +/- opt.args
         args = parser.parse_args()
-        # set values in >y_glbls.arg_ns<
+        # set values in >xx_glbls.arg_ns<
         for key, value in vars(args).iteritems():
-            if hasattr(y_glbls.arg_ns, key):
-                setattr(y_glbls.arg_ns, key, value)
+            if hasattr(xx_glbls.arg_ns, key):
+                setattr(xx_glbls.arg_ns, key, value)
 """
 
 

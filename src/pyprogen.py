@@ -41,12 +41,12 @@ __date__ = "$05.05.2015 21:55:22$"
     line arguments and/or configuration files.
 
     Pyprogen itself is easily configured via its own configuration file:
-    >pyprogen.ini<. Here You configure the name of the generated python
+    >new_prog.ini<. Here You configure the name of the generated python
     script (default: >y_main.py<), the extent of its logging, its the
     commandline arguments and its configuration file.
 
     !!! Falsch:
-    commandline arguments and its configuration file. <=> pyprogen_001.conf
+    commandline arguments and its configuration file. <=> new_prog_args.conf
     !!! Falsch:
 
     Pyprogen uses >ConfArgParse<, a module that offers a rather
@@ -178,7 +178,7 @@ def create_ca_parser(prog_path):
     script, it will write a config-file to ./y_main/cfg
     """
     p_log_this()
-    p_ConfArgParser('./pyprogen_001.conf') # create confargparser for >y_main.py<
+    p_ConfArgParser('./new_prog_args.conf') # create confargparser for >y_main.py<
     subprocess_path  = p_glbls.CAParser_path
     p_log_this("subprocess_path = " + subprocess_path)
     cfg_fn = prog_path + '.cfg'   # cfg-file of new y_main.py
@@ -195,8 +195,8 @@ def pyprogen():
     creates basic python program according to >pyprogen.conf< and .....
     """
     p_log_this()
-    # "pyprogen.ini" =>>>  umbenennen nach: basic.conf oä ???
-    p_code.p_read_ini(".", "pyprogen.ini")  # dir relative to >.<
+    # "new_prog.ini" =>>>  umbenennen nach: basic.conf oä ???
+    p_code.p_read_ini(".", "new_prog.ini")  # dir relative to >.<
     prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
     p_code.create_some_file_names() # i.e.: glbls_path,
     create_maindir(prog_path)     # create dir  ./y_main
