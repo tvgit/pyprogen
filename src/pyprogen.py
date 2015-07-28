@@ -201,8 +201,8 @@ def pyprogen():
     p_code.create_some_file_names() # i.e.: glbls_path,
     create_maindir(prog_path)     # create dir  ./y_main
     create_subdirs(prog_path)     # create dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
-    create_ca_parser(prog_path)   # create & start ./y_main/lib/ConfArgParser.py
     copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
+    create_ca_parser(prog_path)   # create & start ./y_main/lib/ConfArgParser.py
     p_code.p_main()               # create progr ./y_main/y_main.py
     p_code.p_globals()            # create modul ./y_main/lib/y_glbls.py
     p_code.p_my_code()            # create modul ./y_main/lib/y_my_code.py  == YOUR code

@@ -57,6 +57,7 @@ def p_subst_vars_in_patterns (input_dict):
     for key, patt in input_dict.iteritems():
         txt = patt.replace("xx_CAParser", p_glbls.CAParser_fn[:-3])
         txt =  txt.replace("xx_main",     p_glbls.prog_name[:-3])
+        txt =  txt.replace("xx_glbls",    p_glbls.glbls_fn[:-3])
         txt =  txt.replace("xx_parser",   p_glbls.CAParser_func)
         txt =  txt.replace("xx_program_name", p_glbls.prog_name)
         txt =  txt.replace("xx_dir_log",  p_glbls.dir_log)
