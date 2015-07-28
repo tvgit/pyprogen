@@ -52,7 +52,6 @@ def make_regex_pos_arg():
 
 def p_subst_vars_in_patterns (input_dict):
     """ substitutes in code parts (input_dict) some words (xx_....) with variable names """
-    p_log_this()
     patts = dict()
     for key, patt in input_dict.iteritems():
         txt = patt.replace("xx_CAParser", p_glbls.CAParser_fn[:-3])
@@ -67,7 +66,7 @@ def p_subst_vars_in_patterns (input_dict):
 
 def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     """ creates >y_CAParser.py<; executes it, to generate a conf file >y_main.cfg< for >y_main.py<  """
-    p_log_this()
+    p_log_this(conf_file_fn)
     opt_args             = []  # local list of opt-args
     pos_args             = []  # local list of pos-args
     # >p_ConfArgParser< sets vars in p_glbls. ... for later use in >p_code.p_globals<

@@ -102,10 +102,6 @@ def p_inform_about_paths_and_filenames():
     print '-' *60
     print
 
-
-
-
-
 def create_some_file_names():
     p_glbls.glbls_fn      = p_glbls.prefix + 'glbls.py'          # globals of >y_main.py< !
     # p_glbls.my_code_fn    = p_glbls.prefix + p_glbls.my_code_fn  # path globals
@@ -114,7 +110,6 @@ def create_some_file_names():
 
 def p_subst_vars_in_patterns (input_dict):
     """ substitutes in code parts (input_dict) some words (xx_....) with variable names """
-    p_log_this()
     patts = dict()
     for key, patt in input_dict.iteritems():
         txt = patt.replace("xx_CAParser", p_glbls.CAParser_fn[:-3])
@@ -127,7 +122,6 @@ def p_subst_vars_in_patterns (input_dict):
 
 def p_write_code (input_dict, outfile_fn, outfile_path):
     """ writes >input_dict< to outfile """
-    p_log_this()
     now_str = p_utils.p_make_act_date_str()
     p_log_this('writing: ' + outfile_path)
     with open(outfile_path, 'w') as outfile:
@@ -139,7 +133,10 @@ def p_write_code (input_dict, outfile_fn, outfile_path):
 
 def p_globals():
     """ creates ./y_main/lib/y_glbls.py  """
-    p_log_this(' begin')
+    # fn and path of  >y_glbls.py<
+    outfile_fn   = p_glbls.glbls_fn
+    outfile_path = os.path.join(p_glbls.dir_lib, p_glbls.glbls_fn)
+    p_log_this('creating: ' + outfile_path)
 
     txt =       ' '*4 + '# optional args(ConfArgParser):\n'
     for arg in p_glbls.opt_arg_vars:
@@ -153,14 +150,10 @@ def p_globals():
     txt = ''
     patterns.y_glbls[96] = txt
 
-    # fn and path of  >y_glbls.py<
-    outfile_fn   = p_glbls.glbls_fn
-    outfile_path = os.path.join(p_glbls.dir_lib, p_glbls.glbls_fn)
 
     # p_subst(patterns.y_glbls, outfile_fn, outfile_path)
     code = p_subst_vars_in_patterns (patterns.y_glbls)
     p_write_code (code, outfile_fn, outfile_path)
-    p_log_this(' end' )
 
 def get_old_hash_strg(hash_line):
     """ extract originally calculated hash from inp_line / thx to: http://txt2re.com"""
@@ -253,10 +246,10 @@ def save_modified_my_code(outfile_path):
 
 def p_my_code():
     """ if modified, saves old >y_my_code.py< / creates new y_my_code.py """
-    p_log_this(' begin')
     # fn and path of  >y_main.py<
     outfile_fn = p_glbls.my_code_fn
     outfile_path = os.path.join(p_glbls.dir_lib, outfile_fn)
+    p_log_this('creating: ' + outfile_path)
     # if modified, save old >y_my_code.py<:
     save_modified_my_code(outfile_path)
 
@@ -285,19 +278,17 @@ def p_my_code():
     code_dict[1] = '# >' + hash_of_mytext + '< \n'      # second line of y_my_code.py
     code_dict[2] = code                                 #
     p_write_code (code_dict, outfile_fn, outfile_path)  # write >y_my_code.py<
-    p_log_this(' end' )
 
 
 def p_main():
     """ creates y_main.py """
-    p_log_this(' begin')
     # fn and path of  >y_main.py<
     outfile_fn = p_glbls.prog_name
     outfile_path = os.path.join(p_glbls.dir_main, outfile_fn)
+    p_log_this('creating: ' + outfile_path)
     # write code of  >y_main.py<
     code = p_subst_vars_in_patterns (patterns.y_main)
     p_write_code (code, outfile_fn, outfile_path)
-    p_log_this(' end' )
 
 
 if __name__ == "__main__":

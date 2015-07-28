@@ -152,7 +152,6 @@ def create_subdirs(prog_path):
 
 def copy_p_utils_p_log_init():
     """ """
-    p_log_this()
     # dammed '__init__.py'! 2 hrs of nirwana!
     # for every file in fn_list:
     fn_list = ['p_utils.py', 'p_log.py', '__init__.py']
