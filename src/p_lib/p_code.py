@@ -88,17 +88,21 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
         p_log_this('my_code_fn set to: ' + p_glbls.my_code_fn)
 
 def p_inform_about_paths_and_filenames():
+    cfg_path = os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn)
 
     print
     print '-' *60
-    print 'You will find your program in: ' + os.path.join(p_glbls.dir_main, '')
-    print 'Start it via:                  ' + os.path.join(p_glbls.dir_main, p_glbls.prog_name)
-    print 'YOUR CODE should reside in:    ' + os.path.join(p_glbls.dir_lib, p_glbls.my_code_fn)
-    print 'It will be preserved, if changed.'
-    print 'Beware of modifying the other *.py files.'
-    print 'Configure the comand line args via: ' + 'new_prog_args.conf'
-    print 'Configure the comand line defaults via: ' + os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn)
-    print 'Note that >' + p_glbls.cfg_fn + '< is changed every time you run >' + 'pyprogen.py' + '<'
+    print 'You will find the new program in: ' + os.path.join(p_glbls.dir_main, '')
+    print 'Its name is:                      ' + os.path.join(p_glbls.dir_main, p_glbls.prog_name)
+    print 'YOUR CODE should reside in:       ' + os.path.join(p_glbls.dir_lib, p_glbls.my_code_fn)
+    print 'YOUR CODE will be preserved, if changed.'
+    print 'Beware of modifying the other >' + p_glbls.dir_lib + '\*.py< files.'
+    print
+    print 'You may configure the comand line args     of >' + p_glbls.prog_name + '<  via:  >new_prog_args.conf<'
+    print ' ... but run >pyprogen.py< again.'
+    print 'You may configure the comand line defaults of >' + p_glbls.prog_name + '<  via:  >' + cfg_path + '<'
+    print ' ... but run >pyprogen.py< again.'
+    print 'Note that >' + cfg_path + '< is changed every time you run >' + 'pyprogen.py' + '<.'
     print '-' *60
     print
 
