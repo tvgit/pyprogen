@@ -99,9 +99,9 @@ def p_inform_about_paths_and_filenames():
     print 'Beware of modifying the other >' + p_glbls.dir_lib + '\*.py< files.'
     print
     print 'You may configure the comand line args     of >' + p_glbls.prog_name + '<  via:  >new_prog_args.conf<'
-    print ' ... but run >pyprogen.py< again.'
+    print ' ... but run >pyprogen.py< again!'
     print 'You may configure the comand line defaults of >' + p_glbls.prog_name + '<  via:  >' + cfg_path + '<'
-    print ' ... but run >pyprogen.py< again.'
+    print ' ... but run >pyprogen.py< again!'
     print 'Note that >' + cfg_path + '< is changed every time you run >' + 'pyprogen.py' + '<.'
     print '-' *60
     print

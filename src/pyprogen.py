@@ -34,60 +34,34 @@ __date__ = "$05.05.2015 21:55:22$"
     First do a >pip install ConfArgParse< (as admin in windows)
 
     pyprogen:
-    generates a basic python program structure, that offers
-    a basic file tree for logging (,testing (ToDo)) and
-    initialising and the corresponding functionality.
-    The generated python program may be initialised via command
-    line arguments and/or configuration files.
+    generates a basic python program structure, that offers a basic file
+    tree for logging and initialising and the corresponding functionality.
+    The generated python program may be initialised via command line
+    arguments and/or configuration files (*.ini).
+
+    y_main/y_main.py  # y_main.py == new generated python prog
+        /cfg/*.cfg    # configuration files
+        /lib/*.py     # some py modules; your code will reside in >my_code.py<
+        /log/*.log    # log-files
 
     Pyprogen itself is easily configured via its own configuration file:
     >new_prog.ini<. Here You configure the name of the generated python
-    script (default: >y_main.py<), the extent of its logging, its the
-    commandline arguments and its configuration file.
+    script (default: >y_main.py<), the extent of its logging.
+    Commandline arguments of >y_main.py< and their defaults are configured
+    via >new_prog_args.conf<.
 
-    !!! Falsch:
-    commandline arguments and its configuration file. <=> new_prog_args.conf
-    !!! Falsch:
-
-    Pyprogen uses >ConfArgParse<, a module that offers a rather
-    easy way to combine command line arguments and configuration
-    files.
-
+    Pyprogen uses >ConfArgParse<, to handle commandline arguments.
+    This module offers a rather easy way to combine command line arguments
+    and configuration files.
     >ConfArgParse< is able to read and to write configuration files.
-    If you want to generate a configuration file for later modification,
-    add the desired options as arguments to your >ConfArgParse< - parser.
-    Then call your program with the "-n --export-conf-file > y_main.cfg"
-    argument and the configuration file will be written.
-
-    The same procedure is followed by pyprogen, to produce the the
-    configuration file for your >y_main.py<. Pyprogen writes firstly
+    This ability is used by >pyprogen<: it writes firstly
     the program code for the parser >y_CAParser.py<, then executes
     >y_CAParser.py< with the "--export-conf-file > ./y_main/cfg/y_main.cfg".
     Then you will find the new >y_main.conf< for your >y_main.py<
     in the ./y_main/cfg/ dir.
 
-    1. confargparse verstehen / ok
-
-    2. argparse verstehen / ok
-
-    3. howto import modules from subdirs / ok
-
-    4. howto log / ok
-
-    5. howto config/ini / ok
     (http://martin-thoma.com/configuration-files-in-python/)
 
-    7.
-    Ein python Program schreiben, das das ein parametrierbares Grundgeruest
-    fuer Obiges (6.) erledigt, und
-    zugleich eine vernuenftige Grundarchitektur fuer ein mittelgrosses
-    python Programm anbietet: naemlich log-Files, configurations-files,
-    paramater Uebernahme (6.) (mit einer Untermenge der cfg - Paramter),
-    ein subdir in dem sich die Module befinden:
-    y_main
-        /cfg   # configuration
-        /lib   # modules
-        /log   # log
 
     100.
     Dark sides of py:
@@ -207,7 +181,6 @@ def pyprogen():
     p_code.p_my_code()            # create modul ./y_main/lib/y_my_code.py  == YOUR code
     # p_glbls.print_p_cfg_args()    # print variables in ./pyprogen/lib/p_glbls.
     p_code.p_inform_about_paths_and_filenames()  # Do what your name says
-
 
 
 if __name__ == "__main__":
