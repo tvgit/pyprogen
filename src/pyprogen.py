@@ -5,7 +5,7 @@
 # New Editor Window: Im Editor auf Filenamen: New Document on Tab Group
 #
 # PyCharm:
-# New Editor Window: ??
+# New Editor Window: click on tab > Split Vertically
 # ALT left/right  -> switch editor windows
 # Ctrl Tab        -> list/switch editor windows
 # Shift F6        -> run file
