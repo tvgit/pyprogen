@@ -42,7 +42,7 @@ y_my_code = dict()
 y_my_code[02] = """# -
 
 # YOUR code resides in THIS module. Imported to >xx_main.py<.
-# Is respected if changed (modification results from differnet hash code >nnn< above).
+# Is respected if changed (modification results from different hash code >nnn< above).
 
 import lib.xx_glbls as xx_glbls
 import lib.p_utils as p_utils
@@ -106,7 +106,6 @@ y_glbls[96] = """
 
 y_glbls[98] = """
 if __name__ == "__main__":
-    args = Args('xx_glbls.py')
     arg_ns = make_arg_ns('xx_glbls.py')
     print_arg_ns()
 else:
