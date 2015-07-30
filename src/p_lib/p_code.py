@@ -295,19 +295,142 @@ def p_main():
     code = p_subst_vars_in_patterns (patterns.y_main)
     p_write_code (code, outfile_fn, outfile_path)
 
+def save_modified_main_cfg(cfg_file_path):
+    """ if y_my_code.py was modified (== hash is different),
+    rename it with date-time signature """
+    old_my_code_file = p_utils.p_file_open(cfg_file_path, mode = 'r')
+    if not old_my_code_file:
+        return
+    with old_my_code_file:
+        lines = old_my_code_file.readlines()
+    p_utils.p_file_close(old_my_code_file)
+
+    date_line = lines[0]    # first  line contains date-time string
+    hash_line = lines[1]    # second line contains hash (of lines 3 to n-1) at moment of generating
+    # hash of file w/o first 2 lines and w/o last line in >old_code_to_hash<:
+    old_code_to_hash = ''
+    for line in lines[2:-1]:
+        old_code_to_hash = old_code_to_hash + line
+
+    hash_md5           = hashlib.md5()
+    hash_md5.update(old_code_to_hash)            # calc hash
+    hash_of_old_code   = hash_md5.hexdigest()
+
+    # print 'hash_line     = '   , hash_line.rstrip()
+    # print 'hash_of_old_code = ', hash_of_old_code
+
+    old_hash_str = get_old_hash_strg(hash_line)  # get hash at moment of generating
+    if old_hash_str != hash_of_old_code:         # hashes are identical?
+        # print cfg_file_path + ' changed!'
+        # copy from source to dest:
+        # print 'date_line =', date_line
+        date_time = get_datetime_str(date_line)  # date_line == first line of y_my_code-py
+        dest_path = cfg_file_path[:-3] + date_time + '.py'
+        # print dest_path
+        p_log_this ( '>' + cfg_file_path + '< renamed to: >' + dest_path + '<')
+        shutil.move(cfg_file_path, dest_path)
+    return hash_of_old_code
+
+def p_main_cfg_create_hash(cfg_path):
+    """ called by >pyprogen.py< after >create_ca_parser< is called.
+        Creates properties: >timestamp< and >hash< """
+    print 'cfg_path = ', cfg_path
+    f_cfg = p_utils.p_file_open(cfg_path)
+    if not f_cfg :
+        p_log_this('no old cfg file: >' + p_glbls.cfg_path + '<')
+        return
+    else:
+        p_log_this('cfg file: >' + p_glbls.cfg_path + '< opened')
+        print f_cfg
+
+    parser = ConfigParser.SafeConfigParser(allow_no_value=True)
+    p_log_this('cfg_path: ' + cfg_path)
+    cfg_file = parser.read(cfg_path)
+    p_log_this('cfg file: ' + str(cfg_file))
+
+    # p_glbls.prog_name
+    try:
+        p_glbls.prog_name = parser.get("properties", "prog_name")
+        p_log_this('prog_name = ' + p_glbls.prog_name)
+        if (len(p_glbls.prog_name) < 4):
+            p_glbls.prog_name = p_glbls.prog_name + '.py'
+            p_log_this('          =>' + p_glbls.prog_name)
+        if ((string.lower(p_glbls.prog_name[-3:])) <> '.py'):
+            p_glbls.prog_name = p_glbls.prog_name + '.py'
+            p_log_this('          =>' + p_glbls.prog_name)
+    except ConfigParser.NoOptionError:
+        p_glbls.prog_name = 'z_main.py'
+        p_log_this('no >prog_name< in: ' + cfg_path + ' !')
+        p_log_this('prog_name set to: ' + p_glbls.prog_name)
+        # save_modified_my_code(p_glbls.dir_cfg)
+
+def p_main_cfg_check_hash_and rename(cfg_path):
+    """ called by >pyprogen.py< after >create_ca_parser< is called.
+        Creates properties: >timestamp< and >hash< """
+    print 'cfg_path = ', cfg_path
+    f_cfg = p_utils.p_file_open(cfg_path)
+    if not f_cfg :
+        p_log_this('no old cfg file: >' + p_glbls.cfg_path + '<')
+        return
+    else:
+        p_log_this('cfg file: >' + p_glbls.cfg_path + '< opened')
+        print f_cfg
+
+    parser = ConfigParser.SafeConfigParser(allow_no_value=True)
+    p_log_this('cfg_path: ' + cfg_path)
+    cfg_file = parser.read(cfg_path)
+    p_log_this('cfg file: ' + str(cfg_file))
+
+    # p_glbls.prog_name
+    try:
+        p_glbls.prog_name = parser.get("properties", "prog_name")
+        p_log_this('prog_name = ' + p_glbls.prog_name)
+        if (len(p_glbls.prog_name) < 4):
+            p_glbls.prog_name = p_glbls.prog_name + '.py'
+            p_log_this('          =>' + p_glbls.prog_name)
+        if ((string.lower(p_glbls.prog_name[-3:])) <> '.py'):
+            p_glbls.prog_name = p_glbls.prog_name + '.py'
+            p_log_this('          =>' + p_glbls.prog_name)
+    except ConfigParser.NoOptionError:
+        p_glbls.prog_name = 'z_main.py'
+        p_log_this('no >prog_name< in: ' + cfg_path + ' !')
+        p_log_this('prog_name set to: ' + p_glbls.prog_name)
+        # save_modified_my_code(p_glbls.dir_cfg)
+
 def p_main_cfg():
     """ called by >pyprogen.py< before >create_ca_parser< is called.
         checks if >y_main.cfg< exists and has been changed. If so saves it."""
-    print 'p_glbls.cfg_fn = ', p_glbls.cfg_fn
+    print 'p_glbls.cfg_fn   = ', p_glbls.cfg_fn
     print 'p_glbls.cfg_path = ', p_glbls.cfg_path
+    print 'p_glbls.dir_cfg  = ', p_glbls.dir_cfg
     f_cfg = p_utils.p_file_open(p_glbls.cfg_path)
-    if f_cfg :
+    if not f_cfg :
+        p_log_this('no old cfg file: >' + p_glbls.cfg_path + '<')
+        return
+    else:
+        p_log_this('cfg file: >' + p_glbls.cfg_path + '< opened')
         print f_cfg
-    # outfile_path = os.path.join(p_glbls.dir_main, outfile_fn)
-    # p_log_this('creating: ' + outfile_path)
-    # # write code of  >y_main.py<
-    # code = p_subst_vars_in_patterns (patterns.y_main)
-    # p_write_code (code, outfile_fn, outfile_path)
+
+    parser = ConfigParser.SafeConfigParser(allow_no_value=True)
+    p_log_this('cfg_path: ' + cfg_path)
+    cfg_file = parser.read(cfg_path)
+    p_log_this('cfg file: ' + str(cfg_file))
+
+    # p_glbls.prog_name
+    try:
+        p_glbls.prog_name = parser.get("properties", "prog_name")
+        p_log_this('prog_name = ' + p_glbls.prog_name)
+        if (len(p_glbls.prog_name) < 4):
+            p_glbls.prog_name = p_glbls.prog_name + '.py'
+            p_log_this('          =>' + p_glbls.prog_name)
+        if ((string.lower(p_glbls.prog_name[-3:])) <> '.py'):
+            p_glbls.prog_name = p_glbls.prog_name + '.py'
+            p_log_this('          =>' + p_glbls.prog_name)
+    except ConfigParser.NoOptionError:
+        p_glbls.prog_name = 'z_main.py'
+        p_log_this('no >prog_name< in: ' + cfg_path + ' !')
+        p_log_this('prog_name set to: ' + p_glbls.prog_name)
+        # save_modified_my_code(p_glbls.dir_cfg)
 
 
 if __name__ == "__main__":
