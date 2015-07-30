@@ -171,7 +171,7 @@ def pyprogen():
     # "new_prog.ini" =>>>  umbenennen nach: basic.conf oä ???
     p_code.p_read_ini(".", "new_prog.ini")  # dir relative to >.<
     prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
-    p_code.create_paths_and_fns() # i.e.: glbls_path,
+    p_code.p_create_paths_and_fns() # i.e.: glbls_path,
     create_maindir(prog_path)     # create dir  ./y_main
     create_subdirs(prog_path)     # create dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
     copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
