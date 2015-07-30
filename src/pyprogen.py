@@ -117,6 +117,9 @@ def create_subdirs(prog_path):
     p_glbls.dir_cfg = p_utils.p_subdir_make(os.path.join(prog_path, 'cfg'))
     p_glbls.dir_cfg = os.path.join('.', p_glbls.dir_cfg)
 
+    p_glbls.cfg_fn = prog_path + '.cfg'   # cfg-file of new y_main.py
+    p_glbls.cfg_path = os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn)
+
     p_glbls.dir_lib = p_utils.p_subdir_make(os.path.join(prog_path, 'lib'))
     p_glbls.dir_lib = os.path.join('.', p_glbls.dir_lib)
 
@@ -146,21 +149,18 @@ def create_ca_parser(prog_path):
     confargparser == >y_CAParser.py< for the new program >y_main.py<.
     Configure it according to >pyprogen_XXX.conf<
 
-    Then call >y_CAParser.py< via subprocess.
-    Since >y_CAParser.py< is prepared to write a conf file, if called as
-    script, it will write a config-file to ./y_main/cfg
+    Then call >y_CAParser.py< via subprocess. Since >y_CAParser.py< is
+    prepared to write a conf file, if called as script, it will write
+    a config-file to ./y_main/cfg
     """
     p_log_this()
     p_ConfArgParser('./new_prog_args.conf') # create confargparser for >y_main.py<
     subprocess_path  = p_glbls.CAParser_path
     p_log_this("subprocess_path = " + subprocess_path)
-    cfg_fn = prog_path + '.cfg'   # cfg-file of new y_main.py
-    cfg_path = os.path.join(p_glbls.dir_cfg, cfg_fn)
-    p_log_this("cfg_path = " + cfg_path)
-    p_glbls.cfg_fn = cfg_fn
+    p_log_this("cfg_path = " + p_glbls.cfg_path)
     # http://pymotw.com/2/subprocess/
     # start new ConfArgParser to create cfg-file (aka >cfg_path<) for >y_main.py<
-    subprocess.call([subprocess_path, cfg_path], shell=True)
+    subprocess.call([subprocess_path, p_glbls.cfg_path], shell=True)
 
 def pyprogen():
     """
@@ -171,10 +171,11 @@ def pyprogen():
     # "new_prog.ini" =>>>  umbenennen nach: basic.conf oä ???
     p_code.p_read_ini(".", "new_prog.ini")  # dir relative to >.<
     prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
-    p_code.create_some_file_names() # i.e.: glbls_path,
+    p_code.create_paths_and_fns() # i.e.: glbls_path,
     create_maindir(prog_path)     # create dir  ./y_main
     create_subdirs(prog_path)     # create dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
     copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
+    p_code.p_main_cfg()           # check if ./y_main/y_main.cfg exists; if changed -> save it.
     create_ca_parser(prog_path)   # create & start ./y_main/lib/ConfArgParser.py
     p_code.p_main()               # create progr ./y_main/y_main.py
     p_code.p_globals()            # create modul ./y_main/lib/y_glbls.py

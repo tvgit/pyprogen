@@ -1,5 +1,6 @@
 # -------------- y_main.py
-# INFO       2015-07-18 20:36:05  p_log_start:  y_main.py Logging started (first time!)
+# (first time run of y_main.py)
+# INFO       2015-07-18 20:36:05  p_log_start:  y_main.py Logging started
 # INFO       2015-07-18 20:36:05  p_log_end:  y_main.py Logging end
 
 y_main = dict()
@@ -28,7 +29,7 @@ if __name__ == "__main__":
     # xx_CAParser.xx_parser('ignore_pos_args', '')
     xx_CAParser.xx_parser()
 
-    # Here YOUR code is _called_.
+    # Here YOUR code in >xx_my_code.py< is _called_.
     xx_my_code.main()
 
     p_log_end()

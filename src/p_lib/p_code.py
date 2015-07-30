@@ -33,8 +33,8 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
     # print 'p_read_ini: dir_path = ', dir_path
     # print p_glbls.__file__
     p_log_this()
-    cfg_path = os.path.join(dir_cfg, cfg_fn)
-    cfg_path = os.path.normpath(cfg_path)
+    cfg_path = os.path.join(dir_cfg, cfg_fn)     # cfg_path of >pyprogen.py< !
+    cfg_path = os.path.normpath(cfg_path)        #      not of >y_main.py<  !!
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
     p_log_this('cfg_path: ' + cfg_path)
     cfg_file = parser.read(cfg_path)
@@ -106,7 +106,8 @@ def p_inform_about_paths_and_filenames():
     print '-' *60
     print
 
-def create_some_file_names():
+def create_paths_and_fns():
+    """ creates later needed paths and filenames  """
     p_glbls.glbls_fn      = p_glbls.prefix + 'glbls.py'          # globals of >y_main.py< !
     # p_glbls.my_code_fn    = p_glbls.prefix + p_glbls.my_code_fn  # path globals
     p_glbls.CAParser_func = p_glbls.prefix + 'parser'         # name of parser func in >y_CAParser<
@@ -249,7 +250,7 @@ def save_modified_my_code(outfile_path):
     return hash_of_old_code
 
 def p_my_code():
-    """ if modified, saves old >y_my_code.py< / creates new y_my_code.py """
+    """ saves old >y_my_code.py< if modified / creates new y_my_code.py """
     # fn and path of  >y_main.py<
     outfile_fn = p_glbls.my_code_fn
     outfile_path = os.path.join(p_glbls.dir_lib, outfile_fn)
@@ -293,6 +294,20 @@ def p_main():
     # write code of  >y_main.py<
     code = p_subst_vars_in_patterns (patterns.y_main)
     p_write_code (code, outfile_fn, outfile_path)
+
+def p_main_cfg():
+    """ called by >pyprogen.py< before >create_ca_parser< is called.
+        checks if >y_main.cfg< exists and has been changed. If so saves it."""
+    print 'p_glbls.cfg_fn = ', p_glbls.cfg_fn
+    print 'p_glbls.cfg_path = ', p_glbls.cfg_path
+    f_cfg = p_utils.p_file_open(p_glbls.cfg_path)
+    if f_cfg :
+        print f_cfg
+    # outfile_path = os.path.join(p_glbls.dir_main, outfile_fn)
+    # p_log_this('creating: ' + outfile_path)
+    # # write code of  >y_main.py<
+    # code = p_subst_vars_in_patterns (patterns.y_main)
+    # p_write_code (code, outfile_fn, outfile_path)
 
 
 if __name__ == "__main__":
