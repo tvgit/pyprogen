@@ -181,7 +181,8 @@ def pyprogen():
     p_code.p_globals()            # create modul ./y_main/lib/y_glbls.py
     p_code.p_my_code()            # create modul ./y_main/lib/y_my_code.py  == YOUR code
     # p_glbls.print_p_cfg_args()    # print variables in ./pyprogen/lib/p_glbls.
-    p_code.p_inform_about_paths_and_filenames()  # Do what your name says
+    p_code.p_main_cfg_create_hash_and_timestamp() # Do what your name says with ./y_main/cfg/y_main.cfg
+    p_code.p_inform_about_paths_and_filenames()   # Do what your name says
 
 
 if __name__ == "__main__":
