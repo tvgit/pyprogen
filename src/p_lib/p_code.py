@@ -360,16 +360,26 @@ def p_main_cfg_create_hash_and_timestamp():
     mssge = 'cfg file: >' + p_glbls.cfg_path + '< opened'
     p_log_this(mssge); print mssge
 
-    read_parser = ConfigParser.SafeConfigParser(allow_no_value=True)
-    cfg_file = read_parser.read(cfg_path)
-    p_log_this('cfg file: ' + str(cfg_file))
+    parser = ConfigParser.SafeConfigParser(allow_no_value=True)
+    cfg_in_file = parser.read(cfg_path)
+    p_log_this('cfg_in_file: ' + str(cfg_in_file))
 
     try:  # read defaults
-        defaults = read_parser.items("defaults")
+        defaults = parser.items("defaults")
         print defaults
     except ConfigParser.NoSectionError:
-        p_log_this("No section: 'properties' in: >" + cfg_path + '< !')
+        p_log_this("No section: 'defaults' in: >" + cfg_path + '< !')
         return
+    parser.add_section("signature")
+    parser.set("signature", "hash", "someting")
+    parser.set("signature", "timestamp", p_glbls.date_time_str)
+    import sys
+    parser.write(sys.stdout)
+    parser.write(open(cfg_path, "w"))
+
+    # parser = ConfigParser.SafeConfigParser(allow_no_value=True)
+    # cfg_out_file = parser.read(cfg_path)
+
 
 
 def p_main_cfg():
