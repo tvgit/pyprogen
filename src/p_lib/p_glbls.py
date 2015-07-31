@@ -41,6 +41,7 @@ def print_p_cfg_args(print_args=False):
     print ' CAParser_func = ' + CAParser_func
     print ' glbls_fn      = ' + glbls_fn
     print ' my_code_fn    = ' + my_code_fn
+    print ' date_time_str = ' + date_time_str
 
     if print_args:
         for arg in opt_arg_vars:
