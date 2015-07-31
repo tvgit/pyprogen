@@ -175,7 +175,7 @@ def pyprogen():
     create_maindir(prog_path)     # create dir  ./y_main
     create_subdirs(prog_path)     # create dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
     copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
-    p_code.p_main_cfg()           # check if ./y_main/y_main.cfg exists; if changed -> save it.
+    p_code.p_main_cfg_check_hash()# check if ./y_main/y_main.cfg exists; if changed -> save it.
     create_ca_parser(prog_path)   # create & start ./y_main/lib/ConfArgParser.py
     p_code.p_main()               # create progr ./y_main/y_main.py
     p_code.p_globals()            # create modul ./y_main/lib/y_glbls.py

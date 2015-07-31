@@ -348,18 +348,40 @@ def p_main_cfg_check_hash_and_rename(cfg_path):
 
 
 def p_main_cfg_create_hash_and_timestamp():
-    """ called by >pyprogen.py< after >create_ca_parser< is called.
-        Creates properties: >timestamp< and >hash< """
-    # cfg_path = p_glbls.cfg_path
+    """ called by >pyprogen.py< after >create_ca_parser< is called,
+        i.e after a new >y_main.cfg< is written.
+        Calculates hash of defaults & creates section >signature<
+        with items: >timestamp< and >hash< """
     p_log_this('cfg_path: ' + p_glbls.cfg_path)
-    cfg_f = p_utils.p_file_open(p_glbls.cfg_path)
-    if not cfg_f :
-        p_log_this('no old cfg file: >' + p_glbls.cfg_path + '<')
+
+    parser = ConfigParser.SafeConfigParser(allow_no_value=True)
+    cfg_file = parser.read(p_glbls.cfg_path)
+    try:  # read defaults and calc their hash
+        defaults_str = ''
+        defaults = parser.items("defaults")  # read section "defaults"
+        for key_val in defaults:             # type(defaults) == list[tuple, tuple ...]
+            defaults_str = defaults_str + key_val[0] + key_val[1]
+        hash_md5           = hashlib.md5()
+        hash_md5.update(defaults_str)            # calc hash
+        hash_of_defaults   = hash_md5.hexdigest()
+    except ConfigParser.NoSectionError:
+        p_log_this("No section: 'defaults' in: >" + p_glbls.cfg_path + '< !')
         return
 
-    mssge = 'cfg file: >' + p_glbls.cfg_path + '< opened'
-    p_log_this(mssge); print mssge
+    # to >y_main.cfg< add a section "signature" with hash & time_stamp
+    parser.add_section("signature")
+    parser.set("signature", "hash", hash_of_defaults)
+    parser.set("signature", "timestamp", p_glbls.date_time_str)
+    parser.write(open(p_glbls.cfg_path, "w"))
 
+
+def p_main_cfg_check_hash():
+    """ called by >pyprogen.py< before >create_ca_parser< is called,
+        i.e. before a new >y_main.cfg< may overwrite an existing one.
+        Checks if >y_main.cfg< exists and if it is changed (via hash).
+        If so, save it by changing its name by adding the original timestamp."""
+
+    p_log_this('cfg_path: ' + p_glbls.cfg_path)
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
     cfg_in_file = parser.read(p_glbls.cfg_path)
     p_log_this('cfg_in_file: ' + str(cfg_in_file))
@@ -376,48 +398,14 @@ def p_main_cfg_create_hash_and_timestamp():
     except ConfigParser.NoSectionError:
         p_log_this("No section: 'defaults' in: >" + cfg_path + '< !')
         return
-    parser.add_section("signature")
-    parser.set("signature", "hash", hash_of_defaults)
-    parser.set("signature", "timestamp", p_glbls.date_time_str)
-    # import sys ; parser.write(sys.stdout)
-    parser.write(open(p_glbls.cfg_path, "w"))
 
-
-def p_main_cfg():
-    """ called by >pyprogen.py< before >create_ca_parser< is called.
-        checks if >y_main.cfg< exists and has been changed. If so saves it."""
-    print 'p_glbls.cfg_fn   = ', p_glbls.cfg_fn
-    print 'p_glbls.cfg_path = ', p_glbls.cfg_path
-    print 'p_glbls.dir_cfg  = ', p_glbls.dir_cfg
-    f_cfg = p_utils.p_file_open(p_glbls.cfg_path)
-    if not f_cfg :
-        p_log_this('no old cfg file: >' + p_glbls.cfg_path + '<')
+    try:  # read hash (and time_stamp)
+        defaults_str = ''
+        hash = parser.get("signature", "hash")
+        timestamp = parser.get("signa_ture", "timestamp")
+    except ConfigParser.NoSectionError:
+        p_log_this("No section: 'defaults' in: >" + p_glbls.cfg_path + '< !')
         return
-    else:
-        p_log_this('cfg file: >' + p_glbls.cfg_path + '< opened')
-        print f_cfg
-
-    parser = ConfigParser.SafeConfigParser(allow_no_value=True)
-    p_log_this('p_glbls.cfg_path: ' + p_glbls.cfg_path)
-    cfg_file = parser.read(p_glbls.cfg_path)
-#    p_log_this('p_glbls.cfg_file: ' + str(p_glbls.cfg_file))
-
-    # p_glbls.prog_name
-    # try:
-    #     p_glbls.prog_name = parser.get("properties", "prog_name")
-    #     p_log_this('prog_name = ' + p_glbls.prog_name)
-    #     if (len(p_glbls.prog_name) < 4):
-    #         p_glbls.prog_name = p_glbls.prog_name + '.py'
-    #         p_log_this('          =>' + p_glbls.prog_name)
-    #     if ((string.lower(p_glbls.prog_name[-3:])) <> '.py'):
-    #         p_glbls.prog_name = p_glbls.prog_name + '.py'
-    #         p_log_this('          =>' + p_glbls.prog_name)
-    # except ConfigParser.NoOptionError:
-    #     p_glbls.prog_name = 'z_main.py'
-    #     p_log_this('no >prog_name< in: ' + cfg_path + ' !')
-    #     p_log_this('prog_name set to: ' + p_glbls.prog_name)
-    #     # p_my_code_save_if_modified(p_glbls.dir_cfg)
-
 
 if __name__ == "__main__":
     print p_glbls.my_name()
