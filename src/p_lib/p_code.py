@@ -242,14 +242,12 @@ def p_my_code_save_if_modified(outfile_path):
 
     old_hash_str = rgx_get_old_hash_strg(hash_line)  # get hash at moment of generating
     if old_hash_str != hash_of_old_code:         # hashes are identical?
-        # print outfile_path + ' changed!'
-        # copy from source to dest:
-        # print 'date_line =', date_line
+        # print outfile_path + ' changed!' # print 'date_line =', date_line
         date_time = get_datetime_str(date_line)  # date_line == first line of y_my_code-py
         dest_path = outfile_path[:-3] + date_time + '.py'
-        # print dest_path
-        p_log_this ( '>' + outfile_path + '< renamed to: >' + dest_path + '<')
+        # move source to dest:
         shutil.move(outfile_path, dest_path)
+        p_log_this ( '>' + outfile_path + '< renamed to: >' + dest_path + '<')
     return hash_of_old_code
 
 def p_my_code():
@@ -357,8 +355,8 @@ def p_main_cfg_create_hash_and_timestamp():
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
     cfg_file = parser.read(p_glbls.cfg_path)
     try:  # read defaults and calc their hash
-        defaults_str = ''
         defaults = parser.items("defaults")  # read section "defaults"
+        defaults_str = ''
         for key_val in defaults:             # type(defaults) == list[tuple, tuple ...]
             defaults_str = defaults_str + key_val[0] + key_val[1]
         hash_md5           = hashlib.md5()
@@ -383,29 +381,42 @@ def p_main_cfg_check_hash():
 
     p_log_this('cfg_path: ' + p_glbls.cfg_path)
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
-    cfg_in_file = parser.read(p_glbls.cfg_path)
-    p_log_this('cfg_in_file: ' + str(cfg_in_file))
+    cfg_file = parser.read(p_glbls.cfg_path)
+    print cfg_file
 
     try:  # read defaults and calc their hash
-        defaults_str = ''
         defaults = parser.items("defaults")
+        defaults_str = ''
         for key_val in defaults:
             defaults_str = defaults_str + key_val[0] + key_val[1]
-        print defaults, '\n', defaults_str
         hash_md5           = hashlib.md5()
         hash_md5.update(defaults_str)            # calc hash
-        hash_of_defaults   = hash_md5.hexdigest()
+        act_hash_of_defaults = hash_md5.hexdigest()
     except ConfigParser.NoSectionError:
         p_log_this("No section: 'defaults' in: >" + cfg_path + '< !')
+        print     ("No section: 'defaults' in: >" + cfg_path + '< !')
         return
 
-    try:  # read hash (and time_stamp)
-        defaults_str = ''
-        hash = parser.get("signature", "hash")
-        timestamp = parser.get("signa_ture", "timestamp")
-    except ConfigParser.NoSectionError:
-        p_log_this("No section: 'defaults' in: >" + p_glbls.cfg_path + '< !')
+    try:  # read old hash (and time_stamp)
+        old_hash_of_defaults = parser.get("signature", "hash")
+        timestamp = parser.get("signature", "timestamp")
+    except ConfigParser.NoSectionError or ConfigParser.NoOptionError:
+        if ConfigParser.NoSectionError:
+            p_log_this("No section: 'signature' in: >" + p_glbls.cfg_path + '< !')
+        if ConfigParser.NoOptionError:
+            p_log_this("No option: 'timestamp' or 'hash' in section 'signature' in: >" + p_glbls.cfg_path + '< !')
         return
+
+    if (act_hash_of_defaults == old_hash_of_defaults):
+        print 'section: "signature" in >' + p_glbls.cfg_path + '< unchanged.'
+    else:
+        print 'section: "signature" in >' + p_glbls.cfg_path + '< has been changed.'
+        dest_path = p_glbls.cfg_path[:-4] + timestamp + '.cfg'
+        p_log_this ( '>' + p_glbls.cfg_path + '< renamed to: >' + dest_path + '<')
+        print '>' + p_glbls.cfg_path + '< renamed to: >' + dest_path + '<'
+        # move source to dest:
+        shutil.move(p_glbls.cfg_path, dest_path)
+
 
 if __name__ == "__main__":
     print p_glbls.my_name()
