@@ -350,9 +350,9 @@ def p_main_cfg_check_hash_and_rename(cfg_path):
 def p_main_cfg_create_hash_and_timestamp():
     """ called by >pyprogen.py< after >create_ca_parser< is called.
         Creates properties: >timestamp< and >hash< """
-    cfg_path = p_glbls.cfg_path
-    p_log_this('cfg_path: ' + cfg_path)
-    cfg_f = p_utils.p_file_open(cfg_path)
+    # cfg_path = p_glbls.cfg_path
+    p_log_this('cfg_path: ' + p_glbls.cfg_path)
+    cfg_f = p_utils.p_file_open(p_glbls.cfg_path)
     if not cfg_f :
         p_log_this('no old cfg file: >' + p_glbls.cfg_path + '<')
         return
@@ -361,25 +361,26 @@ def p_main_cfg_create_hash_and_timestamp():
     p_log_this(mssge); print mssge
 
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
-    cfg_in_file = parser.read(cfg_path)
+    cfg_in_file = parser.read(p_glbls.cfg_path)
     p_log_this('cfg_in_file: ' + str(cfg_in_file))
 
-    try:  # read defaults
+    try:  # read defaults and calc their hash
+        defaults_str = ''
         defaults = parser.items("defaults")
-        print defaults
+        for key_val in defaults:
+            defaults_str = defaults_str + key_val[0] + key_val[1]
+        print defaults, '\n', defaults_str
+        hash_md5           = hashlib.md5()
+        hash_md5.update(defaults_str)            # calc hash
+        hash_of_defaults   = hash_md5.hexdigest()
     except ConfigParser.NoSectionError:
         p_log_this("No section: 'defaults' in: >" + cfg_path + '< !')
         return
     parser.add_section("signature")
-    parser.set("signature", "hash", "someting")
+    parser.set("signature", "hash", hash_of_defaults)
     parser.set("signature", "timestamp", p_glbls.date_time_str)
-    import sys
-    parser.write(sys.stdout)
-    parser.write(open(cfg_path, "w"))
-
-    # parser = ConfigParser.SafeConfigParser(allow_no_value=True)
-    # cfg_out_file = parser.read(cfg_path)
-
+    # import sys ; parser.write(sys.stdout)
+    parser.write(open(p_glbls.cfg_path, "w"))
 
 
 def p_main_cfg():

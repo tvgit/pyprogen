@@ -56,7 +56,7 @@ def p_make_act_date_str():
     now_str =                 str(now.year)
     now_str = now_str + '_' + str(now.month).zfill(2)
     now_str = now_str + '_' + str(now.day).zfill(2)
-    now_str = now_str + '_' + str(now.hour).zfill(2)
+    now_str = now_str + '-' + str(now.hour).zfill(2)
     now_str = now_str + '_' + str(now.minute).zfill(2)
     now_str = now_str + '_' + str(now.second).zfill(2)
     return now_str
