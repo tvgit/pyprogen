@@ -26,7 +26,7 @@
 #
 
 __author__ = "rh"
-__date__ = "$05.05.2015 21:55:22$"
+__date__   = "$05.05.2015 21:55:22$"
 
 
 """
@@ -35,13 +35,13 @@ __date__ = "$05.05.2015 21:55:22$"
 
     pyprogen:
     generates a basic python program structure, that offers a basic file
-    tree for logging and initialising and the corresponding functionality.
+    tree for logging & initialising and the corresponding functionality.
     The generated python program may be initialised via command line
-    arguments and/or configuration files (*.ini).
+    arguments and/or via a configuration file (*.cfg).
 
     y_main/y_main.py  # y_main.py == new generated python prog
-        /cfg/*.cfg    # configuration files
-        /lib/*.py     # some py modules; your code will reside in >my_code.py<
+        /cfg/*.cfg    # configuration file(s)
+        /lib/*.py     # some py modules; even your code will reside here as: >my_code.py<
         /log/*.log    # log-files
 
     Pyprogen itself is easily configured via its own configuration file:
@@ -54,14 +54,13 @@ __date__ = "$05.05.2015 21:55:22$"
     This module offers a rather easy way to combine command line arguments
     and configuration files.
     >ConfArgParse< is able to read and to write configuration files.
-    This ability is used by >pyprogen<: it writes firstly
-    the program code for the parser >y_CAParser.py<, then executes
-    >y_CAParser.py< with the "--export-conf-file > ./y_main/cfg/y_main.cfg".
-    Then you will find the new >y_main.conf< for your >y_main.py<
-    in the ./y_main/cfg/ dir.
+    This ability is used by >pyprogen<: >pyprogen< writes in a first step
+    the code for >y_main.py<'s parser >y_CAParser.py<. Then it executes
+    >y_CAParser.py< with the "--export-conf-file > ./y_main/cfg/y_main.cfg"
+    commandline. After that you will find a >y_main.cfg< for your
+    >y_main.py< in the ./y_main/cfg/ dir.
 
     (http://martin-thoma.com/configuration-files-in-python/)
-
 
     100.
     Dark sides of py:
@@ -75,7 +74,6 @@ __date__ = "$05.05.2015 21:55:22$"
     want_be_private.var_priv = 99   !!!
     ]
 
-
     py can not prevent creating attributes to this module from outside.
     [
     module want_be_private
@@ -88,10 +86,6 @@ __date__ = "$05.05.2015 21:55:22$"
     ]
 
 """
-###
-
-# ad pytest:
-
 # ad decorator:
 # https://pythonconquerstheuniverse.wordpress.com/2012/04/29/python-decorators/
 
@@ -164,11 +158,10 @@ def create_ca_parser(prog_path):
 
 def pyprogen():
     """
-    creates basic dir-structure
-    creates basic python program according to >pyprogen.conf< and .....
+    creates basic dir-structure; creates basic python program
+    according to >new_prog.ini< and new_>prog_args.conf<.
     """
-    p_log_this()
-    # "new_prog.ini" =>>>  umbenennen nach: basic.conf oä ???
+    p_log_this()                  # in ./p_log/pyprogen.log
     p_code.p_read_ini(".", "new_prog.ini")  # dir relative to >.<
     prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
     p_code.p_create_paths_and_fns() # i.e.: glbls_path,
@@ -176,9 +169,9 @@ def pyprogen():
     create_subdirs(prog_path)     # create dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
     copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
     p_code.p_main_cfg_check_hash()# check if ./y_main/y_main.cfg exists; if changed -> save it.
-    create_ca_parser(prog_path)   # create & start ./y_main/lib/ConfArgParser.py
-    p_code.p_main()               # create progr ./y_main/y_main.py
+    create_ca_parser(prog_path)   # create & start ./y_main/lib/y_CAParser.py
     p_code.p_globals()            # create modul ./y_main/lib/y_glbls.py
+    p_code.p_main()               # create progr ./y_main/y_main.py
     p_code.p_my_code()            # create modul ./y_main/lib/y_my_code.py  == YOUR code
     # p_glbls.print_p_cfg_args()    # print variables in ./pyprogen/lib/p_glbls.
     p_code.p_main_cfg_create_hash_and_timestamp() # Do what your name says with ./y_main/cfg/y_main.cfg
