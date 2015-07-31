@@ -25,6 +25,8 @@ my_code_fn   = None  # name of your code; usually: >y_my_code.py<
 pos_arg_vars = None  # positional args
 opt_arg_vars = None  # optional args
 
+date_time_str= None  # Date & Time
+
 def print_p_cfg_args(print_args=False):
     print ' prog_name = '     + prog_name
     print ' prefix    = '     + prefix
