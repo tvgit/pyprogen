@@ -344,38 +344,31 @@ def p_main_cfg_check_hash_and_rename(cfg_path):
         print f_cfg
 
 
-def p_main_cfg_create_hash_and_timestamp(cfg_path):
+def p_main_cfg_create_hash_and_timestamp():
     """ called by >pyprogen.py< after >create_ca_parser< is called.
         Creates properties: >timestamp< and >hash< """
-    print 'cfg_path = ', cfg_path
-    f_cfg = p_utils.p_file_open(cfg_path)
-    if not f_cfg :
+    cfg_path = p_glbls.cfg_path
+    p_log_this('cfg_path: ' + cfg_path)
+    cfg_f = p_utils.p_file_open(cfg_path)
+    if not cfg_f :
         p_log_this('no old cfg file: >' + p_glbls.cfg_path + '<')
         return
 
-    p_log_this('cfg file: >' + p_glbls.cfg_path + '< opened')
-    print f_cfg
+    mssge = 'cfg file: >' + p_glbls.cfg_path + '< opened'
+    p_log_this(mssge)
+    print mssge
 
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
-    p_log_this('cfg_path: ' + cfg_path)
     cfg_file = parser.read(cfg_path)
     p_log_this('cfg file: ' + str(cfg_file))
 
-    # p_glbls.prog_name
+    # read defaults:
     try:
-        p_glbls.prog_name = parser.get("properties", "prog_name")
-        p_log_this('prog_name = ' + p_glbls.prog_name)
-        if (len(p_glbls.prog_name) < 4):
-            p_glbls.prog_name = p_glbls.prog_name + '.py'
-            p_log_this('          =>' + p_glbls.prog_name)
-        if ((string.lower(p_glbls.prog_name[-3:])) <> '.py'):
-            p_glbls.prog_name = p_glbls.prog_name + '.py'
-            p_log_this('          =>' + p_glbls.prog_name)
-    except ConfigParser.NoOptionError:
-        p_glbls.prog_name = 'z_main.py'
-        p_log_this('no >prog_name< in: ' + cfg_path + ' !')
-        p_log_this('prog_name set to: ' + p_glbls.prog_name)
-        # p_my_code_save_if_modified(p_glbls.dir_cfg)
+        # defaults = parser.get("defaults", "defaults")
+        defaults = parser.items("defaults")
+        print defaults
+    except ConfigParser.NoSectionError:
+        p_log_this("No section: 'properties' in: >" + cfg_path + '< !')
 
 
 def p_main_cfg():
