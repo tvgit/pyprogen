@@ -20,12 +20,12 @@ y_main[96] = """ """
 y_main[98] = """
 
 def my_name():
-    pass
+    prog_info = p_utils.scriptinfo()
+    prog_name = prog_info['name']
+    return prog_name
 
 
 if __name__ == "__main__":
-    prog_info = p_utils.scriptinfo()
-    prog_name = prog_info['name']
     print '--------\\n' + prog_name + '\\n--------'
 
     p_log_init(log_dir = 'log', log_fn = 'xx_main.log')
