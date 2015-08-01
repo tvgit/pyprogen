@@ -293,6 +293,18 @@ def p_main():
     outfile_fn = p_glbls.prog_name
     outfile_path = os.path.join(p_glbls.dir_main, outfile_fn)
     p_log_this('creating: ' + outfile_path)
+
+    # Make new code:
+    # make txt for >if<'s for >opt_arg_vars< of commandline
+    txt =       ' '*4 + '# optional args(ConfArgParser):\n'
+    for arg in p_glbls.opt_arg_vars:
+        # txt = txt + ' '*4 + 'if ' + 'xx_glbls.arg_ns.' + arg + ' == "something":\n'
+        txt = txt + ' '*4 + 'if ' + 'xx_glbls.arg_ns.' + arg + ' == xx_glbls.arg_ns.' + arg + ':\n'
+        txt = txt + ' '*8 + 'eval_arg(xx_glbls.arg_ns.' + arg +')\n'
+        txt = txt + '\n'
+    # add this txt to pattern:
+    patterns.y_main[10] = txt
+
     # write code of  >y_main.py<
     code = p_subst_vars_in_patterns (patterns.y_main)
     p_write_code (code, outfile_fn, outfile_path)
