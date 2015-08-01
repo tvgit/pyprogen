@@ -269,32 +269,31 @@ def p_main_cfg_check_hash():
         # move source to dest:
         shutil.move(p_glbls.cfg_path, dest_path)
 
-def p_main_is_modified(outfile_path):
-    """ if y_main.py was modified (== hash is different),
-    rename it with date-time signature """
+def p_main_was_modified(outfile_path):
+    """ check if y_main.py was modified (== hash is different) """
     old_main_file = p_utils.p_file_open(outfile_path, mode = 'r')
     if not old_main_file:
-        return
+        return False
     with old_main_file:
         lines = old_main_file.readlines()
     p_utils.p_file_close(old_main_file)
 
     date_line = lines[0]    # first  line contains date-time string
     hash_line = lines[1]    # second line contains hash (of lines 3 to n-1) at moment of generating
-    # hash of file w/o first 2 lines and w/o last line in >old_code_to_hash<:
-    old_code_to_hash = ''
+    # hash of file w/o first 2 lines and w/o last line in >code_to_hash<:
+    code_to_hash = ''
     for line in lines[2:-1]:
-        old_code_to_hash = old_code_to_hash + line
+        code_to_hash = code_to_hash + line
 
-    hash_md5           = hashlib.md5()
-    hash_md5.update(old_code_to_hash)            # calc hash
-    hash_of_old_code   = hash_md5.hexdigest()
+    hash_md5       = hashlib.md5()
+    hash_md5.update(code_to_hash)            # calc hash
+    hash_of_code   = hash_md5.hexdigest()
 
     # print 'hash_line     = '   , hash_line.rstrip()
-    # print 'hash_of_old_code = ', hash_of_old_code
+    # print 'hash_of_code = ', hash_of_code
 
     old_hash_str = rgx_get_old_hash_strg(hash_line)  # get hash at moment of generating
-    # if old_hash_str != hash_of_old_code:         # hashes are identical?
+    # if old_hash_str != hash_of_code:         # hashes are identical?
     #     # print outfile_path + ' changed!' # print 'date_line =', date_line
     #     date_time = get_datetime_str(date_line)  # date_line == first line of y_my_code-py
     #     dest_path = outfile_path[:-3] + date_time + '.py'
@@ -305,7 +304,7 @@ def p_main_is_modified(outfile_path):
     # else:
     #     p_log_this (outfile_path + ' unchanged')
 
-    if old_hash_str != hash_of_old_code:         # hashes are identical?
+    if old_hash_str != hash_of_code:         # hashes are identical?
         mssge = ('>' + outfile_path + '< has been modified')
         p_log_this (mssge) # ; print mssge
         return True
@@ -323,9 +322,6 @@ def p_main():
     outfile_fn = p_glbls.prog_name      # fn and path of >y_main.py<
     outfile_path = os.path.join(p_glbls.dir_main, outfile_fn)
     p_log_this('creating: ' + outfile_path)
-
-    # if modified, save old >y_my_code.py<:
-    p_main_is_modified(outfile_path)
 
     # Make new code:
     # make txt for >if<'s for >opt_arg_vars< of commandline
@@ -354,8 +350,12 @@ def p_main():
     code_dict    = dict()                               # p_write_code wants dict as input
     code_dict[1] = '# >' + hash_of_mytext + '< \n'      # second line of y_main.py
     code_dict[2] = code                                 #
-    # finally write code adding timestamp etc in first line & adding timestamp as lastline
-    p_write_code (code_dict, outfile_fn, outfile_path)  # write >y_main.py<
+
+    # finally write code (adding timestamp in first line & lastline)
+    # check if existing >y_my_code.py< was modified:
+    if p_main_was_modified(outfile_path):
+        outfile_path = outfile_path[:-3] + '_' + p_glbls.date_time_str + '.py'
+    p_write_code (code_dict, outfile_fn, outfile_path)  # write >y_main(_+/-timestamp.py<
 
 
 if __name__ == "__main__":
