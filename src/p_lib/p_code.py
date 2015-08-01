@@ -284,7 +284,7 @@ def p_main_was_modified(outfile_path):
 
     date_line = lines[0]    # first  line contains date-time string
     hash_line = lines[1]    # second line contains hash (of lines 3 to n-1) at moment of generating
-    # hash of file w/o first 2 lines and w/o last line in >code_to_hash<:
+    # calc hash of code, i.e. of hash all lines, ignoring first 2 lines and last line:
     code_to_hash = ''
     for line in lines[2:-1]:
         code_to_hash = code_to_hash + line
@@ -292,9 +292,6 @@ def p_main_was_modified(outfile_path):
     hash_md5       = hashlib.md5()
     hash_md5.update(code_to_hash)            # calc hash
     hash_of_code   = hash_md5.hexdigest()
-
-    # print 'hash_line     = '   , hash_line.rstrip()
-    # print 'hash_of_code = ', hash_of_code
 
     old_hash_str = rgx_get_old_hash_strg(hash_line)  # get hash at moment of generating
     if old_hash_str != hash_of_code:         # hashes are identical?
