@@ -61,7 +61,7 @@ def p_make_act_date_str():
     return now_str
 
 
-def p_dir_check_isabs(dir):
+def p_dir_is_abs(dir):
     """ checks if dir is abs dir """
     dir = os.path.normpath(dir)
     if (os.path.isabs(dir)):
@@ -90,7 +90,7 @@ def p_dir_make(dir):
 
 def p_subdir_make(dir):
     """ creates sub_dir """
-    dir = p_dir_check_isabs(dir)
+    dir = p_dir_is_abs(dir)
     p_dir_make(dir)
     return dir
 
