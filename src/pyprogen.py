@@ -112,7 +112,7 @@ def create_subdirs(prog_path):
     p_glbls.dir_cfg = os.path.join('.', p_glbls.dir_cfg)  # cfg-dir of new y_main.py
 
     p_glbls.cfg_fn  = prog_path + '.cfg'   # cfg-file of new y_main.py
-    p_glbls.cfg_path_tmp= os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn)
+    p_glbls.cfg_path= os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn)
 
     p_glbls.cfg_fn_tmp   = p_glbls.cfg_fn[:-4] + '_' + p_glbls.date_time_str + p_glbls.cfg_fn[-4:]
     p_glbls.cfg_path_tmp = os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn_tmp)
@@ -180,14 +180,16 @@ def pyprogen():
     create_subdirs(prog_path)     # create dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
     copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
     #
-    p_code.p_main_cfg_check_hash()# check if ./y_main/y_main.cfg exists; if changed -> save it.
-    create_ca_parser(prog_path)   # create & start ./y_main/lib/y_CAParser.py
-    p_code.p_main_cfg_create_hash_and_timestamp() # Do what your name says with ./y_main/cfg/y_main.cfg
+    create_ca_parser(prog_path)   # create & run: ./y_main/lib/y_CAParser.py  >> create: >y_main_TimeStamp.cfg<
+    p_code.p_main_cfg_create_hash() # Do what your name says with ./y_main/cfg/y_main_TimeStamp.cfg
+    p_code.p_main_cfg_check_hash()# check if >./y_main/y_main.cfg exists;<
+                                  # if (exists && changed): => keep it;
+                                  # else: => overwrite it with >y_main_TimeStamp.cfg<
     #
     p_code.p_globals()            # create modul ./y_main/lib/y_glbls.py
     p_code.p_main()               # create progr ./y_main/y_main.py
     p_code.p_inform_about_paths_and_filenames()   # Do what your name says
-    p_glbls.print_p_cfg_args()  # print variables in ./pyprogen/lib/p_glbls.
+    p_glbls.print_p_cfg_and_args()# print variables and command line args in ./pyprogen/lib/p_glbls.
 
 
 if __name__ == "__main__":
