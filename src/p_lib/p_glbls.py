@@ -4,16 +4,16 @@
 prog_name= 'def_y_main.py' # default name of new program. Configure in ???
 prog_path= None            # default path: >./y_main/y_main.py<
 
-prefix   = None     # common prefix of y_main-specific dirs, paths, modules, functions, vars ...
-arg_prefix= None    # common prefix of vars storing values of cmd-line args
+prefix    = None     # common prefix of y_main-specific dirs, paths, modules, functions, vars ...
+arg_prefix= None     # common prefix of vars storing values of cmd-line args
 
-dir_main = None     # main dir: >./y_main<, where >y_main.py< lives in
-dir_cfg  = None     # subdir  : >./y_main/cfg<, config files for >y_main.py<
-dir_lib  = None     # subdir  : >./y_main/lib<, utilities for >y_main.py<
-dir_log  = None     # subdir  : >./y_main/log<, log-files for >y_main.py<
+dir_main  = None     # main dir: >./y_main<, where >y_main.py< lives in
+dir_cfg   = None     # subdir  : >./y_main/cfg<, config files for >y_main.py<
+dir_lib   = None     # subdir  : >./y_main/lib<, utilities for >y_main.py<
+dir_log   = None     # subdir  : >./y_main/log<, log-files for >y_main.py<
 
-cfg_fn   = None     # filename of cfg-file for for 'y_main.py'; usually: >y_main.py<
-cfg_path = None     # path     of cfg-file for for 'y_main.py'; usually: >y_mainy/cfg/y_main.cfg<
+cfg_fn    = None     # filename of cfg-file for for 'y_main.py'; usually: >y_main.py<
+cfg_path  = None     # path     of cfg-file for for 'y_main.py'; usually: >y_mainy/cfg/y_main.cfg<
 
 CAParser_fn  = None  # filename of arg-parser of 'y_main.py'  (y_ConfArgParser.py)
 CAParser_path= None  # path     of arg-parser of 'y_main.py'  (>./y_main/lib/...<)

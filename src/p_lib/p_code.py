@@ -79,21 +79,22 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
 def p_inform_about_paths_and_filenames():
     cfg_path = os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn)
 
-    print
     print '-' *80
     print 'You will find the new program in: ' + os.path.join(p_glbls.dir_main, '')
     print 'Its name is:                      ' + os.path.join(p_glbls.dir_main, p_glbls.prog_name)
     print 'YOUR code should reside in:       ' + os.path.join(p_glbls.dir_main, p_glbls.prog_name)
-    print 'YOUR code will be preserved, if changed.'
-    print 'Beware of modifying the other >' + p_glbls.dir_lib + '\*.py< files.'
+    print 'YOUR code (i.e. the file: >' + p_glbls.prog_name + '<) will be preserved if changed:'
+    print ' newer generated files will have a timestamp in their filename: >' + p_glbls.prog_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
     print
     print 'You may configure the comand line args     of >' + p_glbls.prog_name + '<  via:  >new_prog_args.conf<'
     print ' ... but run >pyprogen.py< again!'
     print 'You may configure the comand line defaults of >' + p_glbls.prog_name + '<  via:  >' + cfg_path + '<'
-    print 'Note that >' + cfg_path + '< is changed every time you run >' + 'pyprogen.py' + '<.'
-    print ' ... but old versions are saved with timestamp in their filename - if they had been changed.'
-    print '-' *80
+    print '>' + cfg_path + '<  will be preserved, if changed: '
+    print ' newer generated files will have a timestamp in their filename: >' + p_glbls.prog_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
     print
+    print 'Beware of modifying the >' + p_glbls.dir_lib + '\*.py< files.'
+    print
+    print '-' *80
 
 def p_create_paths_and_fns():
     """ creates later needed paths and filenames  """
@@ -269,6 +270,7 @@ def p_main_cfg_check_hash():
         # move source to dest:
         shutil.move(p_glbls.cfg_path, dest_path)
 
+
 def p_main_was_modified(outfile_path):
     """ check if y_main.py was modified (== hash is different) """
     old_main_file = p_utils.p_file_open(outfile_path, mode = 'r')
@@ -293,17 +295,6 @@ def p_main_was_modified(outfile_path):
     # print 'hash_of_code = ', hash_of_code
 
     old_hash_str = rgx_get_old_hash_strg(hash_line)  # get hash at moment of generating
-    # if old_hash_str != hash_of_code:         # hashes are identical?
-    #     # print outfile_path + ' changed!' # print 'date_line =', date_line
-    #     date_time = get_datetime_str(date_line)  # date_line == first line of y_my_code-py
-    #     dest_path = outfile_path[:-3] + date_time + '.py'
-    #     # move source to dest:
-    #     shutil.move(outfile_path, dest_path)
-    #     mssge = ( '>' + outfile_path + '< renamed to: >' + dest_path + '<')
-    #     p_log_this (mssge) # ; print mssge
-    # else:
-    #     p_log_this (outfile_path + ' unchanged')
-
     if old_hash_str != hash_of_code:         # hashes are identical?
         mssge = ('>' + outfile_path + '< has been modified')
         p_log_this (mssge) # ; print mssge
@@ -314,11 +305,8 @@ def p_main_was_modified(outfile_path):
 
 
 def p_main():
-    """
-    if (>y_main.py< exists and if >y_main.py< has been modified)
-        => save it.
-    if not => create new >y_my_code.py<
-    """
+    """ if (>y_main.py< exists && >y_main.py< was modified) => save it.
+    else: => create new >y_main.py<  """
     outfile_fn = p_glbls.prog_name      # fn and path of >y_main.py<
     outfile_path = os.path.join(p_glbls.dir_main, outfile_fn)
     p_log_this('creating: ' + outfile_path)
@@ -335,7 +323,6 @@ def p_main():
     patterns.y_main[10] = txt       # add txt to pattern
     # generate correct var names
     y_main = p_subst_vars_in_patterns (patterns.y_main)
-
     # now >y_main< is complete. => calculate hash for generated program:
     code = ''   # put all code parts together in ane string.
     for key, chunk in sorted(y_main.iteritems()):
@@ -351,10 +338,10 @@ def p_main():
     code_dict[1] = '# >' + hash_of_mytext + '< \n'      # second line of y_main.py
     code_dict[2] = code                                 #
 
-    # finally write code (adding timestamp in first line & lastline)
-    # check if existing >y_my_code.py< was modified:
+    # if existing >y_main.py< was modified => new >y_main.py< gets timestamp in fn
     if p_main_was_modified(outfile_path):
         outfile_path = outfile_path[:-3] + '_' + p_glbls.date_time_str + '.py'
+    # finally write code (adding timestamp in first line & lastline)
     p_write_code (code_dict, outfile_fn, outfile_path)  # write >y_main(_+/-timestamp.py<
 
 
