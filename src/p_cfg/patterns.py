@@ -18,6 +18,10 @@ y_main[10] = """ """
 y_main[96] = """ """
 
 y_main[98] = """
+
+def my_name()
+
+
 if __name__ == "__main__":
     prog_info = p_utils.scriptinfo()
     prog_name = prog_info['name']
@@ -47,6 +51,8 @@ y_my_code[02] = """# -
 
 import lib.xx_glbls as xx_glbls
 import lib.p_utils as p_utils
+# import lib.xx_lead as xx_lead
+import lib.xx_CAParser as xx_CAParser
 from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 """
 
@@ -72,6 +78,25 @@ def main():
 """
 
 y_my_code[98] = """
+if __name__ == "__main__":
+    prog_info = p_utils.scriptinfo()
+    prog_name = prog_info['name']
+    print '--------\\n' + prog_name + '\\n--------'
+
+    p_log_init(log_dir = 'log', log_fn = 'xx_main.log')
+    p_log_start()
+
+    # xx_CAParser.xx_parser('ignore_pos_args', '')
+    xx_CAParser.xx_parser()
+
+    # Here YOUR code in >xx_my_code.py< is _called_.
+    xx_my_code.main()
+
+    evaluate_opt_args()
+
+    p_log_end()
+    p_utils.p_exit()
+
 """
 
 # -------------- y_glbls.py

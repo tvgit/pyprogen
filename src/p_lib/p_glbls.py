@@ -21,6 +21,7 @@ CAParser_func= None  # function name  (>def y_parser(): ...<)
 
 glbls_fn     = None  # name of globals file (OF NEW PROGRAM!); usually: >y_glbls.py<
 my_code_fn   = None  # name of your code; usually: >y_my_code.py<
+lead_fn      = None  # name of your code; usually: >y_my_code.py<
 
 pos_arg_vars = None  # positional args
 opt_arg_vars = None  # optional args
