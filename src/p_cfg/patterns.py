@@ -19,7 +19,8 @@ y_main[96] = """ """
 
 y_main[98] = """
 
-def my_name()
+def my_name():
+    pass
 
 
 if __name__ == "__main__":
@@ -63,7 +64,6 @@ def eval_arg(arg):
 
 def evaluate_opt_args():
     p_log_this()
-    print '- xx_my_code > evaluate_args(): '
     xx_glbls.print_arg_ns()
 """
 

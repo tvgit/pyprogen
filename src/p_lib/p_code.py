@@ -113,7 +113,7 @@ def p_inform_about_paths_and_filenames():
 def p_create_paths_and_fns():
     """ creates later needed paths and filenames  """
     p_glbls.glbls_fn      = p_glbls.prefix + 'glbls.py'    # globals of ! >y_main.py< !
-    p_glbls.lead_fn       = p_glbls.prefix + 'lead.py'     # module handling
+    # p_glbls.lead_fn       = p_glbls.prefix + 'lead.py'     # module handling
     # p_glbls.my_code_fn    = p_glbls.prefix + p_glbls.my_code_fn  # path globals
     p_glbls.CAParser_func = p_glbls.prefix + 'parser'      # name of parser func in >y_CAParser<
 
@@ -126,7 +126,6 @@ def p_subst_vars_in_patterns (input_dict):
         txt =  txt.replace("xx_main",     p_glbls.prog_name[:-3])
         txt =  txt.replace("xx_parser",   p_glbls.CAParser_func)
         txt =  txt.replace("xx_glbls",    p_glbls.glbls_fn[:-3])
-        txt =  txt.replace("xx_lead",     p_glbls.lead_fn[:-3])
         txt =  txt.replace("xx_my_code",  p_glbls.my_code_fn[:-3])
         patts[key] = txt
     return patts
