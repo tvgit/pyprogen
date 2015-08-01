@@ -107,11 +107,12 @@ def p_file_open(fn, mode = 'r'):
         try:
             f_open = open(fn, mode)
         except EnvironmentError:
-            msg = (p_here('', 1) + 'unable to open file : >' + fn + '< EnvironmentError!')
+            msg = (p_here('', 2) + 'unable to open file : >' + fn + '< EnvironmentError!')
             p_log_this(msg, 'error')
             print msg
         else:
-            p_log_this(' file : >' + fn + '< open for ' + mode)
+            msg = (p_here('', 2) + ' file : >' + fn + '< open for ' + mode)
+            p_log_this(msg)
             return f_open
     else:
         msg = (' file : >' + fn + '< does not exist')

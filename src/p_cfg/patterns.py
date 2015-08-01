@@ -5,16 +5,15 @@
 
 y_main = dict()
 y_main[02] = """
-
 # YOUR code resides in THIS module.
 # It is respected if changed (modification results from different
-# hash code >nnn< in second line of source code of this module).
+# hash code '>xxx...xxx<' in second line of source code of this module).
 
-import lib.xx_my_code  as xx_my_code
+# import lib.xx_my_code  as xx_my_code
 
 import lib.xx_glbls    as xx_glbls
 import lib.xx_CAParser as xx_CAParser
-import lib.p_utils     as p_utils
+import lib.p_utils    as p_utils
 from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 """
 
@@ -38,24 +37,20 @@ def main():
 
 y_main[98] = """
 
-#def my_name():
-def prog_name():
+def print_prog_name():
     prog_info = p_utils.scriptinfo()
     prog_name = prog_info['name']
-    return prog_name
-
+    print '--------\\n' + prog_name + '\\n--------'
 
 if __name__ == "__main__":
-    print '--------\\n' + prog_name() + '\\n--------'
-
+    print_prog_name()
     p_log_init(log_dir = 'log', log_fn = 'xx_main.log')
     p_log_start()
 
     # xx_CAParser.xx_parser('ignore_pos_args', '')
     xx_CAParser.xx_parser()
 
-    # Here YOUR code in >xx_my_code.py< is _called_.
-    # xx_my_code.main()
+    # Here YOUR code is called.
     main()
 
     p_log_end()
