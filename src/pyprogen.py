@@ -162,18 +162,21 @@ def pyprogen():
     according to >new_prog.ini< and new_>prog_args.conf<.
     """
     p_log_this()                  # in ./p_log/pyprogen.log
+    #
     p_code.p_read_ini(".", "new_prog.ini")  # dir relative to >.<
     prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
     p_code.p_create_paths_and_fns() # i.e.: glbls_path,
     create_maindir(prog_path)     # create dir  ./y_main
     create_subdirs(prog_path)     # create dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
     copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
+    #
     p_code.p_main_cfg_check_hash()# check if ./y_main/y_main.cfg exists; if changed -> save it.
     create_ca_parser(prog_path)   # create & start ./y_main/lib/y_CAParser.py
+    p_code.p_main_cfg_create_hash_and_timestamp() # Do what your name says with ./y_main/cfg/y_main.cfg
+    #
     p_code.p_globals()            # create modul ./y_main/lib/y_glbls.py
     p_code.p_main()               # create progr ./y_main/y_main.py
     # p_glbls.print_p_cfg_args()  # print variables in ./pyprogen/lib/p_glbls.
-    p_code.p_main_cfg_create_hash_and_timestamp() # Do what your name says with ./y_main/cfg/y_main.cfg
     p_code.p_inform_about_paths_and_filenames()   # Do what your name says
 
 

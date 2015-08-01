@@ -277,50 +277,6 @@ def p_main():
     # finally write code adding timestamp etc in first line & adding timestamp as lastline
     p_write_code (code_dict, outfile_fn, outfile_path)  # write >y_main.py<
 
-def p_main_cfg_save_if_modified(cfg_file_path):
-    """ if y_main.cfg was modified (== hash is different),
-    rename it with date-time signature """
-    old_my_code_file = p_utils.p_file_open(cfg_file_path, mode = 'r')
-    if not old_my_code_file:
-        return
-    with old_my_code_file:
-        lines = old_my_code_file.readlines()
-    p_utils.p_file_close(old_my_code_file)
-
-    date_line = lines[0]    # first  line contains date-time string
-    hash_line = lines[1]    # second line contains hash (of lines 3 to n-1) at moment of generating
-    # hash of file w/o first 2 lines and w/o last line in >old_code_to_hash<:
-    old_code_to_hash = ''
-    for line in lines[2:-1]:
-        old_code_to_hash = old_code_to_hash + line
-
-    hash_md5           = hashlib.md5()
-    hash_md5.update(old_code_to_hash)            # calc hash
-    hash_of_old_code   = hash_md5.hexdigest()
-
-    # print 'hash_line     = '   , hash_line.rstrip()
-    # print 'hash_of_old_code = ', hash_of_old_code
-
-    old_hash_str = rgx_get_old_hash_strg(hash_line)  # get hash at moment of generating
-    if old_hash_str != hash_of_old_code:         # hashes are identical?
-        # print cfg_file_path + ' changed!'
-        # copy from source to dest:
-        # print 'date_line =', date_line
-        date_time = get_datetime_str(date_line)  # date_line == first line of y_my_code-py
-        dest_path = cfg_file_path[:-3] + date_time + '.py'
-        # print dest_path
-        p_log_this ( '>' + cfg_file_path + '< renamed to: >' + dest_path + '<')
-        shutil.move(cfg_file_path, dest_path)
-
-def p_main_cfg_check_hash_and_rename(cfg_path):
-    """ called by >pyprogen.py< after >create_ca_parser< is called.
-        Creates properties: >timestamp< and >hash< """
-    f_cfg = p_utils.p_file_open(cfg_path)
-    if not f_cfg :
-        p_log_this('no old cfg file: >' + p_glbls.cfg_path + '<')
-    else:
-        p_log_this('cfg file: >' + p_glbls.cfg_path + '< opened')
-
 
 def p_main_cfg_create_hash_and_timestamp():
     """ called by >pyprogen.py< after >create_ca_parser< is called,
