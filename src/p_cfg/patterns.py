@@ -168,7 +168,7 @@ except:
 
 args = None
 
-def xx_parser(command = '', cfg_path=''):
+def xx_parser(command = '', cfg_path_tmp=''):
     # p_log_this()
     parser = confargparse.ConfArgParser(description='Program: xx_program_name')
     # exclude positional args when exporting conf-file
@@ -183,10 +183,10 @@ CA_Parser[10] = """
     global args
     # export conf-file:
     if (command == '--export-conf-file'):
-        print '| xx_CAParser.py: generating: ', cfg_path
-        print '| xx_CAParser.py: generating & writing: ', cfg_path
+        print '| xx_CAParser.py: generating: ', cfg_path_tmp
+        print '| xx_CAParser.py: generating & writing: ', cfg_path_tmp
         print '-' * 20
-        parser.parse_args(['--export-conf-file', cfg_path])
+        parser.parse_args(['--export-conf-file', cfg_path_tmp])
         print '| xx_CAParser.py: end'
         # ConfArgParser obviously exits? Here! Why? ? ? ?
     else:
@@ -211,14 +211,14 @@ if __name__ == "__main__":
     p_log_init(log_dir = 'xx_dir_log', log_fn = 'xx_CAParser')
     p_log_start()
     p_log_this('| generating cfg-file')
-    cfg_path = sys.argv[1]
-    if not cfg_path:
+    cfg_path_tmp = sys.argv[1]
+    if not cfg_path_tmp:
         print '| xx_CAParser: No output path for cfg-file?? '
-        cfg_path = os.path.join('.', 'main\cfg', 'conf.ini')
-        print ('| xx_CAParser: Setting output path to: ' + cfg_path)
+        cfg_path_tmp = os.path.join('.', 'main\cfg', 'conf.ini')
+        print ('| xx_CAParser: Setting output path to: ' + cfg_path_tmp)
     else:
-        print '| output path for cfg-file = ', cfg_path
-    xx_parser('--export-conf-file', cfg_path)
+        print '| output path for cfg-file = ', cfg_path_tmp
+    xx_parser('--export-conf-file', cfg_path_tmp)
     print '| xx_CAParser: end'
     print '-' * 20
     p_log_end()
