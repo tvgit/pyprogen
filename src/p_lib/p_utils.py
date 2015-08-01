@@ -21,7 +21,6 @@ def scriptinfo():
     ''' returns name of running script. See:
     http://code.activestate.com/recipes/579018-python-determine-name-and-directory-of-the-top-lev/
     '''
-
     import os, sys, inspect
     for part in inspect.stack():
         if part[1].startswith("<"):
@@ -70,10 +69,8 @@ def p_dir_check_isabs(dir):
         mssg_2 = (' please change dir: >' + dir + '<    to relative subdir (i.e. ./log) ')
         mssg_3 = ('       ....  exiting!')
         print mssg_1 + mssg_2 + mssg_3
+        p_log_this(mssg_1); p_log_this(mssg_2) ; p_log_this(mssg_3)
         p_exit()  # exit !
-        p_log_this(mssg_1)
-        p_log_this(mssg_2)
-        p_log_this(mssg_3)
     if (dir == ''): dir = '.'
     return dir
 
@@ -83,15 +80,12 @@ def p_dir_make(dir):
     if not os.path.exists(dir):
         try:
             os.makedirs(dir)
-            mssge = (' creating dir: ' + dir )
-            p_log_this(mssge)
+            p_log_this(' creating dir: ' + dir )
         except IOError:
             mssge = (' creating dir: ' + dir + ' failed!')
-            print mssge
-            p_log_this(mssge)
+            p_log_this(mssge) ; print mssge
     else:
-        mssge = (' dir exists : >' + dir + '<')
-        p_log_this(mssge)
+        p_log_this(' dir exists : >' + dir + '<')
     return dir
 
 def p_subdir_make(dir):
@@ -102,22 +96,20 @@ def p_subdir_make(dir):
 
 
 def p_file_open(fn, mode = 'r'):
-    """ open files if file exists """
+    """ open files if file exists - error otherwise """
     if os.path.isfile(fn):
         try:
             f_open = open(fn, mode)
         except EnvironmentError:
             msg = (p_here('', 2) + 'unable to open file : >' + fn + '< EnvironmentError!')
-            p_log_this(msg, 'error')
-            print msg
+            p_log_this(msg, 'error') ; print msg
         else:
             msg = (p_here('', 2) + ' file : >' + fn + '< open for ' + mode)
             p_log_this(msg)
             return f_open
     else:
         msg = (' file : >' + fn + '< does not exist')
-        p_log_this(msg, 'error')
-        print msg
+        p_log_this(msg, 'error'); print msg
 
 
 def p_file_close(f):
