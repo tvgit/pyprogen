@@ -34,24 +34,24 @@ __date__   = "$05.05.2015 21:55:22$"
     First do a >pip install ConfArgParse< (as admin in windows)
 
     pyprogen:
-    generates a basic python program structure, that offers a basic file
-    tree for logging & initialising and the corresponding functionality.
-    The generated python program may be initialised via command line
-    arguments and/or via a configuration file (*.cfg).
+    generates a very simple python program structure, that offers a basic
+    file tree for logging & initialising and the corresponding functionality.
+    The generated python program may be initialised via command line arguments
+    and/or via a configuration file (*.cfg).
 
     y_main/y_main.py  # y_main.py == new generated python prog
         /cfg/*.cfg    # configuration file(s)
-        /lib/*.py     # some py modules; even your code will reside here as: >my_code.py<
+        /lib/*.py     # some py modules
         /log/*.log    # log-files
 
     Pyprogen itself is easily configured via its own configuration file:
     >new_prog.ini<. Here You configure the name of the generated python
-    script (default: >y_main.py<), the extent of its logging.
+    script (default: >y_main.py<) and the extent of its logging (TODO).
     Commandline arguments of >y_main.py< and their defaults are configured
     via >new_prog_args.conf<.
 
     Pyprogen uses >ConfArgParse<, to handle commandline arguments.
-    This module offers a rather easy way to combine command line arguments
+    This module offers an very easy way to combine command line arguments
     and configuration files.
     >ConfArgParse< is able to read and to write configuration files.
     This ability is used by >pyprogen<: >pyprogen< writes in a first step
@@ -172,7 +172,7 @@ def pyprogen():
     create_ca_parser(prog_path)   # create & start ./y_main/lib/y_CAParser.py
     p_code.p_globals()            # create modul ./y_main/lib/y_glbls.py
     p_code.p_main()               # create progr ./y_main/y_main.py
-    # p_glbls.print_p_cfg_args()    # print variables in ./pyprogen/lib/p_glbls.
+    # p_glbls.print_p_cfg_args()  # print variables in ./pyprogen/lib/p_glbls.
     p_code.p_main_cfg_create_hash_and_timestamp() # Do what your name says with ./y_main/cfg/y_main.cfg
     p_code.p_inform_about_paths_and_filenames()   # Do what your name says
 
