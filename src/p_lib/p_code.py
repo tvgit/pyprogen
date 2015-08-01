@@ -72,21 +72,6 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
         p_glbls.prefix = p_glbls.prog_name[0] + '_'  # prefix for generated program
         p_log_this('prefix set to: ' + p_glbls.prefix)
 
-    # p_glbls.my_code_fn
-    try:
-        p_glbls.my_code_fn = parser.get("properties", "my_code_fn")
-        p_log_this('my_code_fn = ' + p_glbls.my_code_fn)
-        if (len(p_glbls.my_code_fn) < 3):
-            p_glbls.my_code_fn = p_glbls.my_code_fn + '.py'
-            p_log_this('          =>' + p_glbls.my_code_fn)
-        if ((string.lower(p_glbls.my_code_fn[-3:])) <> '.py'):
-            p_glbls.my_code_fn = p_glbls.my_code_fn + '.py'
-            p_log_this('          =>' + p_glbls.my_code_fn)
-    except ConfigParser.NoOptionError:
-        p_glbls.my_code_fn = 'my_code.py'
-        p_log_this('no >my_code_fn< in: ' + cfg_path + ' !')
-        p_log_this('my_code_fn set to: ' + p_glbls.my_code_fn)
-
     # p_glbls.date_time_str
     p_glbls.date_time_str = p_utils.p_make_act_date_str()
 
@@ -98,8 +83,8 @@ def p_inform_about_paths_and_filenames():
     print '-' *80
     print 'You will find the new program in: ' + os.path.join(p_glbls.dir_main, '')
     print 'Its name is:                      ' + os.path.join(p_glbls.dir_main, p_glbls.prog_name)
-    print 'YOUR CODE should reside in:       ' + os.path.join(p_glbls.dir_lib, p_glbls.my_code_fn)
-    print 'YOUR CODE will be preserved, if changed.'
+    print 'YOUR code should reside in:       ' + os.path.join(p_glbls.dir_main, p_glbls.prog_name)
+    print 'YOUR code will be preserved, if changed.'
     print 'Beware of modifying the other >' + p_glbls.dir_lib + '\*.py< files.'
     print
     print 'You may configure the comand line args     of >' + p_glbls.prog_name + '<  via:  >new_prog_args.conf<'
@@ -126,7 +111,7 @@ def p_subst_vars_in_patterns (input_dict):
         txt =  txt.replace("xx_main",     p_glbls.prog_name[:-3])
         txt =  txt.replace("xx_parser",   p_glbls.CAParser_func)
         txt =  txt.replace("xx_glbls",    p_glbls.glbls_fn[:-3])
-        txt =  txt.replace("xx_my_code",  p_glbls.my_code_fn[:-3])
+        # txt =  txt.replace("xx_my_code",  p_glbls.my_code_fn[:-3])
         patts[key] = txt
     return patts
 
@@ -216,16 +201,15 @@ def get_datetime_str(txt_line):
     else:
         return '_UNKNOWN_DATE_TIME'
 
-
-def p_my_code_save_if_modified(outfile_path):
-    """ if y_my_code.py was modified (== hash is different),
+def p_main_save_if_modified(outfile_path):
+    """ if y_main.py was modified (== hash is different),
     rename it with date-time signature """
-    old_my_code_file = p_utils.p_file_open(outfile_path, mode = 'r')
-    if not old_my_code_file:
+    old_main_file = p_utils.p_file_open(outfile_path, mode = 'r')
+    if not old_main_file:
         return
-    with old_my_code_file:
-        lines = old_my_code_file.readlines()
-    p_utils.p_file_close(old_my_code_file)
+    with old_main_file:
+        lines = old_main_file.readlines()
+    p_utils.p_file_close(old_main_file)
 
     date_line = lines[0]    # first  line contains date-time string
     hash_line = lines[1]    # second line contains hash (of lines 3 to n-1) at moment of generating
@@ -248,78 +232,8 @@ def p_my_code_save_if_modified(outfile_path):
         dest_path = outfile_path[:-3] + date_time + '.py'
         # move source to dest:
         shutil.move(outfile_path, dest_path)
-        p_log_this ( '>' + outfile_path + '< renamed to: >' + dest_path + '<')
-    return hash_of_old_code
-
-def p_my_code():
-    """ saves old >y_my_code.py< if modified / creates new y_my_code.py """
-    # fn and path of  >y_main.py<
-    outfile_fn = p_glbls.my_code_fn
-    outfile_path = os.path.join(p_glbls.dir_lib, outfile_fn)
-    p_log_this('creating: ' + outfile_path)
-    # if modified, save old >y_my_code.py<:
-    p_my_code_save_if_modified(outfile_path)
-
-    # Make new code:
-    # make txt for >if<'s for >opt_arg_vars< of commandline
-    txt =       ' '*4 + '# optional args(ConfArgParser):\n'
-    for arg in p_glbls.opt_arg_vars:
-        txt = txt + ' '*4 + 'if ' + 'xx_glbls.arg_ns.' + arg + ' == "something":\n'
-        txt = txt + ' '*8 + 'eval_arg(xx_glbls.arg_ns.' + arg +')\n'
-        txt = txt + '\n'
-    # add this txt to pattern:
-    patterns.y_my_code[10] = txt
-
-    # now >y_my_code< is complete. => calculate hash for generated program:
-    y_my_code = p_subst_vars_in_patterns (patterns.y_my_code)
-    code = ''
-    for key, chunk in sorted(y_my_code.iteritems()):
-        code = code + chunk
-
-    # print '=' *40 ; print len(code)  ;print '=' *40
-    hash_md5 = hashlib.md5()
-    hash_md5.update(code)                      # calculate hash
-    hash_of_mytext = hash_md5.hexdigest()
-
-    code_dict    = dict()                               # p_write_code wants dict as input
-    code_dict[1] = '# >' + hash_of_mytext + '< \n'      # second line of y_my_code.py
-    code_dict[2] = code                                 #
-    p_write_code (code_dict, outfile_fn, outfile_path)  # write >y_my_code.py<
-
-
-def p_main_save_if_modified(outfile_path):
-    """ if y_main.py was modified (== hash is different),
-    rename it with date-time signature """
-    old_main_file = p_utils.p_file_open(outfile_path, mode = 'r')
-    if not old_main_file:
-        return
-    with old_main_file:
-        lines = old_main_file.readlines()
-    p_utils.p_file_close(old_main_file)
-
-    date_line = lines[0]    # first  line contains date-time string
-    hash_line = lines[1]    # second line contains hash (of lines 3 to n-1) at moment of generating
-    # hash of file w/o first 2 lines and w/o last line in >old_code_to_hash<:
-    old_code_to_hash = ''
-    for line in lines[2:-1]:
-        old_code_to_hash = old_code_to_hash + line
-
-    hash_md5           = hashlib.md5()
-    hash_md5.update(old_code_to_hash)            # calc hash
-    hash_of_old_code   = hash_md5.hexdigest()
-
-    print 'hash_line     = '   , hash_line.rstrip()
-    print 'hash_of_old_code = ', hash_of_old_code
-
-    old_hash_str = rgx_get_old_hash_strg(hash_line)  # get hash at moment of generating
-    if old_hash_str != hash_of_old_code:         # hashes are identical?
-        # print outfile_path + ' changed!' # print 'date_line =', date_line
-        date_time = get_datetime_str(date_line)  # date_line == first line of y_my_code-py
-        dest_path = outfile_path[:-3] + date_time + '.py'
-        # move source to dest:
-        shutil.move(outfile_path, dest_path)
         mssge = ( '>' + outfile_path + '< renamed to: >' + dest_path + '<')
-        p_log_this (mssge) ; print mssge
+        p_log_this (mssge) # ; print mssge
     else:
         p_log_this (outfile_path + ' unchanged')
 
@@ -338,7 +252,7 @@ def p_main():
 
     # Make new code:
     # make txt for >if<'s for >opt_arg_vars< of commandline
-    txt =       ' '*4 + '# optional args(ConfArgParser):\n'
+    txt =           ' '*4 + '# optional args(ConfArgParser):\n'
     for arg in p_glbls.opt_arg_vars:
         # txt = txt + ' '*4 + 'if ' + 'xx_glbls.arg_ns.' + arg + ' == "something":\n'
         txt = txt + ' '*4 + 'if ' + 'xx_glbls.arg_ns.' + arg + ' == xx_glbls.arg_ns.' + arg + ':\n'
@@ -400,19 +314,15 @@ def p_main_cfg_save_if_modified(cfg_file_path):
         # print dest_path
         p_log_this ( '>' + cfg_file_path + '< renamed to: >' + dest_path + '<')
         shutil.move(cfg_file_path, dest_path)
-    return hash_of_old_code
 
 def p_main_cfg_check_hash_and_rename(cfg_path):
     """ called by >pyprogen.py< after >create_ca_parser< is called.
         Creates properties: >timestamp< and >hash< """
-    print 'cfg_path = ', cfg_path
     f_cfg = p_utils.p_file_open(cfg_path)
     if not f_cfg :
         p_log_this('no old cfg file: >' + p_glbls.cfg_path + '<')
-        return
     else:
         p_log_this('cfg file: >' + p_glbls.cfg_path + '< opened')
-        print f_cfg
 
 
 def p_main_cfg_create_hash_and_timestamp():
@@ -452,7 +362,6 @@ def p_main_cfg_check_hash():
     p_log_this('cfg_path: ' + p_glbls.cfg_path)
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
     cfg_file = parser.read(p_glbls.cfg_path)
-    print cfg_file
 
     try:  # read defaults and calc their hash
         defaults = parser.items("defaults")
@@ -463,8 +372,8 @@ def p_main_cfg_check_hash():
         hash_md5.update(defaults_str)            # calc hash
         act_hash_of_defaults = hash_md5.hexdigest()
     except ConfigParser.NoSectionError:
-        p_log_this("No section: 'defaults' in: >" + cfg_path + '< !')
-        print     ("No section: 'defaults' in: >" + cfg_path + '< !')
+        mssge = ("No section: 'defaults' in: >" + cfg_path + '< !')
+        p_log_this(mssge); print('Error: ' + mssge)
         return
 
     try:  # read old hash (and time_stamp)

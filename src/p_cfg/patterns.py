@@ -9,8 +9,6 @@ y_main[02] = """
 # It is respected if changed (modification results from different
 # hash code '>xxx...xxx<' in second line of source code of this module).
 
-# import lib.xx_my_code  as xx_my_code
-
 import lib.xx_glbls    as xx_glbls
 import lib.xx_CAParser as xx_CAParser
 import lib.p_utils    as p_utils
