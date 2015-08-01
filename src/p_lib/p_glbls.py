@@ -15,7 +15,10 @@ dir_log   = None     # subdir  : >./y_main/log<, log-files for >y_main.py<
 cfg_fn    = None     # filename of cfg-file for for 'y_main.py'; usually: >y_main.py<
 cfg_path  = None     # path     of cfg-file for for 'y_main.py'; usually: >y_mainy/cfg/y_main.cfg<
 
-CAParser_fn  = None  # filename of arg-parser of 'y_main.py'  (y_ConfArgParser.py)
+cfg_fn_tmp   = None  # filename of temporary cfg-file for for 'y_main.py'; usually: >y_main_timestamp.py<
+cfg_path_tmp = None  # path     of temporary cfg-file for for 'y_main.py'; usually: >y_mainy/cfg/y_main_timestamp.cfg<
+
+CAParser_fn  = None  # filename of arg-parser of 'y_main.py'  (>.y_ConfArgParser.py<)
 CAParser_path= None  # path     of arg-parser of 'y_main.py'  (>./y_main/lib/...<)
 CAParser_func= None  # function name  (>def y_parser(): ...<)
 
@@ -28,19 +31,26 @@ opt_arg_vars = None  # optional args
 date_time_str= None  # Date & Time
 
 def print_p_cfg_args(print_args=False):
-    print ' prog_name = '     + prog_name
-    print ' prefix    = '     + prefix
-    print ' dir_main  = '     + dir_main
-    print ' dir_cfg   = '     + dir_cfg
-    print ' dir_lib   = '     + dir_lib
-    print ' dir_log   = '     + dir_log
-    print ' cfg_fn    = '     + cfg_fn
-    print ' cfg_path  = '     + cfg_path
-    print ' CAParser_fn   = ' + CAParser_fn
-    print ' CAParser_path = ' + CAParser_path
-    print ' CAParser_func = ' + CAParser_func
-    print ' glbls_fn      = ' + glbls_fn
-    print ' date_time_str = ' + date_time_str
+    print ' prog_name     =   '   + prog_name
+    print ' prefix        =   '   + prefix
+    print
+    print ' dir_main      = '     + dir_main
+    print ' dir_cfg       = '     + dir_cfg
+    print ' dir_lib       = '     + dir_lib
+    print ' dir_log       = '     + dir_log
+    print ' cfg_fn        =   '   + cfg_fn
+    print ' cfg_path      = '     + cfg_path
+    print ' cfg_fn_tmp    =   '   + cfg_fn_tmp
+    print ' cfg_path_tmp  = '     + cfg_path_tmp
+
+    print
+    print ' CAParser_fn   =   '   + CAParser_fn
+    print ' CAParser_path = '     + CAParser_path
+    print ' CAParser_func =   '   + CAParser_func
+    print
+    print ' glbls_fn      =   '   + glbls_fn
+    print ' date_time_str = '     + date_time_str
+    print
 
     if print_args:
         for arg in opt_arg_vars:

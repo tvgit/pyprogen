@@ -109,10 +109,13 @@ def create_subdirs(prog_path):
     """ """
     p_log_this()
     p_glbls.dir_cfg = p_utils.p_subdir_make(os.path.join(prog_path, 'cfg'))
-    p_glbls.dir_cfg = os.path.join('.', p_glbls.dir_cfg)
+    p_glbls.dir_cfg = os.path.join('.', p_glbls.dir_cfg)  # cfg-dir of new y_main.py
 
-    p_glbls.cfg_fn = prog_path + '.cfg'   # cfg-file of new y_main.py
-    p_glbls.cfg_path = os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn)
+    p_glbls.cfg_fn  = prog_path + '.cfg'   # cfg-file of new y_main.py
+    p_glbls.cfg_path= os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn)
+
+    p_glbls.cfg_fn_tmp   = p_glbls.cfg_fn[:-4] + '_' + p_glbls.date_time_str + p_glbls.cfg_fn[-4:]
+    p_glbls.cfg_path_tmp = os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn_tmp)
 
     p_glbls.dir_lib = p_utils.p_subdir_make(os.path.join(prog_path, 'lib'))
     p_glbls.dir_lib = os.path.join('.', p_glbls.dir_lib)
@@ -147,11 +150,18 @@ def create_ca_parser(prog_path):
     prepared to write a conf file, if called as script, it will write
     a config-file to ./y_main/cfg
     """
+
+    # p_glbls.cfg_fn_tmp   = p_glbls.CAParser_fn
+    # p_glbls.cfg_path_tmp = p_glbls.CAParser_path
+
     p_log_this()
+    #
     p_ConfArgParser('./new_prog_args.conf') # create confargparser for >y_main.py<
     subprocess_path  = p_glbls.CAParser_path
     p_log_this("subprocess_path = " + subprocess_path)
-    p_log_this("cfg_path = " + p_glbls.cfg_path)
+
+    cfg_path = p_glbls.cfg_path_tmp         # write >y_main_TimeStamp.cfg<
+    p_log_this("cfg_path = " + cfg_path)
     # http://pymotw.com/2/subprocess/
     # start new ConfArgParser to create cfg-file (aka >cfg_path<) for >y_main.py<
     subprocess.call([subprocess_path, p_glbls.cfg_path], shell=True)
@@ -176,8 +186,8 @@ def pyprogen():
     #
     p_code.p_globals()            # create modul ./y_main/lib/y_glbls.py
     p_code.p_main()               # create progr ./y_main/y_main.py
-    # p_glbls.print_p_cfg_args()  # print variables in ./pyprogen/lib/p_glbls.
     p_code.p_inform_about_paths_and_filenames()   # Do what your name says
+    p_glbls.print_p_cfg_args()  # print variables in ./pyprogen/lib/p_glbls.
 
 
 if __name__ == "__main__":

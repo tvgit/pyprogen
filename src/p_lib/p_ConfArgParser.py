@@ -137,10 +137,11 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
         p_log_this('opt. arg: ' + arg)
 
     # write y_CAParser.py == ConfArgParser for new program
-    CAParser_fn = p_glbls.prefix + 'CAParser.py'
-    p_glbls.CAParser_fn = CAParser_fn
-    outfile_fn = p_glbls.CAParser_fn
-    p_glbls.CAParser_path = os.path.join(p_glbls.dir_lib, CAParser_fn)
+
+    p_glbls.CAParser_fn   = p_glbls.prefix + 'CAParser.py'  # >y_CAParser.py<
+    p_glbls.CAParser_path = os.path.join(p_glbls.dir_lib, p_glbls.CAParser_fn )
+
+    outfile_fn   = p_glbls.CAParser_fn
     outfile_path = p_glbls.CAParser_path
 
     code = p_subst_vars_in_patterns (patterns.CA_Parser)
