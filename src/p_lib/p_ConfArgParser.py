@@ -147,9 +147,6 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     code = p_subst_vars_in_patterns (patterns.CA_Parser)
     p_code.p_write_code (code, outfile_fn, outfile_path)
 
-
-
-
 # ------------------------------------
 
 if __name__ == "__main__":

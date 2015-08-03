@@ -228,12 +228,30 @@ def p_main_cfg_create_hash():
 
 
 def p_main_cfg_check_hash():
-    """ called by >pyprogen.py< after >create_ca_parser< is called.
-        check if >./y_main/y_main.cfg exists;<
-        if (exists && changed): => keep it;
-        else: => overwrite it with >y_main_TimeStamp.cfg< """
+    """ called by >pyprogen.py< after >create_ca_parser< has been called and after
+    p_main_cfg_create_hash() has added hash to: >./y_main/cfg/y_main_TimeStamp.cfg<
+
+    if not (>y_main.cfg< exists)
+        move >y_main_TimeStamp.cfg< to >y_main.cfg<
+        return
+    elsif (>y_main.cfg< was changed):
+        # keep >y_main.cfg<; keep >y_main_TimeStamp.cfg<;
+        return
+    else:
+        move >y_main_TimeStamp.cfg< to >y_main.cfg<
+        """
 
     p_log_this('cfg_path: ' + p_glbls.cfg_path)
+
+    if not p_utils.p_file_exists (p_glbls.cfg_path):
+        dest_path = p_glbls.cfg_path
+        mssge = ( '>' + p_glbls.cfg_path_tmp + '< renamed to: >' + dest_path + '<')
+        p_log_this (mssge) ; print (mssge)
+        # move source to dest:
+        shutil.move(p_glbls.cfg_path_tmp, dest_path)
+        #           p_glbls.cfg_path
+        return
+
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
     cfg_file = parser.read(p_glbls.cfg_path)
 

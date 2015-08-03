@@ -95,6 +95,17 @@ def p_subdir_make(dir):
     return dir
 
 
+def p_file_exists (fn, print_message = False):
+    """ open files if file exists - error otherwise """
+    if os.path.isfile(fn):
+        return True
+    else:
+        msg = (' file : >' + fn + '< does not exist')
+        p_log_this(msg, 'error')
+        if print_message: print msg
+        return False
+
+
 def p_file_open(fn, mode = 'r'):
     """ open files if file exists - error otherwise """
     if os.path.isfile(fn):

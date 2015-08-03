@@ -173,6 +173,7 @@ def xx_parser(command = '', cfg_path_tmp=''):
     parser = confargparse.ConfArgParser(description='Program: xx_program_name')
     # exclude positional args when exporting conf-file
     if (command <> '--export-conf-file') and (command <> 'ignore_pos_args'):
+        pass
 """
 
 CA_Parser[04] = """
