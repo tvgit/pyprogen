@@ -12,9 +12,7 @@ from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 import re
 import os
 
-
 # http://psy.swansea.ac.uk/staff/carter/gnuplot/gnuplot_time.htm
-
 
 def eval_arg(arg):
     print 'do something with: ' + str(arg)
@@ -47,7 +45,6 @@ def make_time_stamp_list(in_file):
     cnt = 0
     rgx = rgx_date_time()
     for line in in_file.xreadlines():
-        # print line
         if not 'p_log_start' in line:
             continue
         match = rgx.search(line)
@@ -61,6 +58,7 @@ def make_time_stamp_list(in_file):
                 time_stamp_list.append(time_stamp)
                 cnt += 1
     return time_stamp_list, cnt
+
 
 def make_day_ts_list(time_stamp_list):
     days_cnt = 0
@@ -113,18 +111,14 @@ def evaluate_opt_args():
     # d_glbls.print_arg_ns()
     # optional args(ConfArgParser):
     if d_glbls.arg_ns.in_file == d_glbls.arg_ns.in_file:
-        #fn_in_file = '../p_log/pyprogen.log'
         fn_in_file = d_glbls.arg_ns.in_file
-        # print fn_in_file
 
         if p_utils.p_file_exists (fn_in_file, print_message = False):
             f_in_file = p_utils.p_file_open(fn_in_file, mode = 'r')
             time_stamp_list, runs_cnt = make_time_stamp_list(f_in_file)
-            # print 'runs = ', runs_cnt
-            # print time_stamp_list
+            # print 'runs = ', runs_cnt; # print time_stamp_list
             day_ts_list, days_cnt, times_cnt = make_day_ts_list(time_stamp_list)
             print '\nday_ts_list = ', days_cnt, 'times = ', times_cnt
-            # print_day_ts_list(day_ts_list)
             fn_out_file = d_glbls.arg_ns.out_file
             f_out_file = p_utils.p_file_open(fn_out_file, mode = 'w')
             for day_ts in sorted(time_stamp_list):
@@ -134,8 +128,6 @@ def evaluate_opt_args():
                 f_out_file.write(data_str) # python will convert \n to os.linesep
                 print data_str,
             f_out_file.close()
-
-
     else:
         print fn_in_file + ' does not exist'
 
