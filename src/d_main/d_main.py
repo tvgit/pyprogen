@@ -12,6 +12,10 @@ from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
 import re
 import os
 
+
+# http://psy.swansea.ac.uk/staff/carter/gnuplot/gnuplot_time.htm
+
+
 def eval_arg(arg):
     print 'do something with: ' + str(arg)
 
@@ -37,87 +41,103 @@ def get_key(item):
     print item
     return item.keys()[0]
 
+def make_time_stamp_list(in_file):
+    time_stamp_list = []
+    old_time_stamp = ''
+    cnt = 0
+    rgx = rgx_date_time()
+    for line in in_file.xreadlines():
+        # print line
+        if not 'p_log_start' in line:
+            continue
+        match = rgx.search(line)
+        if match:
+            yyyymmdd = match.group(1)
+            ws = match.group(2)
+            time = match.group(3)
+            time_stamp = yyyymmdd + ws + time
+            if (time_stamp <> old_time_stamp):
+                old_time_stamp = time_stamp
+                time_stamp_list.append(time_stamp)
+                cnt += 1
+    return time_stamp_list, cnt
+
+def make_day_ts_list(time_stamp_list):
+    days_cnt = 0
+    times_cnt = 0
+    day_str = ''
+    day_ts_list  = []    # list of day
+    day   = dict() # day == dict{day:[time_1, time_2, time_3 ...]}
+    times = []     # Zeitpunkte am gleichen Tag
+    for time_stamp in sorted(time_stamp_list):
+        new_day_str  = time_stamp[:10]
+        time_str     = time_stamp[11:]
+        if new_day_str <> day_str:
+            # print new_day_str, time_str, time_str
+            if day_str:
+                day[day_str] = times    # Zeitpunkte an dict {altes Datum : [Zeitpunkte]} anfuegen
+                day_ts_list.append(day) # Alten Tag an Liste der Tage
+            #
+            days_cnt  += 1
+            # print ; print days_cnt, new_day_str , ; print time_str ,
+            day = dict()            # Neuer Tag
+            day_str = new_day_str
+            times = []              # Liste der Zeitpunkte leeren
+            times.append(time_str)  # ersten Zeitpunkt an Liste ZEitpunkte
+            times_cnt += 1
+        else:
+            # print time_str ,
+            times.append(time_str)
+            times_cnt += 1
+
+    day[day_str] = times    # Zeitpunkte an dict {altes Datum : [Zeitpunkte]} anfuegen
+    day_ts_list.append(day) # Letzten Tag an Liste der Tage
+    return day_ts_list, days_cnt, times_cnt
+
+
+def print_day_ts_list(day_ts_list):
+    days_cnt = 0
+    # for day in sorted (day_ts_list, key = get_key):
+    for day in day_ts_list:
+        for dy, tms in day.iteritems():
+            days_cnt  += 1
+            print days_cnt, '#',
+            print dy,
+            for t in tms:
+                print t ,
+            print
+
+
 def evaluate_opt_args():
     p_log_this()
     # d_glbls.print_arg_ns()
     # optional args(ConfArgParser):
     if d_glbls.arg_ns.in_file == d_glbls.arg_ns.in_file:
-        # with open(str(d_glbls.arg_ns.in_file), 'r') as in_file:
-        fn = '../p_log/pyprogen.log'
-        fn = d_glbls.arg_ns.in_file
-        # fn = os.path.normpath(fn)
-        # dir = os.path.dirname(__file__)
-        # fn = os.path.join(dir,fn)
-        # print fn
+        #fn_in_file = '../p_log/pyprogen.log'
+        fn_in_file = d_glbls.arg_ns.in_file
+        # print fn_in_file
 
-        if p_utils.p_file_exists (fn, print_message = False):
-            time_stamp_list = []
-            old_time_stamp = ''
-            cnt = 0
-            rgx = rgx_date_time()
-            in_file = p_utils.p_file_open(fn, mode = 'r')
-            for line in in_file.xreadlines():
-                # print line
-                if not 'p_log_start' in line:
-                    continue
-                match = rgx.search(line)
-                if match:
-                    yyyymmdd = match.group(1)
-                    ws = match.group(2)
-                    time = match.group(3)
-                    time_stamp = yyyymmdd + ws + time
-                    if (time_stamp <> old_time_stamp):
-                        old_time_stamp = time_stamp
-                        time_stamp_list.append(time_stamp)
-                        cnt += 1
-            #
-            print 'runs = ', cnt
-            days_cnt = 0
-            times_cnt = 0
-            day_str = ''
-            day_s  = []    # list of day
-            day   = dict() # day == dict{day:[time_1, time_2, time_3 ...]}
-            times = []     # Zeitpunkte am gleichen Tag
-            for time_stamp in sorted(time_stamp_list):
-                new_day_str  = time_stamp[:10]
-                time_str     = time_stamp[11:]
-                if new_day_str <> day_str:
-                    # print new_day_str, time_str
-                    # print time_str
-                    if day_str:
-                        day[day_str] = times    # Zeitpunkte an dict {altes Datum : [Zeitpunkte]} anfuegen
-                        day_s.append(day)       # Alten Tag an Liste der Tage
-                    #
-                    days_cnt  += 1
-                    print ; print days_cnt, new_day_str , ; print time_str ,
-                    day = dict()            # Neuer Tag
-                    day_str = new_day_str
-                    times = []              # Liste der Zeitpunkte leeren
-                    times.append(time_str)  # ersten Zeitpunkt an Liste ZEitpunkte
-                    times_cnt += 1
-                else:
-                    print time_str ,
-                    times.append(time_str)
-                    times_cnt += 1
+        if p_utils.p_file_exists (fn_in_file, print_message = False):
+            f_in_file = p_utils.p_file_open(fn_in_file, mode = 'r')
+            time_stamp_list, runs_cnt = make_time_stamp_list(f_in_file)
+            # print 'runs = ', runs_cnt
+            # print time_stamp_list
+            day_ts_list, days_cnt, times_cnt = make_day_ts_list(time_stamp_list)
+            print '\nday_ts_list = ', days_cnt, 'times = ', times_cnt
+            # print_day_ts_list(day_ts_list)
+            fn_out_file = d_glbls.arg_ns.out_file
+            f_out_file = p_utils.p_file_open(fn_out_file, mode = 'w')
+            for day_ts in sorted(time_stamp_list):
+                data_str = (day_ts [:10] + ' 00:00:00 ; ' + day_ts )
+                data_str = data_str + ' ; ' + day_ts [-8:-6] + day_ts [-5:-3]
+                data_str = data_str + ' ; ' + str(int(day_ts [-8:-6])*60 + int(day_ts [-5:-3])) + '\n'
+                f_out_file.write(data_str) # python will convert \n to os.linesep
+                print data_str,
+            f_out_file.close()
 
-            day[day_str] = times    # Zeitpunkte an dict {altes Datum : [Zeitpunkte]} anfuegen
-            day_s.append(day)       # Alten Tag an Liste der Tage
-        #
-        print
-        print 'day_s = ', days_cnt
-        print 'times = ', times_cnt
-        days_cnt = 0
-        # for day in sorted (day_s, key = get_key):
-        for day in day_s:
-            for dy, tms in day.iteritems():
-                 days_cnt  += 1
-                 print days_cnt, '#',
-                 print dy,
-                 for t in tms:
-                     print t ,
-                 print
+
     else:
-        print fn + ' does not exist'
+        print fn_in_file + ' does not exist'
 
 
 

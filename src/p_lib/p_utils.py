@@ -118,6 +118,17 @@ def p_file_open(fn, mode = 'r'):
             msg = (p_here('', 2) + ' file : >' + fn + '< open for ' + mode)
             p_log_this(msg)
             return f_open
+    elif (mode == 'w'):
+        open(fn, 'w').close()
+        try:
+            f_open = open(fn, mode)
+        except EnvironmentError:
+            msg = (p_here('', 2) + 'unable to open file : >' + fn + '< EnvironmentError!')
+            p_log_this(msg, 'error') ; print msg
+        else:
+            msg = (p_here('', 2) + ' file : >' + fn + '< open for ' + mode)
+            p_log_this(msg)
+            return f_open
     else:
         msg = (' file : >' + fn + '< does not exist')
         p_log_this(msg, 'error'); print msg
