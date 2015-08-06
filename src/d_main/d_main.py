@@ -8,8 +8,9 @@
 import lib.d_glbls    as d_glbls
 import lib.d_CAParser as d_CAParser
 import lib.p_utils    as p_utils
-from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
+from   lib.p_log      import p_log_init, p_log_start, p_log_this, p_log_end
 import re
+import datetime
 import os
 
 # http://psy.swansea.ac.uk/staff/carter/gnuplot/gnuplot_time.htm
@@ -20,18 +21,18 @@ def eval_arg(arg):
     return arg
 
 def rgx_date_time():
-    txt = ''
     re1='((?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3}))[-:\\/.](?:[0]?[1-9]|[1][012])[-:\\/.](?:(?:[0-2]?\\d{1})|(?:[3][01]{1})))(?![\\d])'	# YYYYMMDD 1
     re2='(\\s+)'	# White Space 1
     re3='((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?(?:am|AM|pm|PM))?)'	# HourMinuteSec 1
 
     rgx = re.compile(re1+re2+re3,re.IGNORECASE|re.DOTALL)
-    m = rgx.search(txt)
-    if m:
-        yyyymmdd1=m.group(1)
-        ws1=m.group(2)
-        time1=m.group(3)
-        print "("+yyyymmdd1+")"+"("+ws1+")"+"("+time1+")"+"\n"
+    # txt = ''
+    # m = rgx.search(txt)
+    # if m:
+    #     yyyymmdd1=m.group(1)
+    #     ws1=m.group(2)
+    #     time1=m.group(3)
+    #     print "("+yyyymmdd1+")"+"("+ws1+")"+"("+time1+")"+"\n"
     return rgx
 
 def get_key(item):
@@ -121,16 +122,59 @@ def evaluate_opt_args():
             print '\nday_ts_list = ', days_cnt, 'times = ', times_cnt
             fn_out_file = d_glbls.arg_ns.out_file
             f_out_file = p_utils.p_file_open(fn_out_file, mode = 'w')
+            # for day_ts in sorted(time_stamp_list):
+            #     data_str = (day_ts [:10] + ' 00:00:00 ; ' + day_ts )
+            #     data_str = data_str + ' ; ' + day_ts [-8:-6] + day_ts [-5:-3]
+            #     data_str = data_str + ' ; ' + str(int(day_ts [-8:-6])*60 + int(day_ts [-5:-3])) + '\n'
+            #     f_out_file.write(data_str) # python will convert \n to os.linesep
+            #     print data_str,
+            # f_out_file.close()
+
+
+            day_act        = None
+            day_before     = None
+            day_act_str    = ''
+            day_before_str = ''
+            one_day = datetime.timedelta(days=1)
             for day_ts in sorted(time_stamp_list):
-                data_str = (day_ts [:10] + ' 00:00:00 ; ' + day_ts )
-                data_str = data_str + ' ; ' + day_ts [-8:-6] + day_ts [-5:-3]
-                data_str = data_str + ' ; ' + str(int(day_ts [-8:-6])*60 + int(day_ts [-5:-3])) + '\n'
+                Y_a = int(day_ts [:4])
+                M_a = int(day_ts [5:7])
+                D_a = int(day_ts [8:10])
+                day_act = datetime.date(Y_a, M_a, D_a)
+                day_act_str = day_ts [:10]
+                # print Y_a, M_a, D_a,
+                if not day_before:
+                    day_before     = day_act
+                    day_before_str = day_act_str
+
+                mins = int(day_ts [-8:-6])*60 + int(day_ts [-5:-3])
+                if (day_act != day_before):
+                    if ((day_act - day_before) == one_day):
+                        if (mins < 600):
+                            #print ; print '!! ', day_act, day_before, mins
+                        # else:
+                        #     day_before     = day_act
+                        #     day_before_str = day_act_str
+                            data_str = (day_before_str [:10] + ' 00:00:00 ; ' + day_ts )
+                            data_str = data_str + ' ; ' + day_ts [-8:-6] + day_ts [-5:-3]
+                            data_str = data_str + ' ; ' + str(mins + 24 * 60) + ' +\n'
+                    else:
+                        day_before     = day_act
+                        day_before_str = day_act_str
+                        print
+                        data_str = (day_ts [:10] + ' 00:00:00 ; ' + day_ts )
+                        data_str = data_str + ' ; ' + day_ts [-8:-6] + day_ts [-5:-3]
+                        data_str = data_str + ' ; ' + str(mins) + '\n'
+
+                else:
+                    data_str = (day_ts [:10] + ' 00:00:00 ; ' + day_ts )
+                    data_str = data_str + ' ; ' + day_ts [-8:-6] + day_ts [-5:-3]
+                    data_str = data_str + ' ; ' + str(mins) + '\n'
                 f_out_file.write(data_str) # python will convert \n to os.linesep
                 print data_str,
             f_out_file.close()
-    else:
-        print fn_in_file + ' does not exist'
-
+        else:
+            print fn_in_file + ' does not exist'
 
 
 def main():
