@@ -5,6 +5,37 @@
 # It is respected if changed (modification results from different
 # hash code '>xxx...xxx<' in second line of source code of this module).
 
+'''
+# -------------- gnuplot script -----------------
+#
+# load it into the gnuplot console by: 'load 'gplt.txt'
+#
+# gnuplot can not handle different time scales on x and y axis, for example: day vs time of day (i.e. date vs hours:minutes)
+# So time has to be treated as numerical data, for example minutes since midnight.
+# If so, the tics on the y-Axis have to be modified, to be understandable as hours (an not minutes)
+#
+# http://psy.swansea.ac.uk/staff/carter/gnuplot/gnuplot_time.htm
+#
+
+
+set terminal windows
+set title "development time >pyprogen.py<"
+set xlabel "date"
+set ylabel "hour: 00:00 to 02:00"
+set autoscale
+set grid
+set xdata time
+set timefmt "%Y-%m-%d %H:%M:%S"    # format of data in data file!
+set datafile separator ";"
+set format x "%Y-%m-%d"            # format of x-axis tics in graphics!
+# reformat y tics; see gnuplot manual "xtics" > set xtics { ... ({"<label>"} <pos> {<level>} {,{"<label>"}...) } ...
+set ytics ("0" 0, "2" 120, "4" 240, "6" 360, "8" 480, "10" 600, "12" 720, "14" 840, "16" 960, "18" 1080, "20" 1200, "22" 1320, "24" 1440, "26" 1560, "24" 1440, "2" 1560)
+# set border lw 3
+# colum 1 == 2015-08-03 00:00:00
+# colum 4 == Integer range (1 , 24*60 + 2*60) == 24 hours + 2 hours in minutes
+plot 'pyprogen.dat' using 1:4
+'''
+
 import lib.d_glbls    as d_glbls
 import lib.d_CAParser as d_CAParser
 import lib.p_utils    as p_utils
@@ -26,13 +57,6 @@ def rgx_date_time():
     re3='((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?(?:am|AM|pm|PM))?)'	# HourMinuteSec 1
 
     rgx = re.compile(re1+re2+re3,re.IGNORECASE|re.DOTALL)
-    # txt = ''
-    # m = rgx.search(txt)
-    # if m:
-    #     yyyymmdd1=m.group(1)
-    #     ws1=m.group(2)
-    #     time1=m.group(3)
-    #     print "("+yyyymmdd1+")"+"("+ws1+")"+"("+time1+")"+"\n"
     return rgx
 
 def get_key(item):
@@ -100,12 +124,17 @@ def print_day_ts_list(day_ts_list):
     for day in day_ts_list:
         for dy, tms in day.iteritems():
             days_cnt  += 1
-            print days_cnt, '#',
-            print dy,
+            print days_cnt, '#', dy,
             for t in tms:
                 print t ,
             print
 
+
+def make_data_str(day_ts, mins):
+    data_str = (day_ts [:10] + ' 00:00:00 ; ' + day_ts )
+    data_str = data_str + ' ; ' + day_ts [-8:-6] + day_ts [-5:-3]
+    data_str = data_str + ' ; ' + str(mins) + '\n'
+    return data_str
 
 def evaluate_opt_args():
     p_log_this()
@@ -122,14 +151,6 @@ def evaluate_opt_args():
             print '\nday_ts_list = ', days_cnt, 'times = ', times_cnt
             fn_out_file = d_glbls.arg_ns.out_file
             f_out_file = p_utils.p_file_open(fn_out_file, mode = 'w')
-            # for day_ts in sorted(time_stamp_list):
-            #     data_str = (day_ts [:10] + ' 00:00:00 ; ' + day_ts )
-            #     data_str = data_str + ' ; ' + day_ts [-8:-6] + day_ts [-5:-3]
-            #     data_str = data_str + ' ; ' + str(int(day_ts [-8:-6])*60 + int(day_ts [-5:-3])) + '\n'
-            #     f_out_file.write(data_str) # python will convert \n to os.linesep
-            #     print data_str,
-            # f_out_file.close()
-
 
             day_act        = None
             day_before     = None
@@ -148,39 +169,39 @@ def evaluate_opt_args():
                     day_before_str = day_act_str
 
                 mins = int(day_ts [-8:-6])*60 + int(day_ts [-5:-3])
-                if (day_act != day_before):
-                    if ((day_act - day_before) == one_day):
-                        if (mins < 600):
-                            #print ; print '!! ', day_act, day_before, mins
-                        # else:
-                        #     day_before     = day_act
-                        #     day_before_str = day_act_str
-                            data_str = (day_before_str [:10] + ' 00:00:00 ; ' + day_ts )
-                            data_str = data_str + ' ; ' + day_ts [-8:-6] + day_ts [-5:-3]
-                            data_str = data_str + ' ; ' + str(mins + 24 * 60) + ' +\n'
+                if (day_act == day_before):
+                    # data_str = (day_ts [:10] + ' 00:00:00 ; ' + day_ts )
+                    # data_str = data_str + ' ; ' + day_ts [-8:-6] + day_ts [-5:-3]
+                    # data_str = data_str + ' ; ' + str(mins) + '\n'
+                    data_str = make_data_str(day_ts, mins)
+                else:
+                    if (((day_act - day_before) == one_day) and (mins < 600)):
+                        # Tage an denen ich nach Mitternacht noch programmiert habe
+                        data_str = (day_before_str [:10] + ' 00:00:00 ; ' + day_ts )
+                        data_str = data_str + ' ; ' + day_ts [-8:-6] + day_ts [-5:-3]
+                        data_str = data_str + ' ; ' + str(mins + (24 * 60)) + ' ; +\n'
                     else:
                         day_before     = day_act
                         day_before_str = day_act_str
                         print
-                        data_str = (day_ts [:10] + ' 00:00:00 ; ' + day_ts )
-                        data_str = data_str + ' ; ' + day_ts [-8:-6] + day_ts [-5:-3]
-                        data_str = data_str + ' ; ' + str(mins) + '\n'
-
-                else:
-                    data_str = (day_ts [:10] + ' 00:00:00 ; ' + day_ts )
-                    data_str = data_str + ' ; ' + day_ts [-8:-6] + day_ts [-5:-3]
-                    data_str = data_str + ' ; ' + str(mins) + '\n'
+                        data_str = make_data_str(day_ts, mins)
                 f_out_file.write(data_str) # python will convert \n to os.linesep
                 print data_str,
             f_out_file.close()
         else:
             print fn_in_file + ' does not exist'
 
+def calc_gnuplot_ytics():
+    out_str = 'set ytics ('
+    for i in range(0,1561,120):
+        print i, divmod(i,60)[0]
+        out_str += '"' + str(divmod(i,60)[0]) + '" ' + str(i) + ', '
+    out_str +=  '"00" 1440, "2" 1560)'
+    # print out_str
 
 def main():
     p_log_this()
     evaluate_opt_args()
-
 
 def print_prog_name():
     prog_info = p_utils.scriptinfo()
