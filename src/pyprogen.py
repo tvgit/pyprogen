@@ -32,6 +32,9 @@ __date__   = "$05.05.2015 21:55:22$"
 make subdir: data (like */cfg/ etc
 modify >new_prog_args.conf< so in_file and aout_file lie in data_dir
 
+insert # -*- coding: utf-8 -*- in generated script in the first two lines ...
+so modify the hash too!
+
 in p_utils make examples how to open files, scan dirs etc ...
 """
 
