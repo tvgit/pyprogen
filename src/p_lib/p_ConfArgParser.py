@@ -5,7 +5,7 @@
 # http://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
 
 __author__ = "rh"
-__date__ = "$02.07.2015 21:55:22$"
+__date__   = "$02.07.2015 21:55:22$"
 
 import StringIO
 import re

@@ -28,6 +28,13 @@
 __author__ = "rh"
 __date__   = "$05.05.2015 21:55:22$"
 
+"""
+make subdir: data (like */cfg/ etc
+modify >new_prog_args.conf< so in_file and aout_file lie in data_dir
+
+in p_utils make examples how to open files, scan dirs etc ...
+"""
+
 
 """
     0.
