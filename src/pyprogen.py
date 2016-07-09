@@ -29,11 +29,13 @@ __author__ = "rh"
 __date__   = "$05.05.2015 21:55:22$"
 
 """
-make subdir: data (like */cfg/ etc
+make subdir: data   (like */cfg/ etc   # input data
+make subdir: result (like */cfg/ etc   # result data
+
 modify >new_prog_args.conf< so in_file and aout_file lie in data_dir
 
 insert # -*- coding: utf-8 -*- in generated script in the first two lines ...
-so modify the hash too!
+so modify the hash-line and hash-reading mechanism too!
 
 in p_utils make examples how to open files, scan dirs etc ...
 """
