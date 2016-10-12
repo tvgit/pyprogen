@@ -63,14 +63,16 @@ in p_utils make examples how to open files, scan dirs etc ...
     via >new_prog_args.conf<.
 
     Pyprogen uses >ConfArgParse<, to handle commandline arguments.
-    This module offers an very easy way to combine command line arguments
+    This module offers a very easy way to combine command line arguments
     and configuration files.
     >ConfArgParse< is able to read and to write configuration files.
-    This ability is used by >pyprogen<: >pyprogen< writes in a first step
-    the code for >y_main.py<'s parser >y_CAParser.py<. Then it executes
-    >y_CAParser.py< with the "--export-conf-file > ./y_main/cfg/y_main.cfg"
-    commandline. After that you will find a >y_main.cfg< for your
-    >y_main.py< in the ./y_main/cfg/ dir.
+    This ability is used by >pyprogen<:
+    in a first step >pyprogen< writes the code for >y_main.py<'s parser
+    >y_CAParser.py<.
+    Then it executes this pogram (>y_CAParser.py<) with the
+    "--export-conf-file > ./y_main/cfg/y_main.cfg" commandline parameter.
+    After that you will find a config file: >y_main.cfg<
+    for your new >y_main.py< in the ./y_main/cfg/ dir.
 
     (http://martin-thoma.com/configuration-files-in-python/)
 
