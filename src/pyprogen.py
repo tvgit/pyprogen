@@ -29,13 +29,19 @@ __author__ = "rh"
 __date__   = "$05.05.2015 21:55:22$"
 
 """
-make subdir: data   (like */cfg/ etc   # input data
-make subdir: result (like */cfg/ etc   # result data
-
-modify >new_prog_args.conf< so in_file and aout_file lie in data_dir
-
 insert # -*- coding: utf-8 -*- in generated script in the first two lines ...
 so modify the hash-line and hash-reading mechanism too!
+
+Die Namen der Log-Files, Data-Files etc überprüfen: zB in y_main.cfg ...
+names of out_file (? what is this) in /y_main/cfg/y_main.cfg is wrong: P:log etc instead of y_main.log
+
+make subdir: data_In  (like */cfg/ etc   # input data
+make subdir: data_Out (like */cfg/ etc   # result data
+OR
+make subdir: data     (like */cfg/ etc   # input data
+make subdir: result   (like */cfg/ etc   # result data
+
+modify >new_prog_args.conf< so in_file and aout_file lie in data_dir
 
 in p_utils make examples how to open files, scan dirs etc ...
 """
@@ -46,60 +52,83 @@ in p_utils make examples how to open files, scan dirs etc ...
     First do a >pip install ConfArgParse< (as admin in windows)
 
     pyprogen:
-    generates a very simple python program structure, that offers a basic
-    file tree for logging & initialising and the corresponding functionality.
+    generates a very simple python program, that offers a basic functionality,
+    (initialising and logging) and the corresponding directory structure.
+
     The generated python program may be initialised via command line arguments
     and/or via a configuration file (*.cfg).
+
+    Assume the name of the new program is >y_main.py<.
+    Than the generated directory structure is:
 
     y_main/y_main.py  # y_main.py == new generated python prog
         /cfg/*.cfg    # configuration file(s)
         /lib/*.py     # some py modules
         /log/*.log    # log-files
 
-    Pyprogen itself is easily configured via its own configuration file:
-    >new_prog.ini<. Here You configure the name of the generated python
+    Pyprogen gets some information by two configuration files:
+
+    >new_prog.ini<:
+    Here You configure the name of the generated python
     script (default: >y_main.py<) and the extent of its logging (TODO).
-    Commandline arguments of >y_main.py< and their defaults are configured
-    via >new_prog_args.conf<.
 
-    Pyprogen uses >ConfArgParse<, to handle commandline arguments.
-    This module offers a very easy way to combine command line arguments
-    and configuration files.
-    >ConfArgParse< is able to read and to write configuration files.
-    This ability is used by >pyprogen<:
-    in a first step >pyprogen< writes the code for >y_main.py<'s parser
-    >y_CAParser.py<.
-    Then it executes this pogram (>y_CAParser.py<) with the
-    "--export-conf-file > ./y_main/cfg/y_main.cfg" commandline parameter.
-    After that you will find a config file: >y_main.cfg<
-    for your new >y_main.py< in the ./y_main/cfg/ dir.
+    >new_prog_args.conf<:
+    Here You configure the commandline arguments of >y_main.py< and their defaults.
+    Your new program (>y_main.py<) will use >ConfArgParse<, a python library to handle
+    commandline arguments. This module offers an easy way to combine command line
+    arguments and configuration files simultaneously.
 
-    (http://martin-thoma.com/configuration-files-in-python/)
+    Example:
+    <new_prog.ini>
 
-    100.
-    Dark sides of py:
-    py can not protect vars inside a module from being modified from outside.
-    [
-    module want_be_private
-    var_priv = 66
+[properties]
+# prog_name  = d_main
+# prefix     = d_
+prog_name  = s_create_subdirs
+prefix     = s_
 
-    module outside
-    import want_be_private
-    want_be_private.var_priv = 99   !!!
-    ]
+    </new_prog.ini>
 
-    py can not prevent creating attributes to this module from outside.
-    [
-    module want_be_private
-    var_priv = 100
-
-    module outside
-    import want_be_private
-    want_be_private.var_NEW = 1 # but inside >module want_be_private< you know nothing
-      about >var_NEW<!!!
-    ]
 
 """
+
+    # <technical note>
+    # >ConfArgParse< is able to read and to write configuration files.
+    # This ability is used by >pyprogen<:
+    # in a first step >pyprogen< writes the code for >y_main.py<'s parser
+    # >y_CAParser.py<.
+    # Then it executes this pogram (>y_CAParser.py<) with the
+    # "--export-conf-file > ./y_main/cfg/y_main.cfg" commandline parameter.
+    # After that you will find a config file: >y_main.cfg<
+    # for your new >y_main.py< in the ./y_main/cfg/ dir.
+    #
+    # (http://martin-thoma.com/configuration-files-in-python/)
+    #
+    # 100.
+    # Dark sides of py:
+    # py can not protect vars inside a module from being modified from outside.
+    # [
+    # module want_be_private
+    # var_priv = 66
+    #
+    # module outside
+    # import want_be_private
+    # want_be_private.var_priv = 99   !!!
+    # ]
+    #
+    # py can not prevent creating attributes to this module from outside.
+    # [
+    # module want_be_private
+    # var_priv = 100
+    #
+    # module outside
+    # import want_be_private
+    # want_be_private.var_NEW = 1 # but inside >module want_be_private< you know nothing
+    #   about >var_NEW<!!!
+    # ]
+    # </technical note>
+
+
 # ad decorator:
 # https://pythonconquerstheuniverse.wordpress.com/2012/04/29/python-decorators/
 
