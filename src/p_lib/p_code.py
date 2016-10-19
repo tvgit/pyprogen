@@ -86,7 +86,7 @@ def p_inform_about_paths_and_filenames():
     print 'YOUR code (i.e. the file: >' + p_glbls.prog_name + '<) will be preserved if changed:'
     print ' newer generated files will have a timestamp in their filename: >' + p_glbls.prog_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
     print
-    print 'You may configure the comand line args     of >' + p_glbls.prog_name + '<  via:  >new_prog_args.conf<'
+    print 'You may configure the comand line args     of >' + p_glbls.prog_name + '<  via:  >new_prog_args.cfg<'
     print ' ... but run >pyprogen.py< again!'
     print 'You may configure the comand line defaults of >' + p_glbls.prog_name + '<  via:  >' + cfg_path + '<'
     print '>' + cfg_path + '<  will be preserved, if changed: '
@@ -142,7 +142,6 @@ def p_globals():
 
     txt = ''
     patterns.y_glbls[96] = txt
-
 
     # p_subst(patterns.y_glbls, outfile_fn, outfile_path)
     code = p_subst_vars_in_patterns (patterns.y_glbls)

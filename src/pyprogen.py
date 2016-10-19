@@ -29,6 +29,13 @@ __author__ = "rh"
 __date__   = "$05.05.2015 21:55:22$"
 
 """
+sortiere output in y_main.cfg alphabetisch
+
+?? new program should aöways be named >y_main.py<;
+?? copy should be >y_main_YYYY_MM_DD_HH_SS.py<
+
+? scheint so zu sein wenn ich die >new_prog_args.cfg< ändere, muss sich auch die y_main.cfg ändern.
+
 insert # -*- coding: utf-8 -*- in generated script in the first two lines ...
 so modify the hash-line and hash-reading mechanism too!
 
@@ -41,7 +48,7 @@ OR
 make subdir: data     (like */cfg/ etc   # input data
 make subdir: result   (like */cfg/ etc   # result data
 
-modify >new_prog_args.conf< so in_file and aout_file lie in data_dir
+modify >new_prog_args.cfg< so in_file and aout_file lie in data_dir
 
 in p_utils make examples how to open files, scan dirs etc ...
 """
@@ -72,7 +79,7 @@ in p_utils make examples how to open files, scan dirs etc ...
     Here You configure the name of the generated python
     script (default: >y_main.py<) and the extent of its logging (TODO).
 
-    >new_prog_args.conf<:
+    >new_prog_args.cfg<:
     Here You configure the commandline arguments of >y_main.py< and their defaults.
     Your new program (>y_main.py<) will use >ConfArgParse<, a python library to handle
     commandline arguments. This module offers an easy way to combine command line
@@ -91,7 +98,6 @@ prefix     = s_
 
 
 """
-
     # <technical note>
     # >ConfArgParse< is able to read and to write configuration files.
     # This ability is used by >pyprogen<:
@@ -127,8 +133,6 @@ prefix     = s_
     #   about >var_NEW<!!!
     # ]
     # </technical note>
-
-
 # ad decorator:
 # https://pythonconquerstheuniverse.wordpress.com/2012/04/29/python-decorators/
 
@@ -175,7 +179,7 @@ def copy_p_utils_p_log_init():
     for fn in fn_list:
         # create an normalize source path:
         p_utils_srce_path = os.path.join('.', 'p_lib', fn)
-        p_utils_srce_path = os.path.normpath(p_utils_srce_path )
+        p_utils_srce_path = os.path.normpath(p_utils_srce_path)
         # create an normalize destination path:
         p_utils_dest_path = os.path.join('.', p_glbls.dir_lib, fn)
         p_utils_dest_path = os.path.normpath(p_utils_dest_path )
@@ -199,7 +203,7 @@ def create_ca_parser(prog_path):
 
     p_log_this()
     #
-    p_ConfArgParser('./new_prog_args.conf') # create confargparser for >y_main.py<
+    p_ConfArgParser('./new_prog_args.cfg') # create confargparser for >y_main.py<
     subprocess_path  = p_glbls.CAParser_path
     p_log_this("subprocess_path = " + subprocess_path)
 
