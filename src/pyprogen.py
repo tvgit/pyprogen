@@ -29,7 +29,10 @@ __author__ = "rh"
 __date__   = "$05.05.2015 21:55:22$"
 
 """
-sortiere output in y_main.cfg alphabetisch
+finde heraus wo/wann die >y_main.cfg< geschrieben wird.
+sortiere output in >y_main.cfg< alphabetisch
+
+doc: erkläre, was es mit dem prefix auf sich hat (i.e. automatisch generierte variablen).
 
 ?? new program should aöways be named >y_main.py<;
 ?? copy should be >y_main_YYYY_MM_DD_HH_SS.py<
