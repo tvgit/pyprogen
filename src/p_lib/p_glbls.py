@@ -12,6 +12,9 @@ dir_cfg   = None     # subdir  : >./y_main/cfg<, config files for >y_main.py<
 dir_lib   = None     # subdir  : >./y_main/lib<, utilities for >y_main.py<
 dir_log   = None     # subdir  : >./y_main/log<, log-files for >y_main.py<
 
+dir_DataIn  = None   # subdir  : >./y_main/DataIn<, DataIn-files for >y_main.py<
+dir_DataOut = None   # subdir  : >./y_main/DataOut<, DataOut-files for >y_main.py<
+
 cfg_fn    = None     # filename of cfg-file for for 'y_main.py'; usually: >y_main.py<
 cfg_path  = None     # path     of cfg-file for for 'y_main.py'; usually: >y_mainy/cfg/y_main.cfg<
 
@@ -42,6 +45,8 @@ def print_p_cfg_and_args(print_args=False):
     print ' cfg_path      = '     + cfg_path_tmp
     print ' cfg_fn_tmp    =   '   + cfg_fn_tmp
     print ' cfg_path_tmp  = '     + cfg_path_tmp
+    print ' dir_DataIn    = '     + dir_DataIn
+    print ' dir_DataOut   = '     + dir_DataOut
 
     print
     print ' CAParser_fn   =   '   + CAParser_fn

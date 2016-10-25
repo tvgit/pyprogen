@@ -13,6 +13,11 @@ import lib.xx_glbls    as xx_glbls
 import lib.xx_CAParser as xx_CAParser
 import lib.p_utils    as p_utils
 from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
+
+def print_prog_name():
+    prog_info = p_utils.scriptinfo()
+    prog_name = prog_info['name']
+    print '--------\\n' + prog_name + '\\n--------'
 """
 
 y_main[04] = """
@@ -28,18 +33,13 @@ def evaluate_opt_args():
 y_main[10] = """ """
 
 y_main[96] = """
+# Here resides YOUR code:
 def main():
     p_log_this()
     evaluate_opt_args()
 """
 
 y_main[98] = """
-
-def print_prog_name():
-    prog_info = p_utils.scriptinfo()
-    prog_name = prog_info['name']
-    print '--------\\n' + prog_name + '\\n--------'
-
 if __name__ == "__main__":
     print_prog_name()
     p_log_init(log_dir = 'log', log_fn = 'xx_main.log')
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     # xx_CAParser.xx_parser('ignore_pos_args', '')
     xx_CAParser.xx_parser()
 
-    # Here YOUR code is called.
+    # Here YOUR code 'main()' is called:
     main()
 
     p_log_end()
