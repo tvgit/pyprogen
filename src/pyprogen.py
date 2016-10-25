@@ -29,29 +29,16 @@ __author__ = "rh"
 __date__   = "$05.05.2015 21:55:22$"
 
 """
+insert # -*- coding: utf-8 -*- in generated script in the first two lines ...
+so modify the hash-line and hash-reading mechanism too!
+
 finde heraus wo/wann die >y_main.cfg< geschrieben wird.
 sortiere output in >y_main.cfg< alphabetisch
 
 doc: erkläre, was es mit dem prefix auf sich hat (i.e. automatisch generierte variablen).
 
-?? new program should aöways be named >y_main.py<;
-?? copy should be >y_main_YYYY_MM_DD_HH_SS.py<
-
-? scheint so zu sein wenn ich die >new_prog_args.cfg< ändere, muss sich auch die y_main.cfg ändern.
-
-insert # -*- coding: utf-8 -*- in generated script in the first two lines ...
-so modify the hash-line and hash-reading mechanism too!
-
 Die Namen der Log-Files, Data-Files etc überprüfen: zB in y_main.cfg ...
 names of out_file (? what is this) in /y_main/cfg/y_main.cfg is wrong: P:log etc instead of y_main.log
-
-make subdir: Data_In  (like */cfg/ etc   # input data
-make subdir: Data_Out (like */cfg/ etc   # result data
-OR
-make subdir: data     (like */cfg/ etc   # input data
-make subdir: result   (like */cfg/ etc   # result data
-
-modify >new_prog_args.cfg< so in_file and aout_file lie in data_dir
 
 in p_utils make examples how to open files, scan dirs etc ...
 """
@@ -69,12 +56,14 @@ in p_utils make examples how to open files, scan dirs etc ...
     and/or via a configuration file (*.cfg).
 
     Assume the name of the new program is >y_main.py<.
-    Than the generated directory structure is:
+    Then the generated directory structure is:
 
     y_main/y_main.py  # y_main.py == new generated python prog
         /cfg/*.cfg    # configuration file(s)
         /lib/*.py     # some py modules
         /log/*.log    # log-files
+        /DataIn/*.*   # DataIn files (proposal)
+        /DataOut/*.*  # DataOut files (proposal)
 
     Pyprogen gets some information by two configuration files:
 
@@ -91,19 +80,13 @@ in p_utils make examples how to open files, scan dirs etc ...
     commandline arguments. This module offers an easy way to combine command line
     arguments and configuration files simultaneously.
 
-
-
     Example:
     <new_prog.ini>
-
 [properties]
-# prog_name  = d_main
-# prefix     = d_
 prog_name  = s_create_subdirs
 prefix     = s_
 
     </new_prog.ini>
-
 
 """
     # <technical note>
@@ -178,11 +161,11 @@ def create_subdirs(prog_path):
     p_glbls.dir_log = p_utils.p_subdir_make(os.path.join(prog_path, 'log'))
     p_glbls.dir_log = os.path.join('.', p_glbls.dir_log)
 
-    p_glbls.dir_DataIn = p_utils.p_subdir_make(os.path.join(prog_path, 'DataIn'))
-    p_glbls.dir_DataIn = os.path.join('.', p_glbls.dir_DataIn)
+    p_glbls.dir_DataIn  = p_utils.p_subdir_make(os.path.join(prog_path, 'DataIn'))
+    p_glbls.dir_DataIn  = os.path.join('.', p_glbls.dir_DataIn)
 
-    p_glbls.dir_DataOut= p_utils.p_subdir_make(os.path.join(prog_path, 'DataOut'))
-    p_glbls.dir_DataOut= os.path.join('.', p_glbls.dir_DataOut)
+    p_glbls.dir_DataOut = p_utils.p_subdir_make(os.path.join(prog_path, 'DataOut'))
+    p_glbls.dir_DataOut = os.path.join('.', p_glbls.dir_DataOut)
 
 
 def copy_p_utils_p_log_init():
@@ -208,10 +191,10 @@ def create_ca_parser(prog_path):
     Configure it according to >pyprogen_XXX.conf<
 
     Then call >y_CAParser.py< via subprocess. Since >y_CAParser.py< is
-    prepared to write a conf file, if called as script, it will write
-    a config-file to ./y_main/cfg
+    prepared to write a conf file - if called as script - it will write
+    a config-file to >./y_main/cfg<.
+    It is this config-file that You will use to configure >y_main<.
     """
-
     # p_glbls.cfg_fn_tmp   = p_glbls.CAParser_fn
     # p_glbls.cfg_path_tmp = p_glbls.CAParser_path
 
@@ -248,6 +231,7 @@ def pyprogen():
                                   # else: => overwrite it with >y_main_TimeStamp.cfg<
     #
     p_code.p_globals()            # create modul ./y_main/lib/y_glbls.py
+    # Finally HERE >._main.py< will be created:
     p_code.p_main()               # create progr ./y_main/y_main.py
     p_code.p_inform_about_paths_and_filenames()   # Do what your name says
     p_glbls.print_p_cfg_and_args()# print variables and command line args in ./pyprogen/lib/p_glbls.
