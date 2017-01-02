@@ -153,7 +153,6 @@ def show_diff (txt_1, txt_2):
     print '\n'.join(list(diff))
 
 
-
 if __name__ == "__main__":
     p_log_init(log_dir='', log_fn='p_lib')
     p_log_start()
