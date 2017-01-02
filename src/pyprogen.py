@@ -71,8 +71,9 @@ in p_utils make examples how to open files, scan dirs etc ...
     Here You configure the name of the generated python
     script (default: >y_main.py<) and the extent of its logging (TODO),
     and the 'prefix', i.e. a letter followed by an underscore, for example 'y_' or 'b_'.
-    The prefix serves to indicate an automatically generated variable in the generated
-    python program. So name conflicts with Your variables are avoided (hopefully).
+    The prefix serves to mark the variables that are automatically generated in the new
+    python program. So name conflicts with variables that You are coding yourself are
+    avoided (hopefully).
 
     >new_prog_args.cfg<:
     Here You configure the commandline arguments of >y_main.py< and their defaults.
@@ -82,9 +83,10 @@ in p_utils make examples how to open files, scan dirs etc ...
 
     Example:
     <new_prog.ini>
-[properties]
-prog_name  = s_create_subdirs
-prefix     = s_
+
+    [properties]
+    prog_name  = s_create_subdirs
+    prefix     = s_
 
     </new_prog.ini>
 
