@@ -190,7 +190,7 @@ def copy_p_utils_p_log_init():
 def create_ca_parser(prog_path):
     """ Writes via p_ConfArgParser() in ./y_main/lib a new
     confargparser == >y_CAParser.py< for the new program >y_main.py<.
-    Configure it according to >pyprogen_XXX.conf<
+    Configure it according to >new_prog_args.cfg<
 
     Then call >y_CAParser.py< via subprocess. Since >y_CAParser.py< is
     prepared to write a conf file - if called as script - it will write

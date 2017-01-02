@@ -153,7 +153,7 @@ def p_log_end(txt=''):
 def p_log_this(txt='', level=''):
     """ log_s mssge with the global logger """
     global p_logger
-    # testen ob string oder integer. Wenn string -> Integer umwandlen
+    # testen ob string oder integer. Wenn string -> Integer umwandeln
     if p_logger:
         if type(level) == str:
             level = level.lower()
