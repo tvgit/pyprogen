@@ -42,7 +42,7 @@ def main():
 y_main[98] = """
 if __name__ == "__main__":
     print_prog_name()
-    p_log_init(log_dir = 'log', log_fn = 'xx_main.log')
+    p_log_init(log_dir = 'log', log_fn = r'xx_main.log')
     p_log_start()
 
     # xx_CAParser.xx_parser('ignore_pos_args', '')
@@ -97,7 +97,7 @@ if __name__ == "__main__":
     prog_name = prog_info['name']
     print '--------\\n' + prog_name + '\\n--------'
 
-    p_log_init(log_dir = 'log', log_fn = 'xx_main.log')
+    p_log_init(log_dir = 'log', log_fn = r'xx_main.log')
     p_log_start()
 
     # xx_CAParser.xx_parser('ignore_pos_args', '')
@@ -146,10 +146,10 @@ y_glbls[96] = """
 
 y_glbls[98] = """
 if __name__ == "__main__":
-    arg_ns = make_arg_ns('xx_glbls.py')
+    arg_ns = make_arg_ns(r'xx_glbls.py')
     print_arg_ns()
 else:
-    arg_ns = make_arg_ns('xx_glbls.py')
+    arg_ns = make_arg_ns(r'xx_glbls.py')
     pass
 """
 
@@ -209,7 +209,7 @@ if __name__ == "__main__":
     print '-' * 20
     print '| xx_CAParser: running'
     print '|',
-    p_log_init(log_dir = 'xx_dir_log', log_fn = 'xx_CAParser')
+    p_log_init(log_dir = r'xx_dir_log', log_fn = r'xx_CAParser')
     p_log_start()
     p_log_this('| generating cfg-file')
     cfg_path_tmp = sys.argv[1]
