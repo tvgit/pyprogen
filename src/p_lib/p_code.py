@@ -74,6 +74,8 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
 
     # p_glbls.date_time_str
     p_glbls.date_time_str = p_utils.p_make_act_date_str()
+    # filename of globals of created program
+    p_glbls.glbls_fn      = p_glbls.prefix + 'glbls.py'    # globals of ! >y_main.py< !
 
 
 def p_inform_about_paths_and_filenames():
@@ -99,7 +101,7 @@ def p_inform_about_paths_and_filenames():
 def p_create_paths_and_fns():
     """ creates later needed paths and filenames  """
     p_glbls.glbls_fn      = p_glbls.prefix + 'glbls.py'    # globals of ! >y_main.py< !
-    p_glbls.CAParser_func = p_glbls.prefix + 'parser'      # name of parser func in >y_CAParser<
+#    p_glbls.CAParser_func = p_glbls.prefix + 'parser'      # name of parser func in >y_CAParser<
 
 
 def p_subst_vars_in_patterns (input_dict):
@@ -124,7 +126,7 @@ def p_write_code (input_dict, outfile_fn, outfile_path):
             outfile.write(patt)
         outfile.write('# ' + p_glbls.date_time_str)
 
-def p_globals():
+def p_create_globals():
     """ creates ./y_main/lib/y_glbls.py  """
     # fn and path of  >y_glbls.py<
     outfile_fn   = p_glbls.glbls_fn
@@ -321,7 +323,7 @@ def p_main_was_modified(outfile_path):
         return False
 
 
-def p_main():
+def p_create_main():
     """ if (>y_main.py< exists && >y_main.py< was modified) => save it.
     else: => create new >y_main.py<  """
     outfile_fn   = p_glbls.prog_name      # fn and path of >y_main.py<

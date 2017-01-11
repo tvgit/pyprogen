@@ -16,7 +16,8 @@ import p_glbls
 import p_utils
 import p_code
 from   p_log   import p_log_this
-import p_cfg.patterns as patterns
+#import p_cfg.patterns as patterns
+import p_cfg.patterns
 
 
 def make_regex_opt_arg_minus():
@@ -69,7 +70,7 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     p_log_this(conf_file_fn)
     opt_args             = []  # local list of opt-args
     pos_args             = []  # local list of pos-args
-    # >p_ConfArgParser< sets vars in p_glbls. ... for later use in >p_code.p_globals<
+    # >p_ConfArgParser< sets vars in p_glbls. ... for later use in >p_code.p_create_globals<
     p_glbls.opt_arg_vars = []  # list (in p_glbls) of opt-args
     p_glbls.pos_arg_vars = []  # list (in p_glbls) of pos-args
 
@@ -128,7 +129,7 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     for line in opt_arg_lines:
         txt = txt + line # + '\n'
 
-    patterns.CA_Parser[04] = txt
+    p_cfg.patterns.CA_Parser[04] = txt
 
     # log positional and optional arguments
     for arg in pos_args:
@@ -138,13 +139,14 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
 
     # write y_CAParser.py == ConfArgParser for new program
 
-    p_glbls.CAParser_fn   = p_glbls.prefix + 'CAParser.py'  # >y_CAParser.py<
-    p_glbls.CAParser_path = os.path.join(p_glbls.dir_lib, p_glbls.CAParser_fn )
+    p_glbls.CAParser_fn   = p_glbls.prefix + 'CAParser.py'                       # filename >y_CAParser.py<
+    p_glbls.CAParser_path = os.path.join(p_glbls.dir_lib, p_glbls.CAParser_fn )  # path
+    p_glbls.CAParser_func = p_glbls.prefix + 'parser'      # name of parser func in >y_CAParser<
 
     outfile_fn   = p_glbls.CAParser_fn
     outfile_path = p_glbls.CAParser_path
 
-    code = p_subst_vars_in_patterns (patterns.CA_Parser)
+    code = p_subst_vars_in_patterns (p_cfg.patterns.CA_Parser)
     p_code.p_write_code (code, outfile_fn, outfile_path)
 
 # ------------------------------------
