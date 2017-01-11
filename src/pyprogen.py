@@ -1,21 +1,13 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 #
-# NetBeans:  
-# New Editor Window: Im Editor auf Filenamen: New Document on Tab Group
-#
 # PyCharm:
 # New Editor Window: click on tab > Split Vertically
-# ALT left/right  -> switch editor windows
+# ALT left/right  -> editor history back & forth
 # Ctrl Tab        -> list/switch editor windows
+# Ctrl B          -> go to declaration
+# Alt F7          -> find usages
 # Shift F6        -> run file
-#
-# Ctrl + Alt + S  -> Settings
-#
-# C:\Users\rh\.PyCharm40\config\colors
-#     <option name="CONSOLE_BACKGROUND_KEY" value="121e31" />
-# Editor Background color (HTML) :  272822  (grau-braun)
-# Editor Background color (HTML) :  121e31  (blau)
 #
 # Filetypes association:
 # File > Settings > Editor > File Types ... (ie: *.cfg like *.ini)
@@ -32,8 +24,12 @@ __date__   = "$05.05.2015 21:55:22$"
 insert # -*- coding: utf-8 -*- in generated script in the first two lines ...
 so modify the hash-line and hash-reading mechanism too!
 
-finde heraus wo/wann die >y_main.cfg< geschrieben wird.
-sortiere output in >y_main.cfg< alphabetisch
+y_main soll loggen, welche cfg file von y_main.py ausgewertet wird
+(mit oder ohen time-stamp). Überhaupt ist die timestamp Geschichte unklar:
+wann neuer timestamp?
+
+finde heraus wo/wann die >y_main.cfg< geschrieben wird =>
+    sortiere output in >y_main.cfg< alphabetisch
 
 doc: erkläre, was es mit dem prefix auf sich hat (i.e. automatisch generierte variablen).
 
@@ -136,7 +132,7 @@ import p_lib.p_glbls as p_glbls  # share global values
 import p_lib.p_utils as p_utils  # utils for pyprogen
 import p_lib.p_code  as p_code   # funcs generating python code
 from   p_lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
-from   p_lib.p_ConfArgParser import p_ConfArgParser
+from   p_lib.p_ConfArgParser import p_create_ConfArgParser
 
 def create_maindir(prog_path) :
     """ """
@@ -171,7 +167,6 @@ def create_subdirs(prog_path):
 
 
 def copy_p_utils_p_log_init():
-    """ """
     # dammed '__init__.py'! 2 hrs of nirwana!
     # for every file in fn_list:
     p_log_this()
@@ -189,7 +184,7 @@ def copy_p_utils_p_log_init():
 
 
 def create_ca_parser(prog_path):
-    """ Writes via p_ConfArgParser() in ./y_main/lib a new
+    """ Writes via p_create_ConfArgParser() in ./y_main/lib a new
     confargparser == >y_CAParser.py< for the new program >y_main.py<.
     Configure it according to >new_prog_args.cfg<
 
@@ -198,18 +193,15 @@ def create_ca_parser(prog_path):
     a config-file to >./y_main/cfg<.
     It is this config-file that You will use to configure >y_main<.
     """
-    # p_glbls.cfg_fn_tmp   = p_glbls.CAParser_fn
-    # p_glbls.cfg_path_tmp = p_glbls.CAParser_path
-
     p_log_this()
-    p_ConfArgParser('./new_prog_args.cfg') # create confargparser for >y_main.py<
+    p_create_ConfArgParser('./new_prog_args.cfg') # create confargparser for >y_main.py<
     subprocess_path  = p_glbls.CAParser_path
     p_log_this("subprocess_path   = " + subprocess_path)
 
-    cfg_path = p_glbls.cfg_path_tmp         # == >y_main_TimeStamp.cfg<
-    p_log_this("cfg_path_tmp      = " + cfg_path)
     # http://pymotw.com/2/subprocess/
     # start new ConfArgParser to create cfg-file (aka >cfg_path_tmp<) for >y_main.py<
+    cfg_path = p_glbls.cfg_path_tmp         # == >y_main_TimeStamp.cfg<
+    p_log_this("cfg_path_tmp      = " + cfg_path)
     subprocess.call([subprocess_path, cfg_path], shell=True)
 
 def pyprogen():

@@ -65,12 +65,12 @@ def p_subst_vars_in_patterns (input_dict):
     return patts
 
 
-def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
+def p_create_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     """ creates >y_CAParser.py<; executes it, to generate a conf file >y_main.cfg< for >y_main.py<  """
     p_log_this(conf_file_fn)
     opt_args             = []  # local list of opt-args
     pos_args             = []  # local list of pos-args
-    # >p_ConfArgParser< sets vars in p_glbls. ... for later use in >p_code.p_create_globals<
+    # >p_create_ConfArgParser< sets vars in p_glbls. ... for later use in >p_code.p_create_globals<
     p_glbls.opt_arg_vars = []  # list (in p_glbls) of opt-args
     p_glbls.pos_arg_vars = []  # list (in p_glbls) of pos-args
 
@@ -152,6 +152,6 @@ def p_ConfArgParser(conf_file_fn='./pyprogen.conf'):
 # ------------------------------------
 
 if __name__ == "__main__":
-    print 'p_ConfArgParser.py '
+    print 'p_create_ConfArgParser.py '
 else:
     pass

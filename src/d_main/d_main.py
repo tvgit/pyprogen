@@ -138,7 +138,7 @@ def make_data_str(day_ts, mins):
 
 def evaluate_opt_args():
     p_log_this()
-    # d_glbls.print_arg_ns()
+    d_glbls.print_arg_ns()
     # optional args(ConfArgParser):
     if d_glbls.arg_ns.in_file == d_glbls.arg_ns.in_file:
         fn_in_file = d_glbls.arg_ns.in_file
