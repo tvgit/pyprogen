@@ -27,8 +27,8 @@ import p_cfg.patterns as patterns
 def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
     """ reads defaults for generated program: name ..."""
     # http://www.karoltomala.com/blog/?p=622
-    path = os.path.abspath(__file__)
-    dir_path = os.path.dirname(path)
+    #path = os.path.abspath(__file__)
+    #dir_path = os.path.dirname(path)
     # print 'p_read_ini: dir_path = ', p_utils.p_act_dir_path()
     # print 'p_read_ini: dir_path = ', dir_path
     # print p_glbls.__file__

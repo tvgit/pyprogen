@@ -174,6 +174,7 @@ def copy_p_utils_p_log_init():
     """ """
     # dammed '__init__.py'! 2 hrs of nirwana!
     # for every file in fn_list:
+    p_log_this()
     fn_list = ['p_utils.py', 'p_log.py', '__init__.py']
     for fn in fn_list:
         # create an normalize source path:
@@ -203,21 +204,20 @@ def create_ca_parser(prog_path):
     p_log_this()
     p_ConfArgParser('./new_prog_args.cfg') # create confargparser for >y_main.py<
     subprocess_path  = p_glbls.CAParser_path
-    p_log_this("subprocess_path = " + subprocess_path)
+    p_log_this("subprocess_path   = " + subprocess_path)
 
     cfg_path = p_glbls.cfg_path_tmp         # == >y_main_TimeStamp.cfg<
-    p_log_this("cfg_path_tmp = " + cfg_path)
+    p_log_this("cfg_path_tmp      = " + cfg_path)
     # http://pymotw.com/2/subprocess/
     # start new ConfArgParser to create cfg-file (aka >cfg_path_tmp<) for >y_main.py<
     subprocess.call([subprocess_path, cfg_path], shell=True)
 
 def pyprogen():
     """
-    creates basic dir-structure; creates basic python program
-    according to >new_prog.ini< and new_>prog_args.conf<.
+    creates basic directory structure and basic python program
+      according to the configuration files: >new_prog.ini< and new_>prog_args.conf<.
     """
     p_log_this()                  # in ./p_log/pyprogen.log
-    #
     p_code.p_read_ini(".", "new_prog.ini")  # dir relative to >.<
     prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
     p_code.p_create_paths_and_fns() # i.e.: glbls_path,
