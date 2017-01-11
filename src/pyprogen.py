@@ -24,8 +24,15 @@ __date__   = "$05.05.2015 21:55:22$"
 insert # -*- coding: utf-8 -*- in generated script in the first two lines ...
 so modify the hash-line and hash-reading mechanism too!
 
+erkläre warum die Parameter so seltsame Namen haben (x_glbls.arg_ns.fn_data_in)
+ (wg Namespace + der Name des Parameters aus der *.cfg) oder:
+ benenne das Ganze in y_main.py beim import um:
+ import lib.x_glbls.arg_ns    as args
+
+
+
 y_main soll loggen, welche cfg file von y_main.py ausgewertet wird
-(mit oder ohen time-stamp). Überhaupt ist die timestamp Geschichte unklar:
+(mit oder ohen time-stamp). Überhaupt ist mir die timestamp Geschichte unklar:
 wann neuer timestamp?
 
 finde heraus wo/wann die >y_main.cfg< geschrieben wird =>
