@@ -92,11 +92,11 @@ in p_utils make examples how to open files, scan dirs etc ...
 
 """
     # <technical note>
-    # >ConfArgParse< is able to read and to write configuration files.
+    # >ConfArgParse< is able to read and to write (!) configuration files.
     # This ability is used by >pyprogen<:
     # in a first step >pyprogen< writes the code for >y_main.py<'s parser
     # >y_CAParser.py<.
-    # Then it executes this pogram (>y_CAParser.py<) with the
+    # Then it executes this program (>y_CAParser.py<) with the
     # "--export-conf-file > ./y_main/cfg/y_main.cfg" commandline parameter.
     # After that you will find a config file: >y_main.cfg<
     # for your new >y_main.py< in the ./y_main/cfg/ dir.
@@ -201,7 +201,6 @@ def create_ca_parser(prog_path):
     # p_glbls.cfg_path_tmp = p_glbls.CAParser_path
 
     p_log_this()
-    #
     p_ConfArgParser('./new_prog_args.cfg') # create confargparser for >y_main.py<
     subprocess_path  = p_glbls.CAParser_path
     p_log_this("subprocess_path = " + subprocess_path)
