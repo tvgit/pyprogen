@@ -8,6 +8,7 @@
 # Ctrl B          -> go to declaration
 # Alt F7          -> find usages
 # Shift F6        -> run file
+# Shift Ctrl C    -> toggle comment
 #
 # Filetypes association:
 # File > Settings > Editor > File Types ... (ie: *.cfg like *.ini)
@@ -23,6 +24,8 @@ __date__   = "$05.05.2015 21:55:22$"
 """
 insert # -*- coding: utf-8 -*- in generated script in the first two lines ...
 so modify the hash-line and hash-reading mechanism too!
+(p_code.p_write_code (input_dict, outfile_fn, outfile_path)
+
 
 erkläre warum die Parameter so seltsame Namen haben (x_glbls.arg_ns.fn_data_in)
  (wg Namespace + der Name des Parameters aus der *.cfg) oder:
@@ -220,18 +223,23 @@ def pyprogen():
     creates basic directory structure and basic python program
       according to the configuration files: >new_prog.ini< and new_>prog_args.conf<.
     """
+    # dwyns == Do what your name says
     p_log_this()                  # in ./p_log/pyprogen.log
-    p_code.p_read_ini(".", "new_prog.ini")  # dir relative to >.< ; create some global fn's, path's and var's
+    p_code.p_read_ini(".", "new_prog.ini")  # read >new_prog.ini< and create some global fn's, path's and var's
+                                  # These data is stored in module >p_glbls.py<
+    #
+    # >y_main< is in this comment the symbolic name of the generated program.
+    #
     prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
     create_maindir(prog_path)     # create dir  ./y_main
     create_subdirs(prog_path)     # create dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
     copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
     #
     create_ca_parser(prog_path)   # create & run: ./y_main/lib/y_CAParser.py  >> create: >y_main_TimeStamp.cfg<
-    p_code.p_main_cfg_create_hash() # Do what your name says with ./y_main/cfg/y_main_TimeStamp.cfg
+    p_code.p_main_cfg_create_hash() # dwyns: create ./y_main/cfg/y_main_YYYY_MM_DD-HH_mm_SS.cfg
     p_code.p_main_cfg_check_hash()# check if >./y_main/y_main.cfg exists;<
-                                  # if (exists && changed): => keep it;
-                                  # else: => overwrite it with >y_main_TimeStamp.cfg<
+       # if (exists && changed): => keep it;
+       # else: => overwrite it with >y_main_TimeStamp.cfg_YYYY_MM_DD-HH_mm_SS.cfg<
     #
     p_code.p_create_globals()            # create modul ./y_main/lib/y_glbls.py
     # Finally HERE >._main.py< will be created:
