@@ -29,10 +29,8 @@ erkläre warum die Parameter so seltsame Namen haben (x_glbls.arg_ns.fn_data_in)
  benenne das Ganze in y_main.py beim import um:
  import lib.x_glbls.arg_ns    as args
 
-
-
 y_main soll loggen, welche cfg file von y_main.py ausgewertet wird
-(mit oder ohen time-stamp). Überhaupt ist mir die timestamp Geschichte unklar:
+(mit oder ohne time-stamp). Überhaupt ist mir die timestamp Geschichte unklar:
 wann neuer timestamp?
 
 finde heraus wo/wann die >y_main.cfg< geschrieben wird =>
@@ -45,7 +43,6 @@ names of out_file (? what is this) in /y_main/cfg/y_main.cfg is wrong: P:log etc
 
 in p_utils make examples how to open files, scan dirs etc ...
 """
-
 
 """
     0.
