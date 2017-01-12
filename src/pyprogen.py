@@ -125,6 +125,13 @@ in p_utils make examples how to open files, scan dirs etc ...
     # want_be_private.var_NEW = 1 # but inside >module want_be_private< you know nothing
     #   about >var_NEW<!!!
     # ]
+    #
+    # Badly bad:
+    # Composing a path string by adding strings via >os.path.join()< and >os.path.normpath()<
+    # for example joining 'c:' plus 'my_path' plus 'x_program.sh'
+    # in Windows eventually there may be coming up a string containing an unexpected escape sequence:
+    # 'c:\my_path\x_program.sh' namely '\x', which is NOT prevented by >os.path.normpath()<!!
+    #
     # </technical note>
 # ad decorator:
 # https://pythonconquerstheuniverse.wordpress.com/2012/04/29/python-decorators/
