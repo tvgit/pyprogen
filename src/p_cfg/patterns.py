@@ -9,10 +9,11 @@ y_main[02] = """
 # It is respected if changed (modification results from different
 # hash code '>xxx...xxx<' in second line of source code of this module).
 
-import lib.xx_glbls    as xx_glbls
 import lib.xx_CAParser as xx_CAParser
-import lib.p_utils    as p_utils
-from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
+import lib.p_utils     as p_utils
+from   lib.p_log       import p_log_init, p_log_start, p_log_this, p_log_end
+import lib.xx_glbls
+confargs = lib.xx_glbls.arg_ns
 
 def print_prog_name():
     prog_info = p_utils.scriptinfo()
