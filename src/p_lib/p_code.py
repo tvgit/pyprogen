@@ -355,8 +355,10 @@ def p_create_main():
     txt = ' '*4 + '# optional args(ConfArgParser):\n'
     for arg in p_glbls.opt_arg_vars:
         # txt = txt + ' '*4 + 'if ' + 'xx_glbls.arg_ns.' + arg + ' == "something":\n'
-        txt = txt + ' '*4 + 'if ' + 'xx_glbls.arg_ns.' + arg + ' == xx_glbls.arg_ns.' + arg + ':\n'
-        txt = txt + ' '*8 + 'eval_arg(xx_glbls.arg_ns.' + arg +')\n'
+        # txt = txt + ' '*4 + 'if ' + 'xx_glbls.arg_ns.' + arg + ' == xx_glbls.arg_ns.' + arg + ':\n'
+        # txt = txt + ' '*8 + 'eval_arg(xx_glbls.arg_ns.' + arg +')\n'
+        txt = txt + ' '*4 + 'if ' + 'confargs.' + arg + ' == confargs.' + arg + ':\n'
+        txt = txt + ' '*8 + 'eval_arg(confargs.' + arg +')\n'
         txt = txt + '\n'
 
     patterns.y_main[10] = txt       # add txt to pattern
