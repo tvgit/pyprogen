@@ -288,23 +288,21 @@ def p_main_cfg_check_hash():
         shutil.move(p_glbls.cfg_path_tmp, dest_path)
         return
 
-
     # There is already a >y_main.cfg< (in cfg_path)
-
     old_hash_of_defaults = read_hash(p_glbls.cfg_path)     # >y_main.cfg<
     p_log_this('old_hash_of_defaults =' + old_hash_of_defaults)
     act_hash_of_defaults = read_hash(p_glbls.cfg_path_tmp) # >y_main_TimeStamp.cfg<
     p_log_this('act_hash_of_defaults =' + act_hash_of_defaults)
 
-    # old_hash == new_hash
+    # act_hash == old_hash
     if (act_hash_of_defaults == old_hash_of_defaults):
         mssge_0 = ('section: "signature" in >' + p_glbls.cfg_path + '< unchanged. =>')
         p_log_this (mssge_0)
         p_log_this (mssge_1)
         p_log_this (mssge_2)
-        # move source to dest:
-        #shutil.move(p_glbls.cfg_path_tmp, dest_path)
-    else:                   # old_hash != new_hash
+        # move source to dest: ?? should I ? Or not?
+        # shutil.move(p_glbls.cfg_path_tmp, dest_path)
+    else: # act_hash != old_hash
         print 'section: "signature" in >' + p_glbls.cfg_path + '< has been modified.'
         print ' => 1) leave >' + p_glbls.cfg_path + '< unchanged.'
         print '    2) most recent config file is: >' + p_glbls.cfg_path_tmp + '<.'
@@ -314,7 +312,6 @@ def p_main_cfg_check_hash():
         p_log_this (mssge_0)
         p_log_this (mssge_1)
         p_log_this (mssge_2)
-
 
 def p_main_was_modified(outfile_path):
     """ check if y_main.py was modified (== hash is different) """
