@@ -31,11 +31,13 @@ Programm folgendes:
  über den Vergleich von Hash Werten in der jeweiligen Sektion [defaults] in
  den beiden cfg - Files.
 
- Falls sich hier nichts verändert hat, dann bleibt >y_main.cfg< unverändert, nur der
- TimeStamp in der section [signature] wird angepasst (so dass man weiß, wann zuletzt
+ Falls sich hier nichts verändert hat, dann bleibt >y_main.cfg< unverändert,
+ ??? soll ich ??:
+ nur der  TimeStamp in der section [signature] wird angepasst (so dass man weiß, wann zuletzt
  pyprogen eine neue Version generiert hat).
  Falls in der section [defaults] aber Veränderungen stattgefunden haben, dann stimmen auch
  die hash Werte nicht überein.
+  ToDO
 
 
 insert # -*- coding: utf-8 -*- in generated script in the first two lines ...
