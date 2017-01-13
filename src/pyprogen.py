@@ -22,6 +22,22 @@ __author__ = "rh"
 __date__   = "$05.05.2015 21:55:22$"
 
 """
+Also: zusätzlich zum Beschriebenen, (nicht ausreichend Dokumentierten), macht das
+Programm folgendes:
+
+1. Veränderungen in >y_main.cfg<?
+ Wenn pyprogen läuft, wird immer eine aktuelle >y_main_TIMESTAMP.cfg< File erzeugt.
+ Diese wird dann mit der bisher gültigen >y_main.cfg< verglichen, und zwar über
+ über den Vergleich von Hash Werten in der jeweiligen Sektion [defaults] in
+ den beiden cfg - Files.
+
+ Falls sich hier nichts verändert hat, dann bleibt >y_main.cfg< unverändert, nur der
+ TimeStamp in der section [signature] wird angepasst (so dass man weiß, wann zuletzt
+ pyprogen eine neue Version generiert hat).
+ Falls in der section [defaults] aber Veränderungen stattgefunden haben, dann stimmen auch
+ die hash Werte nicht überein.
+
+
 insert # -*- coding: utf-8 -*- in generated script in the first two lines ...
 so modify the hash-line and hash-reading mechanism too!
 (p_code.p_write_code (input_dict, outfile_fn, outfile_path)

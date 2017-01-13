@@ -201,6 +201,16 @@ def get_datetime_str(txt_line):
     else:
         return '_UNKNOWN_DATE_TIME'
 
+def calc_hash(defaults):
+    """ Calculates the hash of members of a list (list[tuple, tuple ...].)"""
+    defaults_str = ''
+    for key_val in defaults:  # type(defaults) == list[(arg,val),(arg,val), tuple ...]
+        defaults_str = defaults_str + key_val[0] + key_val[1]
+    hash_md5 = hashlib.md5()
+    hash_md5.update(defaults_str)  # calc hash
+    hash_of_defaults = hash_md5.hexdigest()
+    return hash_of_defaults
+
 def p_main_cfg_create_hash():
     """ Calculates the hash of default vars in section [defaults] in >y_main.cfg<.
     Then creates in >y_main.cfg< the section [signature] with items:
@@ -230,6 +240,18 @@ def p_main_cfg_create_hash():
     parser.set("signature", "timestamp", p_glbls.date_time_str)
     parser.write(open(p_glbls.cfg_path_tmp, "w"))
 
+def read_hash(cfg_path):
+    """ return the val of var >hash< in cfg-file in section [signature] """
+    parser = ConfigParser.SafeConfigParser(allow_no_value=True)
+    cfg_file = parser.read(cfg_path)
+
+    try:  # read val of var hash
+        hash_val = parser.get("signature", "hash")
+    except ConfigParser.NoSectionError or ConfigParser.NoOptionError:
+        if ConfigParser.NoSectionError:
+            p_log_this("No section: 'signature' in: >" + p_glbls.cfg_path + '< !')
+        return
+    return hash_val
 
 def p_main_cfg_check_hash():
     """ called by >pyprogen.py< after >create_ca_parser< has
@@ -242,8 +264,8 @@ def p_main_cfg_check_hash():
     if not (>y_main.cfg< exists)
         move >y_main_TimeStamp.cfg< to >y_main.cfg<
         return
-    elsif (>y_main.cfg< was changed):
-        # keep >y_main.cfg<; keep >y_main_TimeStamp.cfg<;
+    elsif (>y_main.cfg< != >y_main_TimeStamp.cfg<):
+        # keep >y_main.cfg< && keep >y_main_TimeStamp.cfg<;
         return
     else:
         move >y_main_TimeStamp.cfg< to >y_main.cfg<
@@ -266,44 +288,23 @@ def p_main_cfg_check_hash():
         shutil.move(p_glbls.cfg_path_tmp, dest_path)
         return
 
-    # There is a >y_main.cfg<
-    parser = ConfigParser.SafeConfigParser(allow_no_value=True)
-    cfg_file = parser.read(p_glbls.cfg_path)
 
-    try:  # read defaults and calc their hash
-        defaults = parser.items("defaults")
-        defaults_str = ''
-        for key_val in defaults:
-            defaults_str = defaults_str + key_val[0] + key_val[1]
-        hash_md5           = hashlib.md5()
-        hash_md5.update(defaults_str)            # calc hash
-        act_hash_of_defaults = hash_md5.hexdigest()
-    except ConfigParser.NoSectionError:
-        mssge = ("No section: 'defaults' in: >" + p_glbls.cfg_path + '< !')
-        p_log_this(mssge); print('Error: ' + mssge)
-        return
+    # There is already a >y_main.cfg< (in cfg_path)
 
-    try:  # read old hash (and time_stamp)
-        old_hash_of_defaults = parser.get("signature", "hash")
-        timestamp = parser.get("signature", "timestamp")
-    except ConfigParser.NoSectionError or ConfigParser.NoOptionError:
-        if ConfigParser.NoSectionError:
-            p_log_this("No section: 'signature' in: >" + p_glbls.cfg_path + '< !')
-        if ConfigParser.NoOptionError:
-            p_log_this("No option: 'timestamp' or 'hash' in section 'signature' in: >" + p_glbls.cfg_path_tmp + '< !')
-        return
+    old_hash_of_defaults = read_hash(p_glbls.cfg_path)     # >y_main.cfg<
+    p_log_this('old_hash_of_defaults =' + old_hash_of_defaults)
+    act_hash_of_defaults = read_hash(p_glbls.cfg_path_tmp) # >y_main_TimeStamp.cfg<
+    p_log_this('act_hash_of_defaults =' + act_hash_of_defaults)
 
-
-
-    # There is no >y_main.cfg< ... and old_hash == new_hash
+    # old_hash == new_hash
     if (act_hash_of_defaults == old_hash_of_defaults):
         mssge_0 = ('section: "signature" in >' + p_glbls.cfg_path + '< unchanged. =>')
         p_log_this (mssge_0)
         p_log_this (mssge_1)
         p_log_this (mssge_2)
         # move source to dest:
-        shutil.move(p_glbls.cfg_path_tmp, dest_path)
-    else:
+        #shutil.move(p_glbls.cfg_path_tmp, dest_path)
+    else:                   # old_hash != new_hash
         print 'section: "signature" in >' + p_glbls.cfg_path + '< has been modified.'
         print ' => 1) leave >' + p_glbls.cfg_path + '< unchanged.'
         print '    2) most recent config file is: >' + p_glbls.cfg_path_tmp + '<.'
