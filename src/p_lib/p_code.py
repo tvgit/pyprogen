@@ -302,7 +302,7 @@ def p_main_cfg_check_hash():
         p_log_this (mssge_2)
         # move source to dest: ?? should I ? Or not?
         # shutil.move(p_glbls.cfg_path_tmp, dest_path)
-    else: # act_hash != old_hash
+    else:  # act_hash != old_hash
         print 'section: "signature" in >' + p_glbls.cfg_path + '< has been modified.'
         print ' => 1) leave >' + p_glbls.cfg_path + '< unchanged.'
         print '    2) most recent config file is: >' + p_glbls.cfg_path_tmp + '<.'
