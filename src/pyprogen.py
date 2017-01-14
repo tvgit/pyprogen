@@ -9,6 +9,7 @@
 # Alt F7          -> find usages
 # Shift F6        -> run file
 # Shift Ctrl C    -> toggle comment
+# F12             -> open last Run
 #
 # Filetypes association:
 # File > Settings > Editor > File Types ... (ie: *.cfg like *.ini)
