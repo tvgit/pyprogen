@@ -7,12 +7,14 @@ y_main = dict()
 y_main[02] = """
 # YOUR code resides in THIS module.
 # It is respected if changed (modification results from different
-# hash code '>xxx...xxx<' in second line of source code of this module).
+# hash code '>xxx...xxx<' in third line of source code of this module).
 
 import lib.xx_CAParser as xx_CAParser
 import lib.p_utils     as p_utils
 from   lib.p_log       import p_log_init, p_log_start, p_log_this, p_log_end
 import lib.xx_glbls
+
+# 'confargs' are your configuration parameters / cmdline arguments
 confargs = lib.xx_glbls.arg_ns
 
 def print_prog_name():
@@ -33,23 +35,27 @@ def evaluate_opt_args():
 
 y_main[10] = """ """
 
-y_main[96] = """
-# Here resides YOUR code:
+y_main[60] = """
 def main():
-    p_log_this()
+    p_log_this('begin')
     evaluate_opt_args()
+    p_log_this('end')
 """
 
-y_main[98] = """
+y_main[80] = """
 if __name__ == "__main__":
     print_prog_name()
     p_log_init(log_dir = 'log', log_fn = r'xx_main.log')
     p_log_start()
 
-    # xx_CAParser.xx_parser('ignore_pos_args', '')
-    xx_CAParser.xx_parser()
+"""
 
-    # Here YOUR code 'main()' is called:
+y_main[84] = """ """
+
+
+y_main[86] = """
+
+    # Here YOUR 'main()' is called:
     main()
 
     p_log_end()
@@ -163,7 +169,8 @@ CA_Parser[02] = """
 import confargparse
 import sys
 try:
-    from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
+    from lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
+    from lib.p_utils import p_file_exists
 except:
     pass
 
@@ -190,14 +197,21 @@ CA_Parser[10] = """
         print '-' * 20
         parser.parse_args(['--export-conf-file', cfg_path_tmp])
         print '| xx_CAParser.py: end'
-        # ConfArgParser obviously exits? Here! Why? ? ? ?
+        # xx_CAParser has written cfg-file
     else:
-        # read +/- conf-file +- pos.args +/- opt.args
-        args = parser.parse_args()
-        # set values in >xx_glbls.arg_ns<
+        # read +/- conf-file +/- cmdline pos.args +/- cmdline opt.args
+        # parameters for >parser.parse_args()<:
+        param_list = None
+        if (str (command) != '') and (str (cfg_path_tmp != '')):
+            param_list = [command, cfg_path_tmp]
+            p_log_this('Trying to read from:' + str(cfg_path_tmp))
+
+        args = parser.parse_args(param_list)
+        # set values in >xx_glbls.arg_ns<:
         for key, value in vars(args).iteritems():
             if hasattr(xx_glbls.arg_ns, key):
                 setattr(xx_glbls.arg_ns, key, value)
+                p_log_this(str(key) + ' = ' + str(value))
 """
 
 

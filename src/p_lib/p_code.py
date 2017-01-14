@@ -345,6 +345,23 @@ def p_main_was_modified(outfile_path):
         return False
 
 
+def adjust_cfg_path(cfg_file_path):
+    # http://stackoverflow.com/questions/4579908/cross-platform-splitting-of-path-in-python AND
+    # http://stackoverflow.com/questions/14826888/python-os-path-join-on-a-list
+    path_str = str(cfg_file_path)
+    path_split = []
+    while True:
+        path_str, leaf = os.path.split(path_str)
+        if (leaf):
+            path_split = [leaf] + path_split  # Adds one element, at the beginning of the list
+        else:
+            # Uncomment the following line to have also the drive, in the format "Z:\"
+            # path_split = [path_str] + path_split
+            break;
+    del path_split[1]
+    new_path_str = os.path.join(*path_split)
+    return new_path_str
+
 def p_create_main():
     """ if (>y_main.py< exists && >y_main.py< was modified) => save it.
     else: => create new >y_main.py<  """
@@ -353,17 +370,33 @@ def p_create_main():
     p_log_this('creating: ' + outfile_path)
 
     # Make new code:
-    # make txt for >if<'s for >opt_arg_vars< of commandline
+
+    # make code txt for >if<'s for >confarg_vars< of commandline
     txt = ' '*4 + '# optional args(ConfArgParser):\n'
     for arg in p_glbls.opt_arg_vars:
-        # txt = txt + ' '*4 + 'if ' + 'xx_glbls.arg_ns.' + arg + ' == "something":\n'
-        # txt = txt + ' '*4 + 'if ' + 'xx_glbls.arg_ns.' + arg + ' == xx_glbls.arg_ns.' + arg + ':\n'
-        # txt = txt + ' '*8 + 'eval_arg(xx_glbls.arg_ns.' + arg +')\n'
         txt = txt + ' '*4 + 'if ' + 'confargs.' + arg + ' == confargs.' + arg + ':\n'
         txt = txt + ' '*8 + 'eval_arg(confargs.' + arg +')\n'
         txt = txt + '\n'
 
     patterns.y_main[10] = txt       # add txt to pattern
+
+    # make code txt for optional reading of cfg-file via
+    # xx_CAParser.xx_parser('-c', 'p_glbls.cfg_path')
+    # adjust dir removing highest dir level:
+    adjusted_cfg_path = adjust_cfg_path(p_glbls.cfg_path)
+    txt =  ' '*4 + "# optional reading of cfg-file: (r' == raw string) \n"
+    txt += ' '*4 + "xx_CAParser.xx_parser('-c', r'"
+    txt += str(adjusted_cfg_path)
+    txt += "')" + '\n'
+    txt += ' '*4 + '# or not: \n'
+    txt += ' '*4 + "# xx_CAParser.xx_parser()"
+    # txt += '\n'
+
+    patterns.y_main[84] = txt       # add txt to pattern
+
+
+
+
     # generate correct var names
     y_main = p_subst_vars_in_patterns (patterns.y_main)
     # now >y_main< is complete. => calculate hash for generated program:
