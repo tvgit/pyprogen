@@ -157,10 +157,10 @@ else:
 # -------------- y_CAParser.py
 
 CA_Parser = dict()
+# import argparse
 
 CA_Parser[02] = """
 import confargparse
-import argparse
 import sys
 try:
     from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end

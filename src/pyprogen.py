@@ -25,7 +25,7 @@ __date__   = "$05.05.2015 21:55:22$"
 Also: zusätzlich zum Beschriebenen, (nicht ausreichend Dokumentierten), macht das
 Programm folgendes:
 
-1. Veränderungen in >y_main.cfg<?
+1. Veränderungen in >y_main.cfg<
  Wenn pyprogen läuft, wird immer eine aktuelle >y_main_TIMESTAMP.cfg< File erzeugt.
  Diese wird dann mit der bisher gültigen >y_main.cfg< verglichen, und zwar über
  über den Vergleich von Hash Werten in der jeweiligen Sektion [defaults] in
@@ -38,6 +38,10 @@ Programm folgendes:
  Falls in der section [defaults] aber Veränderungen stattgefunden haben, dann stimmen auch
  die hash Werte nicht überein.
   ToDO
+
+ MAn muss die cfg-File noch lesen - so vorhanden.
+ Man muss evtl übergebene Argumente auswerten.
+  Beides wahrscheinlich in y_CAParser.py
 
 
 insert # -*- coding: utf-8 -*- in generated script in the first two lines ...
