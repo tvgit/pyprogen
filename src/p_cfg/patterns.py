@@ -192,11 +192,11 @@ CA_Parser[10] = """
     global args
     # export conf-file:
     if (command == '--export-conf-file'):
-        print '| xx_CAParser.py: generating: ', cfg_path_tmp
-        print '| xx_CAParser.py: generating & writing: ', cfg_path_tmp
+        mssge = '| xx_CAParser.py: generating & writing: ' + cfg_path_tmp
+        print mssge ; p_log_this(mssge)
         print '-' * 20
+        # NOTE: >parser.parse_args('--export-conf-file' ...) will EXIT!<
         parser.parse_args(['--export-conf-file', cfg_path_tmp])
-        print '| xx_CAParser.py: end'
         # xx_CAParser has written cfg-file
     else:
         # read +/- conf-file +/- cmdline pos.args +/- cmdline opt.args
@@ -220,24 +220,28 @@ CA_Parser[96] = """
 
 CA_Parser[98] = """
 if __name__ == "__main__":
+    # This branch should have been called by >pyprogen.py<
     from   p_log   import p_log_init, p_log_start, p_log_this, p_log_end
     print '-' * 20
-    print '| xx_CAParser: running'
+    print '| xx_CAParser.py: running'
     print '|',
     p_log_init(log_dir = r'xx_dir_log', log_fn = r'xx_CAParser')
     p_log_start()
-    p_log_this('| generating cfg-file')
+    p_log_this(' generating cfg-file')
     cfg_path_tmp = sys.argv[1]
     if not cfg_path_tmp:
-        print '| xx_CAParser: No output path for cfg-file?? '
+        mssge =   '| xx_CAParser: No output path for cfg-file?? '
+        print mssge ; p_log_this(mssge)
         cfg_path_tmp = os.path.join('.', 'main\cfg', 'conf.ini')
-        print ('| xx_CAParser: Setting output path to: ' + cfg_path_tmp)
+        mssge = '| xx_CAParser: Setting output path to: ' + str(cfg_path_tmp)
+        print mssge ; p_log_this(mssge)
     else:
-        print '| output path for cfg-file = ', cfg_path_tmp
+        mssge = '| output path for cfg-file = ' + str(cfg_path_tmp)
+        print mssge ; p_log_this(mssge)
     xx_parser('--export-conf-file', cfg_path_tmp)
-    print '| xx_CAParser: end'
-    print '-' * 20
-    p_log_end()
+    # NOTE: in func >xx_parser()<
+    # calling >parser.parse_args('--export-conf-file' ...)
+    # will EXIT!
 else:
     import lib.xx_glbls as xx_glbls
     pass
