@@ -162,6 +162,9 @@ in p_utils make examples how to open files, scan dirs etc ...
 # ad decorator:
 # https://pythonconquerstheuniverse.wordpress.com/2012/04/29/python-decorators/
 
+# Ad ConfArgParse
+# https://pypi.python.org/pypi/ConfArgParse
+
 import os
 import shutil
 import subprocess

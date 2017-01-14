@@ -20,7 +20,12 @@ confargs = lib.xx_glbls.arg_ns
 def print_prog_name():
     prog_info = p_utils.scriptinfo()
     prog_name = prog_info['name']
-    print '--------\\n' + prog_name + '\\n--------'
+    prog_dir  = prog_info['dir']
+    print '--------'
+    print 'script name:' + prog_name
+    print 'script dir :' + prog_dir
+    print '--------'
+
 """
 
 y_main[04] = """
@@ -60,64 +65,6 @@ y_main[86] = """
 
     p_log_end()
     p_utils.p_exit()
-"""
-
-# -------------- y_my_code.py
-
-y_my_code = dict()
-
-y_my_code[02] = """# -
-
-# YOUR code resides in THIS module. Imported to >xx_main.py<.
-# Is respected if changed (modification results from different hash code >nnn< above).
-
-import lib.xx_glbls as xx_glbls
-import lib.p_utils as p_utils
-# import lib.xx_lead as xx_lead
-import lib.xx_CAParser as xx_CAParser
-from   lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
-"""
-
-y_my_code[04] = """
-def eval_arg(arg):
-    print 'do something with: ' + str(arg)
-    return arg
-
-def evaluate_opt_args():
-    p_log_this()
-    xx_glbls.print_arg_ns()
-"""
-
-y_my_code[10] = """
-"""
-
-y_my_code[96] = """
-def main():
-    p_log_this()
-    evaluate_opt_args()
-
-"""
-
-y_my_code[98] = """
-if __name__ == "__main__":
-    prog_info = p_utils.scriptinfo()
-    prog_name = prog_info['name']
-    print '--------\\n' + prog_name + '\\n--------'
-
-    p_log_init(log_dir = 'log', log_fn = r'xx_main.log')
-    p_log_start()
-
-    # xx_CAParser.xx_parser('ignore_pos_args', '')
-    xx_CAParser.xx_parser()
-
-    # Here YOUR code in >xx_my_code.py< is _called_.
-    xx_my_code.main()
-
-    evaluate_opt_args()
-
-    p_log_end()
-    p_utils.p_exit()
-
 """
 
 # -------------- y_glbls.py
@@ -166,6 +113,9 @@ CA_Parser = dict()
 # import argparse
 
 CA_Parser[02] = """
+# Ad ConfArgParse
+# https://pypi.python.org/pypi/ConfArgParse
+
 import confargparse
 import sys
 try:

@@ -127,7 +127,9 @@ def p_log_init(log_dir='log', log_fn='default'):
     file_handler.setLevel(logging.INFO)
     # Add the log message handler to the logger
     p_logger.addHandler(file_handler)
-    print 'Logger started: log file: >', log_pn_fn
+    print 'Logger started: log file: >' + '.' + os.path.sep + log_pn_fn
+    # prnt_log_pn_fn = os.path.join(os.path.dirname(__file__), log_pn_fn)
+    # print 'Logger started: log file: >', prnt_log_pn_fn
     p_logger.setLevel('INFO')
     line = '-' * 40 # + ' ' + str(p_logger.level)
     p_logger.info(line)
