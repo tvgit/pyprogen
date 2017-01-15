@@ -13,6 +13,8 @@ import lib.xx_CAParser as xx_CAParser
 import lib.p_utils     as p_utils
 from   lib.p_log       import p_log_init, p_log_start, p_log_this, p_log_end
 import lib.xx_glbls
+import copy
+
 
 # 'confargs' are your configuration parameters / cmdline arguments
 confargs = lib.xx_glbls.arg_ns
@@ -47,11 +49,20 @@ def main():
     p_log_this('end')
 """
 
-y_main[80] = """
+y_main[80] = r"""
 if __name__ == "__main__":
     print_prog_name()
     p_log_init(log_dir = 'log', log_fn = r'xx_main.log')
     p_log_start()
+
+    # http://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
+    # http://stackoverflow.com/questions/2799064/how-do-i-merge-dictionaries-together-in-python
+
+    # read commandline arguments:
+    xx_CAParser.xx_parser()
+    confargs_cmd_line = copy.deepcopy(confargs)
+    # print 'cmd_line: ' + str(vars(confargs_cmd_line))
+    # print sorted(vars(confargs_cmd_line).items())
 
 """
 
@@ -59,6 +70,11 @@ y_main[84] = """ """
 
 
 y_main[86] = """
+    confargs_cfg_file = confargs
+    # print vars(confargs_cfg_file)
+    # print 'cfg_file: ' + str(vars(confargs_cfg_file))
+    vars(confargs_cfg_file).update(vars(confargs_cmd_line))
+    print 'confargs: ' + str(vars(confargs_cfg_file))
 
     # Here YOUR 'main()' is called:
     main()

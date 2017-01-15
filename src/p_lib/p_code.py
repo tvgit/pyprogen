@@ -388,8 +388,8 @@ def p_create_main():
     txt += ' '*4 + "xx_CAParser.xx_parser('-c', r'"
     txt += str(adjusted_cfg_path)
     txt += "')" + '\n'
-    txt += ' '*4 + '# or not: \n'
-    txt += ' '*4 + "# xx_CAParser.xx_parser()"
+    # txt += ' '*4 + '# or not: \n'
+    # txt += ' '*4 + "# xx_CAParser.xx_parser()"
     # txt += '\n'
 
     patterns.y_main[84] = txt       # add txt to pattern
