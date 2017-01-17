@@ -88,7 +88,7 @@ def usage(exit_status=0):
     msg += ' \n'
     msg += 'Options:\n'
     msg += '  -i input File.   default= >..\p_log\pyprogen.log< \n'
-    msg += '  -o output File.  default= >..\p_log\pyprogen.out2< \n'
+    msg += '  -o output File.  default= >..\p_log\pyprogen.dat< \n'
     msg += '\n'
     msg += '-----------' * 5
     msg += '\n'
@@ -97,7 +97,6 @@ def usage(exit_status=0):
 
 def eval_arg(arg):
     print 'do something with: ' + str(arg)
-
     return arg
 
 def rgx_date_time():
@@ -242,16 +241,17 @@ def main():
     arg_parser()
     evaluate_opt_args()
 
-def print_prog_name():
+def prog_name():
     prog_info = p_utils.scriptinfo()
     prog_name = prog_info['name']
     print '--------\n' + prog_name + '\n--------'
+    return prog_name
 
 if __name__ == "__main__":
     # print_prog_name()
     usage()
-
-    p_log_init(log_dir = 'log', log_fn = 'd_main.log')
+    log_fn = prog_name()[:-2]  + 'log'
+    p_log_init(log_dir = 'log', log_fn = log_fn)
     p_log_start()
 
     # Here YOUR code is called.
