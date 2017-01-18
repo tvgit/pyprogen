@@ -374,28 +374,22 @@ def p_create_main():
     # make code txt for >if<'s for >confarg_vars< of commandline
     txt = ' '*4 + '# optional args(ConfArgParser):\n'
     for arg in p_glbls.opt_arg_vars:
-        txt = txt + ' '*4 + 'if ' + 'confargs.' + arg + ' == confargs.' + arg + ':\n'
-        txt = txt + ' '*8 + 'eval_arg(confargs.' + arg +')\n'
-        txt = txt + '\n'
+        txt +=  ' '*4 + 'if ' + 'confargs.' + arg + ' == confargs.' + arg + ':\n'
+        txt +=  ' '*8 + 'eval_arg(confargs.' + arg +')\n'
+        txt +=  '\n'
 
     patterns.y_main[10] = txt       # add txt to pattern
 
     # make code txt for optional reading of cfg-file via
-    # xx_CAParser.xx_parser('-c', 'p_glbls.cfg_path')
-    # adjust dir removing highest dir level:
+    # xx_CAParser.xx_parser('--conf-file', 'p_glbls.cfg_path')
+    # but adjust dir of config-file by removing highest dir level:
     adjusted_cfg_path = adjust_cfg_path(p_glbls.cfg_path)
     txt =  ' '*4 + "# optional reading of cfg-file: (r' == raw string) \n"
-    txt += ' '*4 + "xx_CAParser.xx_parser('-c', r'"
+    txt += ' '*4 + "xx_CAParser.xx_parser('--conf-file', r'"
     txt += str(adjusted_cfg_path)
     txt += "')" + '\n'
-    # txt += ' '*4 + '# or not: \n'
-    # txt += ' '*4 + "# xx_CAParser.xx_parser()"
-    # txt += '\n'
 
     patterns.y_main[84] = txt       # add txt to pattern
-
-
-
 
     # generate correct var names
     y_main = p_subst_vars_in_patterns (patterns.y_main)

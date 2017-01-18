@@ -41,6 +41,19 @@ def scriptinfo():
     scr_dict ={"name": trc, "source": trc, "dir": scriptdir}
     return scr_dict
 
+
+def p_get_prog_name():
+    prog_info = scriptinfo()
+    prog_name = prog_info['name']
+    return prog_name
+
+
+def p_get_prog_dir():
+    prog_info = scriptinfo()
+    prog_dir  = prog_info['dir']
+    return prog_dir
+
+
 def p_act_dir_path():
     # http://www.karoltomala.com/blog/?p=622
     path = os.path.abspath(__file__)

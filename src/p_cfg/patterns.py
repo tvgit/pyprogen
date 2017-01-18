@@ -20,13 +20,12 @@ import copy
 confargs = lib.xx_glbls.arg_ns
 
 def print_prog_name():
-    prog_info = p_utils.scriptinfo()
-    prog_name = prog_info['name']
-    prog_dir  = prog_info['dir']
-    print '--------'
+    prog_name = p_utils.p_get_prog_name()
+    prog_dir  = p_utils.p_get_prog_dir()
+    print '-' * 8
     print 'script name:' + prog_name
     print 'script dir :' + prog_dir
-    print '--------'
+    print '-' * 8
 
 """
 
@@ -60,7 +59,7 @@ if __name__ == "__main__":
 
     # read commandline arguments:
     xx_CAParser.xx_parser()
-    confargs_cmd_line = copy.deepcopy(confargs)
+    # confargs_cmd_line = copy.deepcopy(confargs)
     # print 'cmd_line: ' + str(vars(confargs_cmd_line))
     # print sorted(vars(confargs_cmd_line).items())
 
@@ -70,11 +69,11 @@ y_main[84] = """ """
 
 
 y_main[86] = """
-    confargs_cfg_file = confargs
+    # confargs_cfg_file = confargs
     # print vars(confargs_cfg_file)
     # print 'cfg_file: ' + str(vars(confargs_cfg_file))
-    vars(confargs_cfg_file).update(vars(confargs_cmd_line))
-    print 'confargs: ' + str(vars(confargs_cfg_file))
+    # vars(confargs_cfg_file).update(vars(confargs_cmd_line))
+    # print 'confargs: ' + str(vars(confargs_cfg_file))
 
     # Here YOUR 'main()' is called:
     main()
@@ -142,6 +141,15 @@ except:
 
 args = None
 
+def args_to_glbls (args):
+    # Copy args name-space to xx_glbls.arg_ns
+    for key, value in vars(args).iteritems():
+        if hasattr(xx_glbls.arg_ns, key):
+            setattr(xx_glbls.arg_ns, key, value)
+            p_log_this(str(key) + ' = ' + str(value))
+"""
+
+CA_Parser[40] = """
 def xx_parser(command = '', cfg_path_tmp=''):
     # p_log_this()
     parser = confargparse.ConfArgParser(description='Program: xx_program_name')
@@ -150,34 +158,32 @@ def xx_parser(command = '', cfg_path_tmp=''):
     #     pass
 """
 
-CA_Parser[04] = """
+CA_Parser[44] = """
 """
 
 
-CA_Parser[10] = """
+CA_Parser[48] = """
     global args
     # export conf-file:
     if (command == '--export-conf-file'):
         mssge = '| xx_CAParser.py: generating & writing: ' + cfg_path_tmp
-        print mssge ; p_log_this(mssge)
-        print '-' * 20
+        print mssge ; print '-' * 20 ; p_log_this(mssge)
         # NOTE: >parser.parse_args('--export-conf-file' ...) will EXIT!<
         parser.parse_args(['--export-conf-file', cfg_path_tmp])
         # xx_CAParser has written cfg-file
-    else:
-        # read +/- conf-file +/- cmdline pos.args +/- cmdline opt.args
-        # parameters for >parser.parse_args()<:
-        param_list = None
-        if (str (command) != '') and (str (cfg_path_tmp != '')):
-            param_list = [command, cfg_path_tmp]
-            p_log_this('Trying to read from:' + str(cfg_path_tmp))
-
+        # nota: parser.parse_args(['--export-conf-file', cfg_path_tmp]) exits module!
+    elif ((command == '--conf-file') and str(cfg_path_tmp != '')):
+        # read conf-file:
+        param_list = [command, cfg_path_tmp]
+        p_log_this('Trying to read from:' + str(cfg_path_tmp))
         args = parser.parse_args(param_list)
-        # set values in >xx_glbls.arg_ns<:
-        for key, value in vars(args).iteritems():
-            if hasattr(xx_glbls.arg_ns, key):
-                setattr(xx_glbls.arg_ns, key, value)
-                p_log_this(str(key) + ' = ' + str(value))
+        args_to_glbls (args)  # set values in >xx_glbls.arg_ns<
+    else:
+        # cmdline pos.args / opt.args
+        param_list = None
+        p_log_this('No parameters:')
+        args = parser.parse_args(param_list)
+        args_to_glbls (args)  # set values in >xx_glbls.arg_ns<
 """
 
 

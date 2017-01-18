@@ -129,7 +129,7 @@ def p_create_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     for line in opt_arg_lines:
         txt = txt + line # + '\n'
 
-    p_cfg.patterns.CA_Parser[04] = txt
+    p_cfg.patterns.CA_Parser[44] = txt
 
     # log positional and optional arguments
     for arg in pos_args:
