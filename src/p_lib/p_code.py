@@ -385,7 +385,7 @@ def p_create_main():
     # but adjust dir of config-file by removing highest dir level:
     adjusted_cfg_path = adjust_cfg_path(p_glbls.cfg_path)
     txt =  ' '*4 + "# optional reading of cfg-file: (r' == raw string) \n"
-    txt += ' '*4 + "xx_CAParser.xx_parser('--conf-file', r'"
+    txt += ' '*4 + "# xx_CAParser.xx_parser('--conf-file', r'"
     txt += str(adjusted_cfg_path)
     txt += "')" + '\n'
 
