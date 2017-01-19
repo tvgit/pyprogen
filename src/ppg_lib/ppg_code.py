@@ -86,8 +86,8 @@ def p_inform_about_paths_and_filenames():
     print 'Path of YOUR code is:             ' + os.path.join(ppg_glbls.dir_main, ppg_glbls.prog_name)
     print 'Filename of YOUR code is:         ' + ' '*len_dir_main + ppg_glbls.prog_name
     print 'You will find the new version in: ' + os.path.join(ppg_glbls.dir_main, '')
-    print 'Path of new version is:           ' + os.path.join(ppg_glbls.dir_main, ppg_glbls.prog_name_act_cfg)
-    print 'Filename of new version is:       ' + ' '*len_dir_main + ppg_glbls.prog_name_act_cfg
+    print 'Path of new version is:           ' + os.path.join(ppg_glbls.dir_main, ppg_glbls.prog_name_new_cfg)
+    print 'Filename of new version is:       ' + ' '*len_dir_main + ppg_glbls.prog_name_new_cfg
     # print '(>' + p_glbls.prog_name + '< was not changed.)'
     # cfg_path_tmp
     len_cfg_dir = len(os.path.dirname(ppg_glbls.cfg_path_tmp)) + 1
