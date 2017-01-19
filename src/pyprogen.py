@@ -33,22 +33,6 @@ Programm folgendes:
  den beiden cfg - Files.
 
  Falls sich hier nichts verändert hat, dann bleibt >y_main.cfg< unverändert,
- ??? soll ich ??:
- nur der  TimeStamp in der section [signature] wird angepasst (so dass man weiß, wann zuletzt
- pyprogen eine neue Version generiert hat).
- Falls in der section [defaults] aber Veränderungen stattgefunden haben, dann stimmen auch
- die hash Werte nicht überein.
-  ToDO
-
- MAn muss die cfg-File noch lesen - so vorhanden.
- Man muss evtl übergebene Argumente auswerten.
-  Beides wahrscheinlich in y_CAParser.py
-
-
-insert # -*- coding: utf-8 -*- in generated script in the first two lines ...
-so modify the hash-line and hash-reading mechanism too!
-(p_code.p_write_code (input_dict, outfile_fn, outfile_path)
-
 
 erkläre warum die Parameter so seltsame Namen haben (x_glbls.arg_ns.fn_data_in)
  (wg Namespace + der Name des Parameters aus der *.cfg) oder:
@@ -276,7 +260,7 @@ def pyprogen():
 
 if __name__ == "__main__":
     p_log_init(log_dir = 'p_log', log_fn = 'pyprogen')
-    p_log_start()
+    p_log_start(p_utils.p_get_prog_name())
     pyprogen()
     p_log_end()
     p_utils.p_exit()

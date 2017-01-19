@@ -23,8 +23,8 @@ def print_prog_name():
     prog_name = p_utils.p_get_prog_name()
     prog_dir  = p_utils.p_get_prog_dir()
     print '-' * 8
-    print 'script name:' + prog_name
-    print 'script dir :' + prog_dir
+    print 'program name: ' + prog_name
+    print 'program dir : ' + prog_dir
     print '-' * 8
 
 """
@@ -54,14 +54,8 @@ if __name__ == "__main__":
     p_log_init(log_dir = 'log', log_fn = r'xx_main.log')
     p_log_start()
 
-    # http://stackoverflow.com/questions/16878315/what-is-the-right-way-to-treat-python-argparse-namespace-as-a-dictionary
-    # http://stackoverflow.com/questions/2799064/how-do-i-merge-dictionaries-together-in-python
-
     # read commandline arguments:
     xx_CAParser.xx_parser()
-    # confargs_cmd_line = copy.deepcopy(confargs)
-    # print 'cmd_line: ' + str(vars(confargs_cmd_line))
-    # print sorted(vars(confargs_cmd_line).items())
 
 """
 
@@ -69,11 +63,17 @@ y_main[84] = """ """
 
 
 y_main[86] = """
-    # confargs_cfg_file = confargs
-    # print vars(confargs_cfg_file)
-    # print 'cfg_file: ' + str(vars(confargs_cfg_file))
-    # vars(confargs_cfg_file).update(vars(confargs_cmd_line))
-    # print 'confargs: ' + str(vars(confargs_cfg_file))
+    ## NB working with the confargs namespace:
+    ## http://stackoverflow.com/questions/16878315
+    ##   /... treat-argparse-namespace-as-a-dictionary
+    ## http://stackoverflow.com/questions/2799064
+    ##   /... merge-dictionaries
+    ## confargs_cpy = copy.deepcopy(confargs)
+    ## print vars(confargs_cpy)
+    ## print sorted(vars(confargs_cpy).items())
+    ## xx_CAParser.xx_parser( ... some new commands ...) => new confargs
+    ## Modify >confargs_cpy< with new confargs:
+    ## vars(confargs_cpy).update(vars(confargs))
 
     # Here YOUR 'main()' is called:
     main()
@@ -141,12 +141,18 @@ except:
 
 args = None
 
+def args_log (args):
+    # Copy args name-space to xx_glbls.arg_ns
+    for key, value in vars(args).iteritems():
+        if hasattr(xx_glbls.arg_ns, key):
+            p_log_this(str(key) + ' = ' + str(value))
+
 def args_to_glbls (args):
     # Copy args name-space to xx_glbls.arg_ns
     for key, value in vars(args).iteritems():
         if hasattr(xx_glbls.arg_ns, key):
             setattr(xx_glbls.arg_ns, key, value)
-            p_log_this(str(key) + ' = ' + str(value))
+    args_log (args)
 """
 
 CA_Parser[40] = """
@@ -164,7 +170,11 @@ CA_Parser[44] = """
 
 CA_Parser[48] = """
     global args
-    # export conf-file:
+    # log default args
+    p_log_this('cmdline or default args:')
+    # args = parser.parse_args()
+    # args_log (args)
+
     if (command == '--export-conf-file'):
         mssge = '| xx_CAParser.py: generating & writing: ' + cfg_path_tmp
         print mssge ; print '-' * 20 ; p_log_this(mssge)
@@ -179,9 +189,13 @@ CA_Parser[48] = """
         args = parser.parse_args(param_list)
         args_to_glbls (args)  # set values in >xx_glbls.arg_ns<
     else:
+        # log default args
+        p_log_this('cmdline or default args:')
+        args = parser.parse_args()
+        args_log (args)
         # cmdline pos.args / opt.args
         param_list = None
-        p_log_this('No parameters:')
+        p_log_this('after reading cmdline args:')
         args = parser.parse_args(param_list)
         args_to_glbls (args)  # set values in >xx_glbls.arg_ns<
 """

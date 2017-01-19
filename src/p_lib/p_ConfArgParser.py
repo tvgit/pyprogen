@@ -147,7 +147,8 @@ def p_create_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     outfile_path = p_glbls.CAParser_path
 
     code = p_subst_vars_in_patterns (p_cfg.patterns.CA_Parser)
-    p_code.p_write_code (code, outfile_fn, outfile_path)
+    # p_code.p_write_code (code, outfile_fn, outfile_path)
+    p_code.p_write_code (code, outfile_path)
 
 # ------------------------------------
 

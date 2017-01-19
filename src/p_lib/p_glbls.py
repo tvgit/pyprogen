@@ -1,8 +1,12 @@
 # Sharing program wide information about >y_main.py<,
 #  its dirs and cfg-, log-, util-files etc via this module
 #
-prog_name= 'def_y_main.py' # default name of new program. Configure in ???
-prog_path= None            # default path: >./y_main/y_main.py<
+import os.path
+
+prog_name         = 'def_y_main.py' # default name of (new) program, configure in: >new_prog.ini<
+prog_path         = None            # default path: >./y_main/y_main.py<
+prog_changed      = False # x_main.py changed?
+prog_name_new_cfg = prog_name       # name of program with new config version
 
 prefix    = None     # common prefix of y_main-specific dirs, paths, modules, functions, vars ...
 arg_prefix= None     # common prefix of vars storing values of cmd-line args
@@ -26,6 +30,7 @@ CAParser_path= None  # path     of arg-parser of 'y_main.py'  (>./y_main/lib/...
 CAParser_func= None  # function name  (>def y_parser(): ...<)
 
 glbls_fn     = None  # name of globals file (OF NEW PROGRAM!); usually: >y_glbls.py<
+
 my_code_fn   = None  # name of your code; usually: >y_my_code.py<
 
 pos_arg_vars = None  # positional args
@@ -38,19 +43,22 @@ def print_p_cfg_and_args(print_args=False):
     print ' prefix        =   '   + prefix
     print
     print ' dir_main      = '     + dir_main
-    print ' dir_cfg       = '     + dir_cfg
     print ' dir_lib       = '     + dir_lib
     print ' dir_log       = '     + dir_log
-    print ' cfg_fn        =   '   + cfg_fn
-    print ' cfg_path      = '     + cfg_path_tmp
-    print ' cfg_fn_tmp    =   '   + cfg_fn_tmp
+    print
+    print ' dir_cfg       = '     + dir_cfg
+    len_cfg_dir_cfg = len(dir_cfg) + 1
+    print ' cfg_path      = '   + os.path.join(dir_cfg,cfg_fn)
+    print ' cfg_file      = '   + ' '*len_cfg_dir_cfg + cfg_fn
     print ' cfg_path_tmp  = '     + cfg_path_tmp
+    print ' cfg_file_tmp  = '     + ' '*len_cfg_dir_cfg + os.path.basename(cfg_path_tmp)
+    print
     print ' dir_DataIn    = '     + dir_DataIn
     print ' dir_DataOut   = '     + dir_DataOut
-
     print
-    print ' CAParser_fn   =   '   + CAParser_fn
     print ' CAParser_path = '     + CAParser_path
+    len_CAParser_dir = len(os.path.basename(CAParser_path))
+    print ' CAParser_fn   = '   + ' '*len_CAParser_dir + CAParser_fn
     print ' CAParser_func =   '   + CAParser_func
     print
     print ' glbls_fn      =   '   + glbls_fn
@@ -62,4 +70,7 @@ def print_p_cfg_and_args(print_args=False):
             print '  opt. arg var: ' + arg
         for arg in pos_arg_vars:
             print '  pos.-arg var: ' + arg
+
+    print '-'*10 + ' ' + prog_name + ' ' + '-' *60 + '\n'
+
 
