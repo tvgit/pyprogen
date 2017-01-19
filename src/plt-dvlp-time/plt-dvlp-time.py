@@ -58,7 +58,7 @@ def arg_parser(command ='', cfg_path_tmp=''):
     # parser.add_argument('-i', '--in_file', dest='in_file',
     #                     default = default_log, help = 'name of in_file')
     # parser.add_argument('-o', '--out_file',  dest='out_file',
-    #                     default='..\p_log\timedata.dat', help = 'name of out_file')
+    #                     default='..\ppg_log\timedata.dat', help = 'name of out_file')
 
     parser.add_argument('-i', '--in_file', dest='in_file',
                         default='..\p_log\pyprogen.log', help='name of in_file')

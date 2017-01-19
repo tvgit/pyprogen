@@ -11,7 +11,7 @@ y_main[02] = """
 
 import lib.xx_CAParser as xx_CAParser
 import lib.p_utils     as p_utils
-from   lib.p_log       import p_log_init, p_log_start, p_log_this, p_log_end
+from   lib.ppg_log       import p_log_init, p_log_start, p_log_this, p_log_end
 import lib.xx_glbls
 import copy
 
@@ -134,7 +134,7 @@ CA_Parser[02] = """
 import confargparse
 import sys
 try:
-    from lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
+    from lib.ppg_log   import p_log_init, p_log_start, p_log_this, p_log_end
     from lib.p_utils import p_file_exists
 except:
     pass
@@ -207,7 +207,7 @@ CA_Parser[96] = """
 CA_Parser[98] = """
 if __name__ == "__main__":
     # This branch should have been called by >pyprogen.py<
-    from   p_log   import p_log_init, p_log_start, p_log_this, p_log_end
+    from   ppg_log   import p_log_init, p_log_start, p_log_this, p_log_end
     print '-' * 20
     print '| xx_CAParser.py: running'
     print '|',

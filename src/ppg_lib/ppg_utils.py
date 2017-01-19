@@ -15,7 +15,7 @@ import datetime
 import inspect
 import difflib
 
-from   p_log   import p_log_init, p_log_start, p_log_this, p_log_end
+from   ppg_log   import p_log_init, p_log_start, p_log_this, p_log_end
 
 def scriptinfo():
     ''' returns name of running script. See:
@@ -167,7 +167,7 @@ def show_diff (txt_1, txt_2):
 
 
 if __name__ == "__main__":
-    p_log_init(log_dir='', log_fn='p_lib')
+    p_log_init(log_dir='', log_fn='ppg_lib')
     p_log_start()
     print p_here('', 1)        # does not work
     prog_info = scriptinfo()

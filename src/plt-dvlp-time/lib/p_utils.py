@@ -155,7 +155,7 @@ def show_diff (txt_1, txt_2):
 
 
 if __name__ == "__main__":
-    p_log_init(log_dir='', log_fn='p_lib')
+    p_log_init(log_dir='', log_fn='ppg_lib')
     p_log_start()
     print p_here('', 1)        # does not work
     prog_info = scriptinfo()

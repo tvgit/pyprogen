@@ -11,13 +11,13 @@ import StringIO
 import re
 import os
 
-import p_code
-import p_glbls
-import p_utils
-import p_code
-from   p_log   import p_log_this
-#import p_cfg.patterns as patterns
-import p_cfg.patterns
+import ppg_code
+import ppg_glbls
+import ppg_utils
+import ppg_code
+from   ppg_log   import p_log_this
+#import ppg_cfg.ppg_patterns as patterns
+import ppg_cfg.ppg_patterns
 
 
 def make_regex_opt_arg_minus():
@@ -55,12 +55,12 @@ def p_subst_vars_in_patterns (input_dict):
     """ substitutes in code parts (input_dict) some words (xx_....) with variable names """
     patts = dict()
     for key, patt in input_dict.iteritems():
-        txt = patt.replace("xx_CAParser", p_glbls.CAParser_fn[:-3])
-        txt =  txt.replace("xx_main",     p_glbls.prog_name[:-3])
-        txt =  txt.replace("xx_glbls",    p_glbls.glbls_fn[:-3])
-        txt =  txt.replace("xx_parser",   p_glbls.CAParser_func)
-        txt =  txt.replace("xx_program_name", p_glbls.prog_name)
-        txt =  txt.replace("xx_dir_log",  p_glbls.dir_log)
+        txt = patt.replace("xx_CAParser", ppg_glbls.CAParser_fn[:-3])
+        txt =  txt.replace("xx_main", ppg_glbls.prog_name[:-3])
+        txt =  txt.replace("xx_glbls", ppg_glbls.glbls_fn[:-3])
+        txt =  txt.replace("xx_parser", ppg_glbls.CAParser_func)
+        txt =  txt.replace("xx_program_name", ppg_glbls.prog_name)
+        txt =  txt.replace("xx_dir_log", ppg_glbls.dir_log)
         patts[key] = txt
     return patts
 
@@ -71,8 +71,8 @@ def p_create_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     opt_args             = []  # local list of opt-args
     pos_args             = []  # local list of pos-args
     # >p_create_ConfArgParser< sets vars in p_glbls. ... for later use in >p_code.p_create_globals<
-    p_glbls.opt_arg_vars = []  # list (in p_glbls) of opt-args
-    p_glbls.pos_arg_vars = []  # list (in p_glbls) of pos-args
+    ppg_glbls.opt_arg_vars = []  # list (in p_glbls) of opt-args
+    ppg_glbls.pos_arg_vars = []  # list (in p_glbls) of pos-args
 
     opt_arg_lines      = []  # lines with optional args
     pos_arg_lines      = []  # lines with positional args
@@ -116,10 +116,10 @@ def p_create_ConfArgParser(conf_file_fn='./pyprogen.conf'):
 
     # strip '-' or '--' from opt_args and copy them to >p_glbls.opt_arg_vars<
     for arg in opt_args:
-        p_glbls.opt_arg_vars.append(arg.lstrip('-'))
+        ppg_glbls.opt_arg_vars.append(arg.lstrip('-'))
     # copy opt_args to >p_glbls.opt_arg_vars<
     for arg in pos_args:
-        p_glbls.pos_arg_vars.append(arg)
+        ppg_glbls.pos_arg_vars.append(arg)
 
     # generate lines with pos args like: >parser.add_argument('bar', type=file)<
     txt = ''
@@ -129,7 +129,7 @@ def p_create_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     for line in opt_arg_lines:
         txt = txt + line # + '\n'
 
-    p_cfg.patterns.CA_Parser[44] = txt
+    ppg_cfg.ppg_patterns.CA_Parser[44] = txt
 
     # log positional and optional arguments
     for arg in pos_args:
@@ -139,16 +139,16 @@ def p_create_ConfArgParser(conf_file_fn='./pyprogen.conf'):
 
     # write y_CAParser.py == ConfArgParser for new program
 
-    p_glbls.CAParser_fn   = p_glbls.prefix + 'CAParser.py'                       # filename >y_CAParser.py<
-    p_glbls.CAParser_path = os.path.join(p_glbls.dir_lib, p_glbls.CAParser_fn )  # path
-    p_glbls.CAParser_func = p_glbls.prefix + 'parser'      # name of parser func in >y_CAParser<
+    ppg_glbls.CAParser_fn   = ppg_glbls.prefix + 'CAParser.py'                       # filename >y_CAParser.py<
+    ppg_glbls.CAParser_path = os.path.join(ppg_glbls.dir_lib, ppg_glbls.CAParser_fn)  # path
+    ppg_glbls.CAParser_func = ppg_glbls.prefix + 'parser'      # name of parser func in >y_CAParser<
 
-    outfile_fn   = p_glbls.CAParser_fn
-    outfile_path = p_glbls.CAParser_path
+    outfile_fn   = ppg_glbls.CAParser_fn
+    outfile_path = ppg_glbls.CAParser_path
 
-    code = p_subst_vars_in_patterns (p_cfg.patterns.CA_Parser)
+    code = p_subst_vars_in_patterns (ppg_cfg.ppg_patterns.CA_Parser)
     # p_code.p_write_code (code, outfile_fn, outfile_path)
-    p_code.p_write_code (code, outfile_path)
+    ppg_code.p_write_code (code, outfile_path)
 
 # ------------------------------------
 

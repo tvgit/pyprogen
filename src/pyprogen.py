@@ -152,11 +152,11 @@ in p_utils make examples how to open files, scan dirs etc ...
 import os
 import shutil
 import subprocess
-import p_lib.p_glbls as p_glbls  # share global values
-import p_lib.p_utils as p_utils  # utils for pyprogen
-import p_lib.p_code  as p_code   # funcs generating python code
-from   p_lib.p_log   import p_log_init, p_log_start, p_log_this, p_log_end
-from   p_lib.p_ConfArgParser import p_create_ConfArgParser
+import ppg_lib.ppg_glbls as p_glbls  # share global values
+import ppg_lib.ppg_utils as p_utils  # utils for pyprogen
+import ppg_lib.ppg_code  as p_code   # funcs generating python code
+from   ppg_lib.ppg_log   import p_log_init, p_log_start, p_log_this, p_log_end
+from   ppg_lib.ppg_ConfArgParser import p_create_ConfArgParser
 
 def create_maindir(prog_path) :
     """ """
@@ -194,10 +194,10 @@ def copy_p_utils_p_log_init():
     # dammed '__init__.py'! 2 hrs of nirwana!
     # for every file in fn_list:
     p_log_this()
-    fn_list = ['p_utils.py', 'p_log.py', '__init__.py']
+    fn_list = ['ppg_utils.py', 'ppg_log.py', '__init__.py']
     for fn in fn_list:
         # create an normalize source path:
-        p_utils_srce_path = os.path.join('.', 'p_lib', fn)
+        p_utils_srce_path = os.path.join('.', 'ppg_lib', fn)
         p_utils_srce_path = os.path.normpath(p_utils_srce_path)
         # create an normalize destination path:
         p_utils_dest_path = os.path.join('.', p_glbls.dir_lib, fn)
@@ -234,9 +234,9 @@ def pyprogen():
       according to the configuration files: >new_prog.ini< and new_>prog_args.conf<.
     """
     # dwyns == Do what your name says
-    p_log_this()                  # in ./p_log/pyprogen.log
+    p_log_this()                  # in ./ppg_log/pyprogen.log
     p_code.p_read_ini(".", "new_prog.ini")  # read >new_prog.ini< and create some global fn's, path's and var's
-                                  # These data is stored in module >p_glbls.py<
+                                  # These data is stored in module >ppg_glbls.py<
     #
     # >y_main< is in this comment the symbolic name of the generated program.
     #
@@ -259,7 +259,7 @@ def pyprogen():
 
 
 if __name__ == "__main__":
-    p_log_init(log_dir = 'p_log', log_fn = 'pyprogen')
+    p_log_init(log_dir = 'ppg_log', log_fn = 'pyprogen')
     p_log_start(p_utils.p_get_prog_name())
     pyprogen()
     p_log_end()
