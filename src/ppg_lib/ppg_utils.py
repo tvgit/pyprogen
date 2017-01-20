@@ -148,7 +148,22 @@ def p_file_open(fn, mode = 'r'):
 
 
 def p_file_close(f):
+    fn = os.path.basename(f.name)
+    msg = ('closing file: ' + fn)
     file.close(f)
+    p_log_this(msg); print msg
+
+def p_file_delete(fn):
+    msg = ''
+    if os.path.exists(fn):
+        try:
+            os.remove(fn)
+        except OSError, err:
+            msg = ("Error: %s - %s." % (err.fn, err.strerror))
+            p_log_this(msg); print msg
+    else:
+        msg = ("Error: %s - %s." % (err.fn, err.strerror))
+        p_log_this(msg); print msg
 
 def p_exit(txt=''):
     """ gentle program p_exit  """

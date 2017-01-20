@@ -27,11 +27,6 @@ import ppg_cfg.ppg_patterns as patterns
 def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
     """ reads defaults for generated program: name ..."""
     # http://www.karoltomala.com/blog/?p=622
-    #path = os.path.abspath(__file__)
-    #dir_path = os.path.dirname(path)
-    # print 'p_read_ini: dir_path = ', p_utils.p_act_dir_path()
-    # print 'p_read_ini: dir_path = ', dir_path
-    # print p_glbls.__file__
     p_log_this()
     cfg_path = os.path.join(dir_cfg, cfg_fn)     # cfg_path_tmp of >pyprogen.py< !
     cfg_path = os.path.normpath(cfg_path)        #      not of >y_main.py<  !!
@@ -57,7 +52,6 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
 
     # p_glbls.prog_path
     ppg_glbls.prog_path = os.path.normpath(ppg_glbls.prog_name[:-3])
-    # print 'p_read_ini: p_glbls.prog_path = ', p_glbls.prog_path
     p_log_this("prog_path = " + ppg_glbls.prog_path)
 
     # p_glbls.prefix
@@ -81,30 +75,33 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
 def p_inform_about_paths_and_filenames():
     cfg_path = os.path.join(ppg_glbls.dir_cfg, ppg_glbls.cfg_fn)
 
-    print '-'*10 + ' ' + ppg_glbls.prog_name + ' ' + '-' * 60
+    mssge  = ''
+    mssge += '\n' + '-'*10 + ' ' + ppg_glbls.prog_name + ' ' + '-' * 60 + '\n'
     len_dir_main = len(ppg_glbls.dir_main) + 1
-    print 'Path of YOUR code is:             ' + os.path.join(ppg_glbls.dir_main, ppg_glbls.prog_name)
-    print 'Filename of YOUR code is:         ' + ' '*len_dir_main + ppg_glbls.prog_name
-    print 'You will find the new version in: ' + os.path.join(ppg_glbls.dir_main, '')
-    print 'Path of new version is:           ' + os.path.join(ppg_glbls.dir_main, ppg_glbls.prog_name_new_cfg)
-    print 'Filename of new version is:       ' + ' '*len_dir_main + ppg_glbls.prog_name_new_cfg
-    # print '(>' + p_glbls.prog_name + '< was not changed.)'
+    mssge += '\n Path of YOUR code is:             ' + os.path.join(ppg_glbls.dir_main, ppg_glbls.prog_name)
+    mssge += '\n Filename of YOUR code is:         ' + ' '*len_dir_main + ppg_glbls.prog_name
+    mssge += '\n You will find the new version in: ' + os.path.join(ppg_glbls.dir_main, '')
+    mssge += '\n Path of new version is:           ' + os.path.join(ppg_glbls.dir_main, ppg_glbls.prog_name_new_cfg)
+    mssge += '\n Filename of new version is:       ' + ' '*len_dir_main + ppg_glbls.prog_name_new_cfg
+    # mssge += '(>' + p_glbls.prog_name + '< was not changed.)'
     # cfg_path_tmp
     len_cfg_dir = len(os.path.dirname(ppg_glbls.cfg_path_tmp)) + 1
-    print 'Path of new cfg-file is:          ' + ppg_glbls.cfg_path_tmp
-    print 'Filename of new cfg-file is:      ' + ' '*len_cfg_dir + os.path.basename(ppg_glbls.cfg_path_tmp)
-    # print ' The new files have a timestamp  >' + p_glbls.prog_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
-    print
-    print 'You may configure the comand line _args_     of >' + ppg_glbls.prog_name + '<  via:  >new_prog_args.cfg<'
-    print ' ... but run >pyprogen.py< again!'
-    print 'You may configure the comand line _defaults_ of >' + ppg_glbls.prog_name + '<  via:  >' + cfg_path + '<'
-    print '>' + cfg_path + '<  will be preserved, if changed. '
-    print
-    print ' newer generated files will have a timestamp in their filename: >' + ppg_glbls.prog_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
-    print
-    print 'Do not change the >' + ppg_glbls.dir_lib + '\*.py< files!\n'
-    print '-'*10 + ' ' + ppg_glbls.prog_name + ' ' + '-' * 60
-    print
+    mssge += '\n Path of new cfg-file is:          ' + ppg_glbls.cfg_path_tmp
+    mssge += '\n Filename of new cfg-file is:      ' + ' '*len_cfg_dir + os.path.basename(ppg_glbls.cfg_path_tmp)
+    # mssge += ' The new files have a timestamp  >' + p_glbls.prog_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
+    mssge += '\n'
+    mssge += '\n You may configure the comand line _args_     of >' + ppg_glbls.prog_name + '<  via:  >new_prog_args.cfg<'
+    mssge += '\n  ... but run >pyprogen.py< again!'
+    mssge += '\n You may configure the comand line _defaults_ of >' + ppg_glbls.prog_name + '<  via:  >' + cfg_path + '<'
+    mssge += '\n >' + cfg_path + '<  will be preserved, if changed. '
+    mssge += '\n'
+    mssge += '\n  newer generated files will have a timestamp in their filename: >' + ppg_glbls.prog_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
+    mssge += '\n'
+    mssge += '\n Do not change the >' + ppg_glbls.dir_lib + '\*.py< files!'
+    mssge += '\n' + '-'*10 + ' ' + ppg_glbls.prog_name + ' ' + '-' * 60
+    mssge += '\n'
+    print (mssge)
+
 
 def p_create_paths_and_fns():
     """ creates later needed paths and filenames  """
@@ -167,7 +164,6 @@ def rgx_get_old_hash_strg(hash_line):
         c1=m.group(1)
         alphanum1=m.group(2)
         c2=m.group(3)
-        # print c1 ; print alphanum1 ; print c2
         old_hash_str = alphanum1
     else:
         old_hash_str = 'NO_HASH_FOUND'
@@ -233,7 +229,8 @@ def p_main_cfg_create_hash():
         defaults = parser.items("defaults")  # read section "defaults"
         defaults_str = ''
         for key_val in defaults:             # type(defaults) == list[tuple, tuple ...]
-            defaults_str = defaults_str + key_val[0] + key_val[1]
+            # defaults_str = defaults_str + key_val[0] + key_val[1]
+            defaults_str = defaults_str + key_val[0]
         hash_md5           = hashlib.md5()
         hash_md5.update(defaults_str)            # calc hash
         hash_of_defaults   = hash_md5.hexdigest()
@@ -280,17 +277,17 @@ def p_main_cfg_check_hash():
 
     p_log_this('cfg_path:      ' + ppg_glbls.cfg_path)
 
+    mssges    = ['','','']        # badly bad. really. I know
     dest_path = ppg_glbls.cfg_path
-    mssge_1 = ('renaming:      ' + ppg_glbls.cfg_path_tmp)
-    mssge_2 = ('to:            ' + dest_path)
+    mssges[1] = ('renaming:      ' + ppg_glbls.cfg_path_tmp)
+    mssges[2] = ('to:            ' + dest_path)
 
     # There is no >y_main.cfg<
     if not ppg_utils.p_file_exists (ppg_glbls.cfg_path):
         dest_path = ppg_glbls.cfg_path
-        mssge_0 = ('There is no    ' + ppg_glbls.cfg_path + ' =>')
-        p_log_this (mssge_0)
-        p_log_this (mssge_1)
-        p_log_this (mssge_2)
+        mssges[0] = ('There is no    ' + ppg_glbls.cfg_path + ' =>')
+        for mssge in mssges:
+            p_log_this (mssge)
         # move source to dest:
         shutil.move(ppg_glbls.cfg_path_tmp, dest_path)
         return
@@ -303,22 +300,21 @@ def p_main_cfg_check_hash():
 
     # act_hash == old_hash
     if (act_hash_of_defaults == old_hash_of_defaults):
-        mssge_0 = ('section: "signature" in >' + ppg_glbls.cfg_path + '< unchanged. =>')
-        p_log_this (mssge_0)
-        p_log_this (mssge_1)
-        p_log_this (mssge_2)
+        mssges[0] = ('section: "signature" in >' + ppg_glbls.cfg_path + '< unchanged. =>')
+        for mssge in mssges:
+            p_log_this (mssge)
         # move source to dest: ?? should I ? Or not?
         # shutil.move(p_glbls.cfg_path_tmp, dest_path)
     else:  # act_hash != old_hash
-        print 'section: "signature" in >' + ppg_glbls.cfg_path + '< has been modified.'
-        print ' => 1) leave >' + ppg_glbls.cfg_path + '< unchanged.'
-        print '    2) most recent config file is: >' + ppg_glbls.cfg_path_tmp + '<.'
-        mssge_0 = ('section: "signature" in >' + ppg_glbls.cfg_path + '< has been modified.')
-        mssge_1 = (' => 1) leave >' + ppg_glbls.cfg_path + '< unchanged.')
-        mssge_2 = ('    2) most recent config file is: >' + ppg_glbls.cfg_path_tmp + '<.')
-        p_log_this (mssge_0)
-        p_log_this (mssge_1)
-        p_log_this (mssge_2)
+        mssges[0] = ('section: "signature" in >' + ppg_glbls.cfg_path + '< has been modified.')
+        mssges[1] = (' => 1) leave >' + ppg_glbls.cfg_path + '< unchanged.')
+        mssges[2] = ('    2) most recent config file is: >' + ppg_glbls.cfg_path_tmp + '<.')
+
+        for mssge in mssges:
+            p_log_this (mssge)
+        for mssge in mssges:
+            print(mssge + '\n')
+
 
 def p_main_was_modified(outfile_path):
     """ check if y_main.py was modified (== hash is different) """

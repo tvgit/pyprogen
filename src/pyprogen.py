@@ -28,20 +28,20 @@ Programm folgendes:
 
 1. Veränderungen in >y_main.cfg<
  Wenn pyprogen läuft, wird immer eine aktuelle >y_main_TIMESTAMP.cfg< File erzeugt.
- Diese wird dann mit der bisher gültigen >y_main.cfg< verglichen, und zwar über
- über den Vergleich von Hash Werten in der jeweiligen Sektion [defaults] in
- den beiden cfg - Files.
+ Diese wird dann mit der bisher gültigen >y_main.cfg< verglichen, und zwar
 
- Falls sich hier nichts verändert hat, dann bleibt >y_main.cfg< unverändert,
+ über den Vergleich von Hash Werten der Sektion [defaults]
+ oder
+ über den Vergleich von Hash Werten der Variablen (nicht deren Werte) der Sektion [defaults]
 
-erkläre warum die Parameter so seltsame Namen haben (x_glbls.arg_ns.fn_data_in)
+
+ in den beiden cfg - Files: Falls sich hier nichts verändert hat,
+ dann bleibt >y_main.cfg< unverändert,
+
+2. erkläre warum die Parameter so seltsame Namen haben (x_glbls.arg_ns.fn_data_in)
  (wg Namespace + der Name des Parameters aus der *.cfg) oder:
  benenne das Ganze in y_main.py beim import um:
  import lib.x_glbls.arg_ns    as args
-
-y_main soll loggen, welche cfg file von y_main.py ausgewertet wird
-(mit oder ohne time-stamp). Überhaupt ist mir die timestamp Geschichte unklar:
-wann neuer timestamp?
 
 finde heraus wo/wann die >y_main.cfg< geschrieben wird =>
     sortiere output in >y_main.cfg< alphabetisch
@@ -251,11 +251,11 @@ def pyprogen():
        # if (exists && changed): => keep it;
        # else: => overwrite it with >y_main_TimeStamp.cfg_YYYY_MM_DD-HH_mm_SS.cfg<
     #
-    p_code.p_create_globals()            # create modul ./y_main/lib/y_glbls.py
-    # Finally HERE >._main.py< will be created:
+    p_code.p_create_globals()     # create modul ./y_main/lib/y_glbls.py
+    # Finally HERE >y_main.py< will be created:
     p_code.p_create_main()        # create progr ./y_main/y_main.py
-    p_code.p_inform_about_paths_and_filenames()   # Do what your name says
-    p_glbls.print_p_cfg_and_args()# print variables and command line args in ./pyprogen/lib/p_glbls.
+    p_code.p_inform_about_paths_and_filenames()   # dwyns
+    p_glbls.print_p_cfg_and_args()# print variables and command line args in ./pyprogen/ppg_lib/ppg_glbls.
 
 
 if __name__ == "__main__":
