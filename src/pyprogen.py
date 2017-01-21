@@ -161,27 +161,27 @@ from   ppg_lib.ppg_ConfArgParser import p_create_ConfArgParser
 def create_maindir(prog_path) :
     """ """
     p_log_this()
-    p_glbls.dir_main = p_utils.p_subdir_make(prog_path)
-    p_glbls.dir_main = os.path.join('.', p_glbls.dir_main)
+    p_glbls.main_dir = p_utils.p_subdir_make(prog_path)
+    p_glbls.main_dir = os.path.join('.', p_glbls.main_dir)
 
 
 def create_subdirs(prog_path):
     """ """
     p_log_this()
-    p_glbls.dir_cfg = p_utils.p_subdir_make(os.path.join(prog_path, 'cfg'))
-    p_glbls.dir_cfg = os.path.join('.', p_glbls.dir_cfg)  # cfg-dir of new y_main.py
+    p_glbls.cfg_dir = p_utils.p_subdir_make(os.path.join(prog_path, 'cfg'))
+    p_glbls.cfg_dir = os.path.join('.', p_glbls.cfg_dir)  # cfg-dir of new y_main.py
 
     p_glbls.cfg_fn  = prog_path + '.cfg'   # cfg-file of new y_main.py
-    p_glbls.cfg_path= os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn)
+    p_glbls.cfg_path= os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn)
 
     p_glbls.cfg_fn_tmp   = p_glbls.cfg_fn[:-4] + '_' + p_glbls.date_time_str + p_glbls.cfg_fn[-4:]
-    p_glbls.cfg_path_tmp = os.path.join(p_glbls.dir_cfg, p_glbls.cfg_fn_tmp)
+    p_glbls.cfg_path_tmp = os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn_tmp)
 
-    p_glbls.dir_lib = p_utils.p_subdir_make(os.path.join(prog_path, 'lib'))
-    p_glbls.dir_lib = os.path.join('.', p_glbls.dir_lib)
+    p_glbls.lib_dir = p_utils.p_subdir_make(os.path.join(prog_path, 'lib'))
+    p_glbls.lib_dir = os.path.join('.', p_glbls.lib_dir)
 
-    p_glbls.dir_log = p_utils.p_subdir_make(os.path.join(prog_path, 'log'))
-    p_glbls.dir_log = os.path.join('.', p_glbls.dir_log)
+    p_glbls.log_dir = p_utils.p_subdir_make(os.path.join(prog_path, 'log'))
+    p_glbls.log_dir = os.path.join('.', p_glbls.log_dir)
 
     p_glbls.dir_DataIn  = p_utils.p_subdir_make(os.path.join(prog_path, 'DataIn'))
     p_glbls.dir_DataIn  = os.path.join('.', p_glbls.dir_DataIn)
@@ -200,7 +200,7 @@ def copy_p_utils_p_log_init():
         p_utils_srce_path = os.path.join('.', 'ppg_lib', fn)
         p_utils_srce_path = os.path.normpath(p_utils_srce_path)
         # create an normalize destination path:
-        p_utils_dest_path = os.path.join('.', p_glbls.dir_lib, fn)
+        p_utils_dest_path = os.path.join('.', p_glbls.lib_dir, fn)
         p_utils_dest_path = os.path.normpath(p_utils_dest_path )
         # copy from source to dest
         shutil.copy(p_utils_srce_path, p_utils_dest_path)

@@ -124,15 +124,15 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
 
 
 def p_inform_about_paths_and_filenames():
-    cfg_path = os.path.join(ppg_glbls.dir_cfg, ppg_glbls.cfg_fn)
+    cfg_path = os.path.join(ppg_glbls.cfg_dir, ppg_glbls.cfg_fn)
 
     mssge  = ''
     mssge += '\n' + '-'*10 + ' ' + ppg_glbls.prog_name + ' ' + '-' * 60 + '\n'
-    len_dir_main = len(ppg_glbls.dir_main) + 1
-    mssge += '\n Path of YOUR code is:             ' + os.path.join(ppg_glbls.dir_main, ppg_glbls.prog_name)
+    len_dir_main = len(ppg_glbls.main_dir) + 1
+    mssge += '\n Path of YOUR code is:             ' + os.path.join(ppg_glbls.main_dir, ppg_glbls.prog_name)
     mssge += '\n Filename of YOUR code is:         ' + ' '*len_dir_main + ppg_glbls.prog_name
-    mssge += '\n You will find the new version in: ' + os.path.join(ppg_glbls.dir_main, '')
-    mssge += '\n Path of new version is:           ' + os.path.join(ppg_glbls.dir_main, ppg_glbls.prog_name_new_cfg)
+    mssge += '\n You will find the new version in: ' + os.path.join(ppg_glbls.main_dir, '')
+    mssge += '\n Path of new version is:           ' + os.path.join(ppg_glbls.main_dir, ppg_glbls.prog_name_new_cfg)
     mssge += '\n Filename of new version is:       ' + ' '*len_dir_main + ppg_glbls.prog_name_new_cfg
     # mssge += '(>' + p_glbls.prog_name + '< was not changed.)'
     # cfg_path_tmp
@@ -148,7 +148,7 @@ def p_inform_about_paths_and_filenames():
     mssge += '\n'
     mssge += '\n  newer generated files will have a timestamp in their filename: >' + ppg_glbls.prog_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
     mssge += '\n'
-    mssge += '\n Do not change the >' + ppg_glbls.dir_lib + '\*.py< files!'
+    mssge += '\n Do not change the >' + ppg_glbls.lib_dir + '\*.py< files!'
     mssge += '\n' + '-'*10 + ' ' + ppg_glbls.prog_name + ' ' + '-' * 60
     mssge += '\n'
     print (mssge)
@@ -189,7 +189,7 @@ def p_glbls_create():
     """ creates ./y_main/lib/y_glbls.py  """
     # fn and path of  >y_glbls.py<
     outfile_fn   = ppg_glbls.glbls_fn
-    outfile_path = os.path.join(ppg_glbls.dir_lib, ppg_glbls.glbls_fn)
+    outfile_path = os.path.join(ppg_glbls.lib_dir, ppg_glbls.glbls_fn)
     p_log_this('creating: ' + outfile_path)
 
     txt =       ' '*4 + '# optional args(ConfArgParser):\n'
@@ -411,7 +411,7 @@ def p_main_create():
     code_dict[2] = code_lines
 
     outfile_fn   = ppg_glbls.prog_name  # fn and path of future >y_main.py<
-    outfile_path = os.path.join(ppg_glbls.dir_main, outfile_fn)
+    outfile_path = os.path.join(ppg_glbls.main_dir, outfile_fn)
     p_log_this('creating: ' + outfile_path)
 
     # if existing >y_main.py< was modified => new >y_main.py< gets timestamp in fn

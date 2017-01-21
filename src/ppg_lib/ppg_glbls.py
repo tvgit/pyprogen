@@ -11,10 +11,10 @@ prog_name_new_cfg = prog_name       # name of program with new config version
 prefix    = None     # common prefix of y_main-specific dirs, paths, modules, functions, vars ...
 arg_prefix= None     # common prefix of vars storing values of cmd-line args
 
-dir_main  = None     # main dir: >./y_main<, where >y_main.py< lives in
-dir_cfg   = None     # subdir  : >./y_main/cfg<, config files for >y_main.py<
-dir_lib   = None     # subdir  : >./y_main/lib<, utilities for >y_main.py<
-dir_log   = None     # subdir  : >./y_main/log<, log-files for >y_main.py<
+main_dir  = None     # main dir: >./y_main<, where >y_main.py< lives in
+cfg_dir   = None     # subdir  : >./y_main/cfg<, config files for >y_main.py<
+lib_dir   = None     # subdir  : >./y_main/lib<, utilities for >y_main.py<
+log_dir   = None     # subdir  : >./y_main/log<, log-files for >y_main.py<
 
 dir_DataIn  = None   # subdir  : >./y_main/DataIn<, DataIn-files for >y_main.py<
 dir_DataOut = None   # subdir  : >./y_main/DataOut<, DataOut-files for >y_main.py<
@@ -42,13 +42,13 @@ def print_p_cfg_and_args(print_args=False):
     print ' prog_name     =   '   + prog_name
     print ' prefix        =   '   + prefix
     print
-    print ' dir_main      = '     + dir_main
-    print ' dir_lib       = '     + dir_lib
-    print ' dir_log       = '     + dir_log
+    print ' main_dir      = ' + main_dir
+    print ' lib_dir       = ' + lib_dir
+    print ' log_dir       = ' + log_dir
     print
-    print ' dir_cfg       = '     + dir_cfg
-    len_cfg_dir_cfg = len(dir_cfg) + 1
-    print ' cfg_path      = '   + os.path.join(dir_cfg,cfg_fn)
+    print ' cfg_dir       = ' + cfg_dir
+    len_cfg_dir_cfg = len(cfg_dir) + 1
+    print ' cfg_path      = '   + os.path.join(cfg_dir, cfg_fn)
     print ' cfg_file      = '   + ' '*len_cfg_dir_cfg + cfg_fn
     print ' cfg_path_tmp  = '     + cfg_path_tmp
     print ' cfg_file_tmp  = '     + ' '*len_cfg_dir_cfg + os.path.basename(cfg_path_tmp)

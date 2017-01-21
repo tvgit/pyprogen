@@ -60,7 +60,7 @@ def p_subst_vars_in_patterns (input_dict):
         txt =  txt.replace("xx_glbls", ppg_glbls.glbls_fn[:-3])
         txt =  txt.replace("xx_parser", ppg_glbls.CAParser_func)
         txt =  txt.replace("xx_program_name", ppg_glbls.prog_name)
-        txt =  txt.replace("xx_dir_log", ppg_glbls.dir_log)
+        txt =  txt.replace("xx_dir_log", ppg_glbls.log_dir)
         patts[key] = txt
     return patts
 
@@ -140,7 +140,7 @@ def p_create_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     # write y_CAParser.py == ConfArgParser for new program
 
     ppg_glbls.CAParser_fn   = ppg_glbls.prefix + 'CAParser.py'                       # filename >y_CAParser.py<
-    ppg_glbls.CAParser_path = os.path.join(ppg_glbls.dir_lib, ppg_glbls.CAParser_fn)  # path
+    ppg_glbls.CAParser_path = os.path.join(ppg_glbls.lib_dir, ppg_glbls.CAParser_fn)  # path
     ppg_glbls.CAParser_func = ppg_glbls.prefix + 'parser'      # name of parser func in >y_CAParser<
 
     outfile_fn   = ppg_glbls.CAParser_fn
