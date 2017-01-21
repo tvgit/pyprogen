@@ -17,6 +17,13 @@ import difflib
 
 from   ppg_log   import p_log_init, p_log_start, p_log_this, p_log_end
 
+
+def success():
+    # http://stackoverflow.com/questions/287871
+    #     ... print-in-terminal-with-colors-using-python
+    print('\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
+    pass
+
 def scriptinfo():
     ''' returns name of running script. See:
     http://code.activestate.com/recipes/579018-python-determine-name-and-directory-of-the-top-lev/

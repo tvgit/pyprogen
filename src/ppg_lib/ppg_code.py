@@ -367,19 +367,17 @@ def p_main_check_if_modified(outfile_path):
         ppg_glbls.prog_changed = False
         return False
 
-
-def p_main_create():
+def p_main_make_code():
     # create code of new main program: >y_main.py<
     # - Program code is made mainly by copying text from >patterns.y_main[]<
     # (module >ppg_patterns.py<) to the new >y_main.py< program code.
-    # >ppg_patterns.py< is a simple array of text containing program patterns.
+    # >ppg_patterns.py< is a _dict_ whose elements contain parts of
+    # program patterns.
     # - Some variables (and their logic) in the new >y_main.py< are
     # generated according to the parameters in >new_prog_args.cfg<.
     # - Additionally some variable names are adjusted.
-    #
-    # Then hash of text lines containing code is calculated.
 
-    # code for >def evaluate_opt_args():< in >y_main.py<
+    # Make code for >def evaluate_opt_args():< in >y_main.py<
     # make code txt for >if<'s for >confarg_vars< as of >new_prog_args.cfg<
     txt = ' '*4 + '# optional args(ConfArgParser):\n'
     for arg in ppg_glbls.opt_arg_vars:
@@ -389,10 +387,9 @@ def p_main_create():
 
     patterns.y_main[10] = txt       # add txt to pattern
 
-    # some code for >__main__< in >y_main.py<
     # make code txt for optional reading of cfg-file via
     # xx_CAParser.xx_parser('--conf-file', 'p_glbls.cfg_path')
-    # but adjust dir of config-file by removing highest dir level:
+    # (and adjust dir of config-file by removing highest dir level:)
     adjusted_cfg_path = adjust_cfg_path(ppg_glbls.cfg_path)
     txt =  ' '*4 + "# optional reading of cfg-file: (r' == raw string) \n"
     txt += ' '*4 + "# xx_CAParser.xx_parser('--conf-file', r'"
@@ -401,35 +398,23 @@ def p_main_create():
 
     patterns.y_main[84] = txt       # add txt to pattern
 
-    # adjust some var names in the new program text in .
-    y_main = p_subst_vars_in_patterns (patterns.y_main)
+    # adjust some var names in >patterns.y_main< .
+    y_main = p_subst_vars_in_patterns(patterns.y_main)
 
-    # now >y_main< is complete. => put code together:
-    code_lines = ''   # put all code parts together in one string.
+    # now code for >y_main< is complete. => put code together:
+    code_lines = ''   # put parts of dict to a single string.
     for key, line in sorted(y_main.iteritems()):
         code_lines += line
 
-    # now the code of >y_main.py< is complete. => calculate hash:
-
-    # code = ''   # put all code parts together in one string.
-    # for key, chunk in sorted(y_main.iteritems()):
-    #     code = code + chunk
-    # hash_md5 = hashlib.md5()
-    # hash_md5.update(code)                      # calculate hash of code
-    # hash_of_code = hash_md5.hexdigest()        # here (>hash_of_mytext<) it is
-
+    # now the code of >y_main.py< is complete.
+    # It is in: >code_lines<
+    # => calculate hash:
     hash_of_codelines = calc_hash_of_text(code_lines)  # calculate hash of code
 
-    # if calc_hash_of_text(code_lines) != hash_of_code:
-    #     sys.exit(1)
-    # else:
-    #     print('\x1b[6;30;42m' + 'Success!'*20 + '\x1b[0m')
-    #     # print 'ok ' * 60
-
     # Add hash as heading line to the code:
-    code_dict    = dict()                           # p_write_code wants dict as input
+    code_dict    = dict()                        # p_write_code wants dict as input
     code_dict[1] = '# >' + hash_of_codelines + '< \n'    # second line of y_main.py
-    code_dict[2] = code_lines                             #
+    code_dict[2] = code_lines                    #
 
     outfile_fn   = ppg_glbls.prog_name  # fn and path of future >y_main.py<
     outfile_path = os.path.join(ppg_glbls.dir_main, outfile_fn)
@@ -443,6 +428,10 @@ def p_main_create():
         ppg_glbls.prog_name_act_cfg = os.path.basename(outfile_path)
     # finally write code (adding timestamp in first line & lastline)
     p_write_code (code_dict, outfile_path)  # write >y_main(_+/-timestamp.py<
+    return code_lines
+
+def p_main_create():
+    code_ = p_main_make_code()
 
 
 if __name__ == "__main__":
