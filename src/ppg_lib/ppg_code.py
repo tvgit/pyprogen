@@ -295,6 +295,7 @@ def p_main_delete_identical_versions(list_of_paths):
     """"find in dir >outfile_path< files with identical hash-values in line 1 .. 5"""
     ppg_utils.p_note_this()
     for fn in list_of_paths:
+        ppg_utils.p_file_delete(fn)
         print fn
     ppg_utils.p_note_this()
 
@@ -414,15 +415,14 @@ def p_main_create():
 
     # if there are existing >y_main_TIMESTAMP.py< with identical hash:
     # remember their names to delete them later:
-    y_main_identical = []
-    y_main_identical = p_main_find_identical_versions(outfile_path, hash_of_new_codelines)
+    list_of_y_main_identical_versions = []
+    list_of_y_main_identical_versions = p_main_find_identical_versions(outfile_path, hash_of_new_codelines)
 
     # finally write code (adding timestamp in first line & lastline)
     p_write_code (code_dict, outfile_path)  # write >y_main(_+/-timestamp.py<
 
-    if y_main_identical:
-        p_main_delete_identical_versions (y_main_identical)
-
+    if list_of_y_main_identical_versions:
+        p_main_delete_identical_versions (list_of_y_main_identical_versions)
 
 
 if __name__ == "__main__":

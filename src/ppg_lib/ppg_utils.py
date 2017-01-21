@@ -223,10 +223,11 @@ def p_file_close(f):
     p_log_this(msg); print msg
 
 def p_file_delete(fn):
-    msg = ''
     if os.path.exists(fn):
         try:
-            os.remove(fn)
+            # os.remove(fn)
+            msg = ("%s removed" % fn)
+            p_log_this(msg); print msg
         except OSError, err:
             msg = ("Error: %s - %s." % (err.fn, err.strerror))
             p_log_this(msg); print msg
