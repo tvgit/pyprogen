@@ -64,7 +64,7 @@ def scriptinfo():
 
 def here(txt='', level=2):
     """ print txt; echoes from the stack the callee """
-    mssge = inspect.stack()[level][3] + ':  '
+    mssge = inspect.stack()[level][3] + ': '
     if mssge.find('module') > -1 :
         prog_info = scriptinfo()
         mssge = prog_info['name']

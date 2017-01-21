@@ -290,36 +290,34 @@ def p_cfg_check_hash():
         for mssge in mssges:
             print(mssge + '\n')
 
-def p_main_find_old_vs(outfile_path, hash):
+
+def p_main_delete_identical_versions(list_of_paths):
+    """"find in dir >outfile_path< files with identical hash-values in line 1 .. 5"""
+    ppg_utils.p_note_this()
+    for fn in list_of_paths:
+        print fn
     ppg_utils.p_note_this()
 
-    tmp_dir = ppg_glbls.cfg_dir
 
-    lngth = len('_' + ppg_glbls.date_time_str + '.py')
-    outfile_path = outfile_path[:-lngth]
-    print outfile_path
-    print hash
-    line_max = 7
-    for name in glob.glob(outfile_path + '*'):
+def p_main_find_identical_versions(outfile_path, hash):
+    """"find in dir >outfile_path< files with identical hash-values in line 1 .. 5"""
+    y_main_identical = []      # list of >y_main_timestamp.py< with identical hash
+    lngth = len(ppg_glbls.date_time_str + '.py')
+    outfile_path = outfile_path[:-lngth]  # == .../y_main_*
+    line_max = 6 # search hash in first 5 lines
+    for fn in glob.glob(outfile_path + '*'):
         hash_found = False
-        hash_identical = False
-        line_cnt = 0
-        with open(name) as fp:
+        line_cnt = 1
+        with open(fn) as fp:
             for line in fp:
-                line_cnt += 1
-                hash_identical =
-                if line_cnt > line_max:
+                hash_found = hash in line
+                if (line_cnt > line_max):    # hash isn't found in line_max lines
                     break
-
-            #     print line
-            # if hash_identical:
-            #     print name
-            # else:
-            #     print '> ' + name
-
-    lst_main_old_vs = []
-    ppg_utils.p_note_this()
-    return lst_main_old_vs
+                if hash_found:
+                    y_main_identical.append(fn)
+                    break
+                line_cnt += 1
+    return y_main_identical
 
 
 def p_main_check_if_modified(outfile_path):
@@ -415,14 +413,16 @@ def p_main_create():
         ppg_glbls.prog_name_act_cfg = os.path.basename(outfile_path)
 
     # if there are existing >y_main_TIMESTAMP.py< with identical hash:
-    # remember their names to delete them:
-    p_main_find_old_vs(outfile_path, hash_of_new_codelines)
-    if p_main_check_if_modified(outfile_path):
-        outfile_path = outfile_path[:-3] + '_' + ppg_glbls.date_time_str + '.py'
-        ppg_glbls.prog_name_act_cfg = os.path.basename(outfile_path)
+    # remember their names to delete them later:
+    y_main_identical = []
+    y_main_identical = p_main_find_identical_versions(outfile_path, hash_of_new_codelines)
 
     # finally write code (adding timestamp in first line & lastline)
     p_write_code (code_dict, outfile_path)  # write >y_main(_+/-timestamp.py<
+
+    if y_main_identical:
+        p_main_delete_identical_versions (y_main_identical)
+
 
 
 if __name__ == "__main__":
