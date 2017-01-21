@@ -214,14 +214,14 @@ def calc_cfg_hash(defaults):
     hash_of_defaults = hash_md5.hexdigest()
     return hash_of_defaults
 
-def p_main_cfg_create_hash():
+def p_cfg_create_hash():
     """ Calculates the hash of default vars in section [defaults] in >y_main.cfg<.
     Then creates in >y_main.cfg< the section [signature] with items:
     >timestamp< and >hash<.
     Called by >pyprogen.py< after >create_ca_parser< was called,
     i.e after a new >y_main_TimeStamp.cfg< is written."""
 
-    p_log_this('cfg_path_tmp: ' + ppg_glbls.cfg_path_tmp)
+    p_log_this('cfg_path_tmp     = ' + ppg_glbls.cfg_path_tmp)
 
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
     cfg_file = parser.read(ppg_glbls.cfg_path_tmp)
@@ -257,9 +257,9 @@ def read_hash(cfg_path):
         return
     return hash_val
 
-def p_main_cfg_check_hash():
+def p_cfg_check_hash():
     """ called by >pyprogen.py< after >create_ca_parser< has
-    written >y_main.cfg< and after p_main_cfg_create_hash() has
+    written >y_main.cfg< and after p_cfg_create_hash() has
     added the hash of default vars to >./y_main/cfg/y_main_TimeStamp.cfg<
 
     Replaces >y_main.cfg< with >./y_main/cfg/y_main_TimeStamp.cfg<
@@ -282,7 +282,7 @@ def p_main_cfg_check_hash():
     mssges[1] = ('renaming:      ' + ppg_glbls.cfg_path_tmp)
     mssges[2] = ('to:            ' + dest_path)
 
-    # There is no >y_main.cfg<
+    # There is no >y_main.cfg<:
     if not ppg_utils.p_file_exists (ppg_glbls.cfg_path):
         dest_path = ppg_glbls.cfg_path
         mssges[0] = ('There is no    ' + ppg_glbls.cfg_path + ' =>')
@@ -292,7 +292,7 @@ def p_main_cfg_check_hash():
         shutil.move(ppg_glbls.cfg_path_tmp, dest_path)
         return
 
-    # There is already a >y_main.cfg< (in cfg_path)
+    # There is already a >y_main.cfg<:
     old_hash_of_defaults = read_hash(ppg_glbls.cfg_path)     # >y_main.cfg<
     p_log_this('old_hash_of_defaults =' + old_hash_of_defaults)
     act_hash_of_defaults = read_hash(ppg_glbls.cfg_path_tmp) # >y_main_TimeStamp.cfg<

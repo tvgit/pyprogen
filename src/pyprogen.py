@@ -245,9 +245,10 @@ def pyprogen():
     create_subdirs(prog_path)     # create dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
     copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
     #
-    create_ca_parser(prog_path)   # create & run: ./y_main/lib/y_CAParser.py  >> create: >y_main_TimeStamp.cfg<
-    p_code.p_main_cfg_create_hash() # dwyns: create ./y_main/cfg/y_main_YYYY_MM_DD-HH_mm_SS.cfg
-    p_code.p_main_cfg_check_hash()# check if >./y_main/y_main.cfg exists;<
+    create_ca_parser(prog_path)   # create & run: ./y_main/lib/y_CAParser.py
+                                  # => create: >y_main_TimeStamp.cfg<
+    p_code.p_cfg_create_hash()    # create hash for vars in >y_main_TimeStamp.cfg<
+    p_code.p_cfg_check_hash()     # check if >./y_main/y_main.cfg exists;<
        # if (exists && changed): => keep it;
        # else: => overwrite it with >y_main_TimeStamp.cfg_YYYY_MM_DD-HH_mm_SS.cfg<
     #
