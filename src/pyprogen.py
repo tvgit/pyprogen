@@ -265,5 +265,7 @@ if __name__ == "__main__":
     pyprogen()
     p_log_end()
     p_utils.p_success()
+    # p_utils.p_error()
+    # p_utils.p_note_this()
     # p_utils.print_format_table()
     p_utils.p_exit()

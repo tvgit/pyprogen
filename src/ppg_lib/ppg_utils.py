@@ -32,6 +32,13 @@ def print_format_table():
         print('\n')
 
 
+def p_note_this():
+    # http://stackoverflow.com/questions/287871
+    #     ... print-in-terminal-with-colors-using-python
+    # print('\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
+    print('\x1b[6;36;40m' + 'note this' + '\x1b[0m')
+    pass
+
 def p_error():
     # http://stackoverflow.com/questions/287871
     #     ... print-in-terminal-with-colors-using-python
@@ -91,6 +98,39 @@ def p_act_dir_path():
     # http://stackoverflow.com/questions/247770/retrieving-python-module-path
     return dir_path
 
+
+def p_get_datetime_str(txt_line):
+    """ thx to: http://txt2re.com"""
+    re1='((?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3})))(?![\\d])'	# Year 1
+    re2='(_)'	# Any Single Character 1
+    re3='(\\d+)'	# Integer Number 1
+    re4='(_)'	# Any Single Character 2
+    re5='(\\d+)'	# Integer Number 2
+    re6='(-)'	# Any Single Character 3
+    re7='(\\d+)'	# Integer Number 3
+    re8='(_)'	# Any Single Character 4
+    re9='(\\d+)'	# Integer Number 4
+    re10='(_)'	# Any Single Character 5
+    re11='(\\d+)'	# Integer Number 5
+
+    rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11,re.IGNORECASE|re.DOTALL)
+    m = rg.search(txt_line)
+    if m:
+        year1=m.group(1)
+        c1=m.group(2)
+        int1=m.group(3)
+        c2=m.group(4)
+        int2=m.group(5)
+        c3=m.group(6)
+        int3=m.group(7)
+        c4=m.group(8)
+        int4=m.group(9)
+        c5=m.group(10)
+        int5=m.group(11)
+        sgntr = '_'+year1+c1+int1+c2+int2+c3+int3+c4+int4+c5+int5
+        return sgntr
+    else:
+        return '_UNKNOWN_DATE_TIME'
 
 def p_make_act_date_str():
     now     = datetime.datetime.now()
