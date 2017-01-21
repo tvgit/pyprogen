@@ -241,7 +241,7 @@ def p_cfg_create_hash():
     Then creates in >y_main.cfg< the section [signature] with items:
     >timestamp< and >hash<.
     Called by >pyprogen.py< after >create_ca_parser< was called,
-    i.e after a new >y_main_TimeStamp.cfg< is written."""
+    i.e after a new >y_main_TimeStamp.cfg< was written."""
 
     p_log_this('cfg_path_tmp     = ' + ppg_glbls.cfg_path_tmp)
 
@@ -249,18 +249,16 @@ def p_cfg_create_hash():
     cfg_file = parser.read(ppg_glbls.cfg_path_tmp)
     try:  # read defaults and calc their hash
         defaults = parser.items("defaults")  # read section "defaults"
-        defaults_str = ''
-        for key_val in defaults:             # type(defaults) == list[tuple, tuple ...]
-            # defaults_str = defaults_str + key_val[0] + key_val[1]
-            defaults_str = defaults_str + key_val[0]
-        hash_md5           = hashlib.md5()
-        hash_md5.update(defaults_str)            # calc hash
-        hash_of_defaults   = hash_md5.hexdigest()
+        vars_str = ''
+        for key_val in defaults:   # type(defaults) == list[tuple, tuple ...]
+            # vars_str += key_val[0] + key_val[1]
+            vars_str += key_val[0]
+        hash_of_defaults = calc_hash_of_text(vars_str)
     except ConfigParser.NoSectionError:
         p_log_this("No section: 'defaults' in: >" + ppg_glbls.cfg_path_tmp + '< !')
         return
 
-    # to >y_main.cfg< add a section "signature" with hash & time_stamp
+    # add to >y_main.cfg< a section "signature" with hash & time_stamp
     parser.add_section("signature")
     parser.set("signature", "hash", hash_of_defaults)
     parser.set("signature", "timestamp", ppg_glbls.date_time_str)
@@ -269,8 +267,8 @@ def p_cfg_create_hash():
 def p_cfg_read_hash(cfg_path):
     """ return the val of var >hash< in cfg-file in section [signature] """
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
-    cfg_file = parser.read(cfg_path)
-
+    # cfg_file = parser.read(cfg_path)
+    parser.read(cfg_path)
     try:  # read val of var hash
         hash_val = parser.get("signature", "hash")
     except ConfigParser.NoSectionError or ConfigParser.NoOptionError:
@@ -283,29 +281,16 @@ def p_cfg_check_hash():
     """ called by >pyprogen.py< after >create_ca_parser< has
     written >y_main.cfg< and after p_cfg_create_hash() has
     added the hash of default vars to >./y_main/cfg/y_main_TimeStamp.cfg<
-
-    Replaces >y_main.cfg< with >./y_main/cfg/y_main_TimeStamp.cfg<
-    according to:
-
-    if not (>y_main.cfg< exists)
-        move >y_main_TimeStamp.cfg< to >y_main.cfg<
-        return
-    elsif (>y_main.cfg< != >y_main_TimeStamp.cfg<):
-        # keep >y_main.cfg< && keep >y_main_TimeStamp.cfg<;
-        return
-    else:
-        move >y_main_TimeStamp.cfg< to >y_main.cfg<
     """
-
     p_log_this('cfg_path:      ' + ppg_glbls.cfg_path)
 
-    mssges    = ['']*3 # not nice
+    mssges    = ['']*3 # dict of mssges
     dest_path = ppg_glbls.cfg_path
     mssges[0] = ('')
     mssges[1] = ('renaming:      ' + ppg_glbls.cfg_path_tmp)
     mssges[2] = ('to:            ' + dest_path)
 
-    # There is no >y_main.cfg<:
+    # if there is no >y_main.cfg<:
     if not ppg_utils.p_file_exists (ppg_glbls.cfg_path):
         dest_path = ppg_glbls.cfg_path
         mssges[0] = ('There is no    ' + ppg_glbls.cfg_path + ' =>')
@@ -315,14 +300,14 @@ def p_cfg_check_hash():
         shutil.move(ppg_glbls.cfg_path_tmp, dest_path)
         return
 
-    # There is already a >y_main.cfg<:
-    old_hash_of_defaults = p_cfg_read_hash(ppg_glbls.cfg_path)     # >y_main.cfg<
-    p_log_this('old_hash_of_defaults =' + old_hash_of_defaults)
-    act_hash_of_defaults = p_cfg_read_hash(ppg_glbls.cfg_path_tmp) # >y_main_TimeStamp.cfg<
-    p_log_this('act_hash_of_defaults =' + act_hash_of_defaults)
+    # if there is already a >y_main.cfg<:
+    hash_of_old_defaults = p_cfg_read_hash(ppg_glbls.cfg_path)     # >y_main.cfg<
+    p_log_this('hash_of_old_defaults =' + hash_of_old_defaults)
+    hash_of_new_defaults = p_cfg_read_hash(ppg_glbls.cfg_path_tmp) # >y_main_TimeStamp.cfg<
+    p_log_this('hash_of_new_defaults =' + hash_of_new_defaults)
 
-    # act_hash == old_hash
-    if (act_hash_of_defaults == old_hash_of_defaults):
+    # if (act_hash == old_hash)
+    if (hash_of_new_defaults == hash_of_old_defaults):
         mssges[0] = ('section: "signature" in >' + ppg_glbls.cfg_path + '< unchanged. =>')
         for mssge in mssges:
             p_log_this (mssge)
@@ -369,13 +354,14 @@ def p_main_check_if_modified(outfile_path):
 
 def p_main_make_code():
     # create code of new main program: >y_main.py<
-    # - Program code is made mainly by copying text from >patterns.y_main[]<
-    # (module >ppg_patterns.py<) to the new >y_main.py< program code.
-    # >ppg_patterns.py< is a _dict_ whose elements contain parts of
-    # program patterns.
     # - Some variables (and their logic) in the new >y_main.py< are
     # generated according to the parameters in >new_prog_args.cfg<.
     # - Additionally some variable names are adjusted.
+    # - Program code is made mainly by copying text from dict
+    # >patterns.y_main[]<  (in module >ppg_patterns.py<) to the
+    # new >y_main.py< program code.
+    # >ppg_patterns.py< is a _dict_ whose elements contain parts of
+    # program patterns.
 
     # Make code for >def evaluate_opt_args():< in >y_main.py<
     # make code txt for >if<'s for >confarg_vars< as of >new_prog_args.cfg<
@@ -384,7 +370,6 @@ def p_main_make_code():
         txt +=  ' '*4 + 'if ' + 'confargs.' + arg + ' == confargs.' + arg + ':\n'
         txt +=  ' '*8 + 'eval_arg(confargs.' + arg +')\n'
         txt +=  '\n'
-
     patterns.y_main[10] = txt       # add txt to pattern
 
     # make code txt for optional reading of cfg-file via
@@ -395,43 +380,44 @@ def p_main_make_code():
     txt += ' '*4 + "# xx_CAParser.xx_parser('--conf-file', r'"
     txt += str(adjusted_cfg_path)
     txt += "')" + '\n'
-
     patterns.y_main[84] = txt       # add txt to pattern
 
     # adjust some var names in >patterns.y_main< .
-    y_main = p_subst_vars_in_patterns(patterns.y_main)
+    patterns.y_main = p_subst_vars_in_patterns(patterns.y_main)
 
     # now code for >y_main< is complete. => put code together:
-    code_lines = ''   # put parts of dict to a single string.
-    for key, line in sorted(y_main.iteritems()):
+    # stick all elements of dict >patterns.y_main< in one
+    # new str-var: >code_lines<
+    code_lines = ''
+    for key, line in sorted(patterns.y_main.iteritems()):
         code_lines += line
 
-    # now the code of >y_main.py< is complete.
-    # It is in: >code_lines<
+    return code_lines
+
+def p_main_create():
+    # create code_lines > calc hash of code_lines
+
+    code_lines = p_main_make_code()
     # => calculate hash:
-    hash_of_codelines = calc_hash_of_text(code_lines)  # calculate hash of code
+    # hash_of_old_defaults
+    hash_of_new_codelines = calc_hash_of_text(code_lines)  # calculate hash of code
 
     # Add hash as heading line to the code:
-    code_dict    = dict()                        # p_write_code wants dict as input
-    code_dict[1] = '# >' + hash_of_codelines + '< \n'    # second line of y_main.py
-    code_dict[2] = code_lines                    #
+    code_dict    = dict()     # p_write_code wants dict as input
+    code_dict[1] = '# >' + hash_of_new_codelines + '< \n'    # second line of y_main.py
+    code_dict[2] = code_lines
 
     outfile_fn   = ppg_glbls.prog_name  # fn and path of future >y_main.py<
     outfile_path = os.path.join(ppg_glbls.dir_main, outfile_fn)
     p_log_this('creating: ' + outfile_path)
 
 
-    print('\x1b[6;30;42m' + 'Success!'*20 + '\x1b[0m')
     # if existing >y_main.py< was modified => new >y_main.py< gets timestamp in fn
     if p_main_check_if_modified(outfile_path):
         outfile_path = outfile_path[:-3] + '_' + ppg_glbls.date_time_str + '.py'
         ppg_glbls.prog_name_act_cfg = os.path.basename(outfile_path)
     # finally write code (adding timestamp in first line & lastline)
     p_write_code (code_dict, outfile_path)  # write >y_main(_+/-timestamp.py<
-    return code_lines
-
-def p_main_create():
-    code_ = p_main_make_code()
 
 
 if __name__ == "__main__":

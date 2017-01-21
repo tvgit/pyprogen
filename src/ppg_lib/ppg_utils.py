@@ -18,10 +18,32 @@ import difflib
 from   ppg_log   import p_log_init, p_log_start, p_log_this, p_log_end
 
 
-def success():
+def print_format_table():
+    """
+    prints table of formatted text format options
+    """
+    for style in range(8):
+        for fg in range(30,38):
+            s1 = ''
+            for bg in range(40,48):
+                format = ';'.join([str(style), str(fg), str(bg)])
+                s1 += '\x1b[%sm %s \x1b[0m' % (format, format)
+            print(s1)
+        print('\n')
+
+
+def p_error():
     # http://stackoverflow.com/questions/287871
     #     ... print-in-terminal-with-colors-using-python
-    print('\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
+    # print('\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
+    print('\x1b[1;35;40m' + 'Error' + '\x1b[0m')
+    pass
+
+def p_success():
+    # http://stackoverflow.com/questions/287871
+    #     ... print-in-terminal-with-colors-using-python
+    # print('\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
+    print('\x1b[1;32;40m' + 'Success' + '\x1b[0m')
     pass
 
 def scriptinfo():

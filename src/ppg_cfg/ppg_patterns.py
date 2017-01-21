@@ -79,6 +79,7 @@ y_main[86] = """
     main()
 
     p_log_end()
+    p_utils.p_success()
     p_utils.p_exit()
 """
 
