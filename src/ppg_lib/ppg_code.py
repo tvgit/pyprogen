@@ -334,7 +334,7 @@ def p_cfg_check_hash():
             print(mssge + '\n')
 
 
-def p_main_was_modified(outfile_path):
+def p_main_check_if__modified(outfile_path):
     """ check if y_main.py was modified (== hash is different) """
     old_main_file = ppg_utils.p_file_open(outfile_path, mode ='r')
     if not old_main_file:
@@ -398,7 +398,7 @@ def p_main_create():
 
     # generate correct var names
     y_main = p_subst_vars_in_patterns (patterns.y_main)
-    # now >y_main< is complete. => calculate hash for generated program:
+    # now >y_main< is complete. => calculate hash for generated code:
 
     code = ''   # put all code parts together in ane string.
     for key, chunk in sorted(y_main.iteritems()):
@@ -415,7 +415,7 @@ def p_main_create():
     code_dict[2] = code                             #
 
     # if existing >y_main.py< was modified => new >y_main.py< gets timestamp in fn
-    if p_main_was_modified(outfile_path):
+    if p_main_check_if__modified(outfile_path):
         outfile_path = outfile_path[:-3] + '_' + ppg_glbls.date_time_str + '.py'
         ppg_glbls.prog_name_act_cfg = os.path.basename(outfile_path)
     # finally write code (adding timestamp in first line & lastline)
