@@ -24,6 +24,57 @@ import ppg_cfg.ppg_patterns as patterns
 # read it via:
 # parser.readfp(io.BytesIO(pyprogen_ini))
 
+def get_datetime_str(txt_line):
+    """ thx to: http://txt2re.com"""
+    re1='((?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3})))(?![\\d])'	# Year 1
+    re2='(_)'	# Any Single Character 1
+    re3='(\\d+)'	# Integer Number 1
+    re4='(_)'	# Any Single Character 2
+    re5='(\\d+)'	# Integer Number 2
+    re6='(-)'	# Any Single Character 3
+    re7='(\\d+)'	# Integer Number 3
+    re8='(_)'	# Any Single Character 4
+    re9='(\\d+)'	# Integer Number 4
+    re10='(_)'	# Any Single Character 5
+    re11='(\\d+)'	# Integer Number 5
+
+    rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11,re.IGNORECASE|re.DOTALL)
+    m = rg.search(txt_line)
+    if m:
+        year1=m.group(1)
+        c1=m.group(2)
+        int1=m.group(3)
+        c2=m.group(4)
+        int2=m.group(5)
+        c3=m.group(6)
+        int3=m.group(7)
+        c4=m.group(8)
+        int4=m.group(9)
+        c5=m.group(10)
+        int5=m.group(11)
+        sgntr = '_'+year1+c1+int1+c2+int2+c3+int3+c4+int4+c5+int5
+        return sgntr
+    else:
+        return '_UNKNOWN_DATE_TIME'
+
+def adjust_cfg_path(cfg_file_path):
+    # adjust path of y_main.cfg so it can be read by >y_main.py< via cmd-line directive:
+    # http://stackoverflow.com/questions/4579908/cross-platform-splitting-of-path-in-python AND
+    # http://stackoverflow.com/questions/14826888/python-os-path-join-on-a-list
+    path_str = str(cfg_file_path)
+    path_split = []
+    while True:
+        path_str, leaf = os.path.split(path_str)
+        if (leaf):
+            path_split = [leaf] + path_split  # Adds one element, at the beginning of the list
+        else:
+            # Uncomment the following line to have also the drive, in the format "Z:\"
+            # path_split = [path_str] + path_split
+            break;
+    del path_split[1]
+    new_path_str = os.path.join(*path_split)
+    return new_path_str
+
 def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
     """ reads defaults for generated program: name ..."""
     # http://www.karoltomala.com/blog/?p=622
@@ -131,7 +182,7 @@ def p_write_code(input_dict, outfile_path):
             outfile.write(patt)
         outfile.write('# ' + ppg_glbls.date_time_str)
 
-def p_create_globals():
+def p_glbls_create():
     """ creates ./y_main/lib/y_glbls.py  """
     # fn and path of  >y_glbls.py<
     outfile_fn   = ppg_glbls.glbls_fn
@@ -153,13 +204,13 @@ def p_create_globals():
     code = p_subst_vars_in_patterns (patterns.y_glbls)
     p_write_code (code, outfile_path)
 
-def rgx_get_old_hash_strg(hash_line):
-    """ extract originally calculated hash from inp_line / thx to: http://txt2re.com"""
+def rgx_get_old_hash_strg(inp_line):
+    """ rgx for >hash< inp_line / thx to: http://txt2re.com"""
     re1='(>)'	# Any Single Character 1
     re2='(([a-z0-9]*))'	# Alphanum 1
     re3='(<)'	# Any Single Character 2
     rg = re.compile(re1+re2+re3,re.IGNORECASE|re.DOTALL)
-    m  = rg.search(hash_line)
+    m  = rg.search(inp_line)
     if m:
         c1=m.group(1)
         alphanum1=m.group(2)
@@ -171,48 +222,15 @@ def rgx_get_old_hash_strg(hash_line):
     return old_hash_str
 
 
-def get_datetime_str(txt_line):
-    """ thx to: http://txt2re.com"""
-    re1='((?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3})))(?![\\d])'	# Year 1
-    re2='(_)'	# Any Single Character 1
-    re3='(\\d+)'	# Integer Number 1
-    re4='(_)'	# Any Single Character 2
-    re5='(\\d+)'	# Integer Number 2
-    re6='(-)'	# Any Single Character 3
-    re7='(\\d+)'	# Integer Number 3
-    re8='(_)'	# Any Single Character 4
-    re9='(\\d+)'	# Integer Number 4
-    re10='(_)'	# Any Single Character 5
-    re11='(\\d+)'	# Integer Number 5
-
-    rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11,re.IGNORECASE|re.DOTALL)
-    m = rg.search(txt_line)
-    if m:
-        year1=m.group(1)
-        c1=m.group(2)
-        int1=m.group(3)
-        c2=m.group(4)
-        int2=m.group(5)
-        c3=m.group(6)
-        int3=m.group(7)
-        c4=m.group(8)
-        int4=m.group(9)
-        c5=m.group(10)
-        int5=m.group(11)
-        sgntr = '_'+year1+c1+int1+c2+int2+c3+int3+c4+int4+c5+int5
-        return sgntr
-    else:
-        return '_UNKNOWN_DATE_TIME'
-
-def calc_cfg_hash(defaults):
-    """ Calculates the hash of members of a list (list[tuple, tuple ...].)"""
-    defaults_str = ''
-    for key_val in defaults:  # type(defaults) == list[(arg,val),(arg,val), tuple ...]
-        defaults_str = defaults_str + key_val[0] + key_val[1]
-    hash_md5 = hashlib.md5()
-    hash_md5.update(defaults_str)  # calc hash
-    hash_of_defaults = hash_md5.hexdigest()
-    return hash_of_defaults
+# def calc_cfg_hash(defaults):
+#     """ Calculates the hash of members of a list (list[tuple, tuple ...].)"""
+#     defaults_str = ''
+#     for key_val in defaults:  # type(defaults) == list[(arg,val),(arg,val), tuple ...]
+#         defaults_str = defaults_str + key_val[0] + key_val[1]
+#     hash_md5 = hashlib.md5()
+#     hash_md5.update(defaults_str)  # calc hash
+#     hash_of_defaults = hash_md5.hexdigest()
+#     return hash_of_defaults
 
 def p_cfg_create_hash():
     """ Calculates the hash of default vars in section [defaults] in >y_main.cfg<.
@@ -244,7 +262,7 @@ def p_cfg_create_hash():
     parser.set("signature", "timestamp", ppg_glbls.date_time_str)
     parser.write(open(ppg_glbls.cfg_path_tmp, "w"))
 
-def read_hash(cfg_path):
+def p_cfg_read_hash(cfg_path):
     """ return the val of var >hash< in cfg-file in section [signature] """
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
     cfg_file = parser.read(cfg_path)
@@ -293,9 +311,9 @@ def p_cfg_check_hash():
         return
 
     # There is already a >y_main.cfg<:
-    old_hash_of_defaults = read_hash(ppg_glbls.cfg_path)     # >y_main.cfg<
+    old_hash_of_defaults = p_cfg_read_hash(ppg_glbls.cfg_path)     # >y_main.cfg<
     p_log_this('old_hash_of_defaults =' + old_hash_of_defaults)
-    act_hash_of_defaults = read_hash(ppg_glbls.cfg_path_tmp) # >y_main_TimeStamp.cfg<
+    act_hash_of_defaults = p_cfg_read_hash(ppg_glbls.cfg_path_tmp) # >y_main_TimeStamp.cfg<
     p_log_this('act_hash_of_defaults =' + act_hash_of_defaults)
 
     # act_hash == old_hash
@@ -325,20 +343,20 @@ def p_main_was_modified(outfile_path):
         lines = old_main_file.readlines()
     ppg_utils.p_file_close(old_main_file)
 
-    code_line = lines[0]    # line 0 contains coding
+    code_line = lines[0]    # line 0 contains coding, i.e.: -*- coding: utf-8 -*-
     date_line = lines[1]    # line 1 contains date-time string
     hash_line = lines[2]    # line 2 contains hash (of lines 3 to n-1) at moment of generating
-    # calc hash of code, i.e. of hash all lines, ignoring first 2 lines and last line:
+    # calc hash of code, i.e. of hash all lines, ignoring first 3 lines and last line:
     code_to_hash = ''
     for line in lines[3:-1]:
         code_to_hash = code_to_hash + line
 
-    hash_md5       = hashlib.md5()
+    hash_md5         = hashlib.md5()
     hash_md5.update(code_to_hash)            # calc hash
-    hash_of_code   = hash_md5.hexdigest()
+    hash_of_new_code = hash_md5.hexdigest()
 
-    old_hash_str = rgx_get_old_hash_strg(hash_line)  # get hash at moment of generating
-    if old_hash_str != hash_of_code:         # hashes are identical?
+    hash_of_old_code = rgx_get_old_hash_strg(hash_line)  # get hash at moment of generating
+    if hash_of_old_code != hash_of_new_code:         # hashes are identical?
         mssge = ('>' + outfile_path + '< has been modified')
         p_log_this (mssge) # ; print mssge
         ppg_glbls.prog_changed = True
@@ -349,24 +367,7 @@ def p_main_was_modified(outfile_path):
         return False
 
 
-def adjust_cfg_path(cfg_file_path):
-    # http://stackoverflow.com/questions/4579908/cross-platform-splitting-of-path-in-python AND
-    # http://stackoverflow.com/questions/14826888/python-os-path-join-on-a-list
-    path_str = str(cfg_file_path)
-    path_split = []
-    while True:
-        path_str, leaf = os.path.split(path_str)
-        if (leaf):
-            path_split = [leaf] + path_split  # Adds one element, at the beginning of the list
-        else:
-            # Uncomment the following line to have also the drive, in the format "Z:\"
-            # path_split = [path_str] + path_split
-            break;
-    del path_split[1]
-    new_path_str = os.path.join(*path_split)
-    return new_path_str
-
-def p_create_main():
+def p_main_create():
     """ if (>y_main.py< exists && >y_main.py< was modified) => save it.
     else: => create new >y_main.py<  """
     outfile_fn   = ppg_glbls.prog_name      # fn and path of >y_main.py<
@@ -398,6 +399,7 @@ def p_create_main():
     # generate correct var names
     y_main = p_subst_vars_in_patterns (patterns.y_main)
     # now >y_main< is complete. => calculate hash for generated program:
+
     code = ''   # put all code parts together in ane string.
     for key, chunk in sorted(y_main.iteritems()):
         code = code + chunk

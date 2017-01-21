@@ -252,9 +252,9 @@ def pyprogen():
        # if (exists && changed): => keep it;
        # else: => overwrite it with >y_main_TimeStamp.cfg_YYYY_MM_DD-HH_mm_SS.cfg<
     #
-    p_code.p_create_globals()     # create modul ./y_main/lib/y_glbls.py
+    p_code.p_glbls_create()       # create modul ./y_main/lib/y_glbls.py
     # Finally HERE >y_main.py< will be created:
-    p_code.p_create_main()        # create progr ./y_main/y_main.py
+    p_code.p_main_create()        # create progr ./y_main/y_main.py
     p_code.p_inform_about_paths_and_filenames()   # dwyns
     p_glbls.print_p_cfg_and_args()# print variables and command line args in ./pyprogen/ppg_lib/ppg_glbls.
 

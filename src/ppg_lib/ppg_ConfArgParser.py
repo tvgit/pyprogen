@@ -70,7 +70,7 @@ def p_create_ConfArgParser(conf_file_fn='./pyprogen.conf'):
     p_log_this(conf_file_fn)
     opt_args             = []  # local list of opt-args
     pos_args             = []  # local list of pos-args
-    # >p_create_ConfArgParser< sets vars in p_glbls. ... for later use in >p_code.p_create_globals<
+    # >p_create_ConfArgParser< sets vars in p_glbls. ... for later use in >p_code.p_glbls_create<
     ppg_glbls.opt_arg_vars = []  # list (in p_glbls) of opt-args
     ppg_glbls.pos_arg_vars = []  # list (in p_glbls) of pos-args
 
