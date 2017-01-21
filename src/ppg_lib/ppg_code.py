@@ -201,19 +201,17 @@ def p_glbls_create():
     txt = txt + ' '*4 + 'return arg_ns\n'
     patterns.y_glbls[04] = txt
 
-    txt = ''
-    patterns.y_glbls[96] = txt
-
+    # txt = '' ; patterns.y_glbls[96] = txt
     code = p_subst_vars_in_patterns (patterns.y_glbls)
     p_write_code (code, outfile_path)
 
-def get_old_hash_strg(inp_line):
+def p_get_hash_strg(txt_line):
     """ rgx for >hash< inp_line / thx to: http://txt2re.com"""
     re1='(>)'	# Any Single Character 1
     re2='(([a-z0-9]*))'	# Alphanum 1
     re3='(<)'	# Any Single Character 2
     rg = re.compile(re1+re2+re3,re.IGNORECASE|re.DOTALL)
-    m  = rg.search(inp_line)
+    m  = rg.search(txt_line)
     if m:
         c1=m.group(1)
         alphanum1=m.group(2)
@@ -323,6 +321,11 @@ def p_cfg_check_hash():
         for mssge in mssges:
             print(mssge + '\n')
 
+def p_main_find_old_vs(y_main_dir, hash):
+    lst_main_old_vs = []
+    return lst_main_old_vs
+    pass
+
 
 def p_main_check_if_modified(outfile_path):
     """ check if y_main.py was modified (== hash of code is different) """
@@ -339,7 +342,7 @@ def p_main_check_if_modified(outfile_path):
 
     # calc hash of code, i.e. of hash all code_lines, ignoring first 3 code_lines and last line:
     hash_of_new_code = calc_hash_of_text(code_lines[3:-1])
-    hash_of_old_code = get_old_hash_strg(hash_line)  # get hash at moment of generating
+    hash_of_old_code = p_get_hash_strg(hash_line)  # get hash at moment of generating
 
     # identical hashes?
     if hash_of_old_code != hash_of_new_code:
@@ -411,11 +414,17 @@ def p_main_create():
     outfile_path = os.path.join(ppg_glbls.dir_main, outfile_fn)
     p_log_this('creating: ' + outfile_path)
 
-
     # if existing >y_main.py< was modified => new >y_main.py< gets timestamp in fn
     if p_main_check_if_modified(outfile_path):
         outfile_path = outfile_path[:-3] + '_' + ppg_glbls.date_time_str + '.py'
         ppg_glbls.prog_name_act_cfg = os.path.basename(outfile_path)
+
+    # if there are existing >y_main_TIMESTAMP.py< with identical hash:
+    # remember their names to delete them:
+    if p_main_check_if_modified(outfile_path):
+        outfile_path = outfile_path[:-3] + '_' + ppg_glbls.date_time_str + '.py'
+        ppg_glbls.prog_name_act_cfg = os.path.basename(outfile_path)
+
     # finally write code (adding timestamp in first line & lastline)
     p_write_code (code_dict, outfile_path)  # write >y_main(_+/-timestamp.py<
 
