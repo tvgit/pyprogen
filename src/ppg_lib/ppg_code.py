@@ -155,21 +155,24 @@ def p_inform_about_paths_and_filenames():
 
 
 def p_create_paths_and_fns():
-    """ creates later needed paths and filenames  """
-    ppg_glbls.glbls_fn      = ppg_glbls.prefix + 'glbls.py'    # globals of ! >y_main.py< !
-#    p_glbls.CAParser_func = p_glbls.prefix + 'parser'      # name of parser func in >y_CAParser<
+    """ creates later needed filename  """
+    # globals of ! >y_main.py< !
+    ppg_glbls.glbls_fn      = ppg_glbls.prefix + 'glbls.py'
+    # name of parser func in >y_CAParser<
+    # p_glbls.CAParser_func = p_glbls.prefix + 'parser'
 
 
 def p_subst_vars_in_patterns (input_dict):
     """ substitutes in code parts (input_dict) some words (xx_....) with variable names """
-    patts = dict()
+    pattern = dict()
     for key, patt in input_dict.iteritems():
         txt = patt.replace("xx_CAParser", ppg_glbls.CAParser_fn[:-3])
         txt =  txt.replace("xx_main", ppg_glbls.prog_name[:-3])
         txt =  txt.replace("xx_parser", ppg_glbls.CAParser_func)
         txt =  txt.replace("xx_glbls", ppg_glbls.glbls_fn[:-3])
-        patts[key] = txt
-    return patts
+        pattern[key] = txt
+    return pattern
+
 
 def p_write_code(input_dict, outfile_path):
     """ writes >input_dict< to outfile """
@@ -204,7 +207,7 @@ def p_glbls_create():
     code = p_subst_vars_in_patterns (patterns.y_glbls)
     p_write_code (code, outfile_path)
 
-def rgx_get_old_hash_strg(inp_line):
+def get_old_hash_strg(inp_line):
     """ rgx for >hash< inp_line / thx to: http://txt2re.com"""
     re1='(>)'	# Any Single Character 1
     re2='(([a-z0-9]*))'	# Alphanum 1
@@ -222,15 +225,16 @@ def rgx_get_old_hash_strg(inp_line):
     return old_hash_str
 
 
-# def calc_cfg_hash(defaults):
-#     """ Calculates the hash of members of a list (list[tuple, tuple ...].)"""
-#     defaults_str = ''
-#     for key_val in defaults:  # type(defaults) == list[(arg,val),(arg,val), tuple ...]
-#         defaults_str = defaults_str + key_val[0] + key_val[1]
-#     hash_md5 = hashlib.md5()
-#     hash_md5.update(defaults_str)  # calc hash
-#     hash_of_defaults = hash_md5.hexdigest()
-#     return hash_of_defaults
+def calc_hash_of_text(txt):
+    " Calculates the hash of txt"
+    txt_to_hash = ''
+    for line in txt:
+        txt_to_hash += line
+
+    hash_md5    = hashlib.md5()
+    hash_md5.update(txt_to_hash)    # calc hash
+    return hash_md5.hexdigest()
+
 
 def p_cfg_create_hash():
     """ Calculates the hash of default vars in section [defaults] in >y_main.cfg<.
@@ -295,8 +299,9 @@ def p_cfg_check_hash():
 
     p_log_this('cfg_path:      ' + ppg_glbls.cfg_path)
 
-    mssges    = ['','','']        # badly bad. really. I know
+    mssges    = ['']*3 # not nice
     dest_path = ppg_glbls.cfg_path
+    mssges[0] = ('')
     mssges[1] = ('renaming:      ' + ppg_glbls.cfg_path_tmp)
     mssges[2] = ('to:            ' + dest_path)
 
@@ -334,29 +339,25 @@ def p_cfg_check_hash():
             print(mssge + '\n')
 
 
-def p_main_check_if__modified(outfile_path):
-    """ check if y_main.py was modified (== hash is different) """
+def p_main_check_if_modified(outfile_path):
+    """ check if y_main.py was modified (== hash of code is different) """
     old_main_file = ppg_utils.p_file_open(outfile_path, mode ='r')
     if not old_main_file:
         return False
     with old_main_file:
-        lines = old_main_file.readlines()
+        code_lines = old_main_file.readlines()
     ppg_utils.p_file_close(old_main_file)
 
-    code_line = lines[0]    # line 0 contains coding, i.e.: -*- coding: utf-8 -*-
-    date_line = lines[1]    # line 1 contains date-time string
-    hash_line = lines[2]    # line 2 contains hash (of lines 3 to n-1) at moment of generating
-    # calc hash of code, i.e. of hash all lines, ignoring first 3 lines and last line:
-    code_to_hash = ''
-    for line in lines[3:-1]:
-        code_to_hash = code_to_hash + line
+    code_line = code_lines[0]    # line 0 contains coding, i.e.: -*- coding: utf-8 -*-
+    date_line = code_lines[1]    # line 1 contains date-time string
+    hash_line = code_lines[2]    # line 2 contains hash (of code_lines 3 to n-1) at moment of generating
 
-    hash_md5         = hashlib.md5()
-    hash_md5.update(code_to_hash)            # calc hash
-    hash_of_new_code = hash_md5.hexdigest()
+    # calc hash of code, i.e. of hash all code_lines, ignoring first 3 code_lines and last line:
+    hash_of_new_code = calc_hash_of_text(code_lines[3:-1])
+    hash_of_old_code = get_old_hash_strg(hash_line)  # get hash at moment of generating
 
-    hash_of_old_code = rgx_get_old_hash_strg(hash_line)  # get hash at moment of generating
-    if hash_of_old_code != hash_of_new_code:         # hashes are identical?
+    # identical hashes?
+    if hash_of_old_code != hash_of_new_code:
         mssge = ('>' + outfile_path + '< has been modified')
         p_log_this (mssge) # ; print mssge
         ppg_glbls.prog_changed = True
@@ -368,15 +369,18 @@ def p_main_check_if__modified(outfile_path):
 
 
 def p_main_create():
-    """ if (>y_main.py< exists && >y_main.py< was modified) => save it.
-    else: => create new >y_main.py<  """
-    outfile_fn   = ppg_glbls.prog_name      # fn and path of >y_main.py<
-    outfile_path = os.path.join(ppg_glbls.dir_main, outfile_fn)
-    p_log_this('creating: ' + outfile_path)
+    # create code of new main program: >y_main.py<
+    # - Program code is made mainly by copying text from >patterns.y_main[]<
+    # (module >ppg_patterns.py<) to the new >y_main.py< program code.
+    # >ppg_patterns.py< is a simple array of text containing program patterns.
+    # - Some variables (and their logic) in the new >y_main.py< are
+    # generated according to the parameters in >new_prog_args.cfg<.
+    # - Additionally some variable names are adjusted.
+    #
+    # Then hash of text lines containing code is calculated.
 
-    # Make new code:
-
-    # make code txt for >if<'s for >confarg_vars< of commandline
+    # code for >def evaluate_opt_args():< in >y_main.py<
+    # make code txt for >if<'s for >confarg_vars< as of >new_prog_args.cfg<
     txt = ' '*4 + '# optional args(ConfArgParser):\n'
     for arg in ppg_glbls.opt_arg_vars:
         txt +=  ' '*4 + 'if ' + 'confargs.' + arg + ' == confargs.' + arg + ':\n'
@@ -385,6 +389,7 @@ def p_main_create():
 
     patterns.y_main[10] = txt       # add txt to pattern
 
+    # some code for >__main__< in >y_main.py<
     # make code txt for optional reading of cfg-file via
     # xx_CAParser.xx_parser('--conf-file', 'p_glbls.cfg_path')
     # but adjust dir of config-file by removing highest dir level:
@@ -396,26 +401,44 @@ def p_main_create():
 
     patterns.y_main[84] = txt       # add txt to pattern
 
-    # generate correct var names
+    # adjust some var names in the new program text in .
     y_main = p_subst_vars_in_patterns (patterns.y_main)
-    # now >y_main< is complete. => calculate hash for generated code:
 
-    code = ''   # put all code parts together in ane string.
-    for key, chunk in sorted(y_main.iteritems()):
-        code = code + chunk
+    # now >y_main< is complete. => put code together:
+    code_lines = ''   # put all code parts together in one string.
+    for key, line in sorted(y_main.iteritems()):
+        code_lines += line
 
-    # print '=' *40 ; print len(code)  ;print '=' *40
-    hash_md5 = hashlib.md5()
-    hash_md5.update(code)                      # calculate hash of code
-    hash_of_code = hash_md5.hexdigest()        # here (>hash_of_mytext<) it is
+    # now the code of >y_main.py< is complete. => calculate hash:
+
+    # code = ''   # put all code parts together in one string.
+    # for key, chunk in sorted(y_main.iteritems()):
+    #     code = code + chunk
+    # hash_md5 = hashlib.md5()
+    # hash_md5.update(code)                      # calculate hash of code
+    # hash_of_code = hash_md5.hexdigest()        # here (>hash_of_mytext<) it is
+
+    hash_of_codelines = calc_hash_of_text(code_lines)  # calculate hash of code
+
+    # if calc_hash_of_text(code_lines) != hash_of_code:
+    #     sys.exit(1)
+    # else:
+    #     print('\x1b[6;30;42m' + 'Success!'*20 + '\x1b[0m')
+    #     # print 'ok ' * 60
 
     # Add hash as heading line to the code:
     code_dict    = dict()                           # p_write_code wants dict as input
-    code_dict[1] = '# >' + hash_of_code + '< \n'    # second line of y_main.py
-    code_dict[2] = code                             #
+    code_dict[1] = '# >' + hash_of_codelines + '< \n'    # second line of y_main.py
+    code_dict[2] = code_lines                             #
 
+    outfile_fn   = ppg_glbls.prog_name  # fn and path of future >y_main.py<
+    outfile_path = os.path.join(ppg_glbls.dir_main, outfile_fn)
+    p_log_this('creating: ' + outfile_path)
+
+
+    print('\x1b[6;30;42m' + 'Success!'*20 + '\x1b[0m')
     # if existing >y_main.py< was modified => new >y_main.py< gets timestamp in fn
-    if p_main_check_if__modified(outfile_path):
+    if p_main_check_if_modified(outfile_path):
         outfile_path = outfile_path[:-3] + '_' + ppg_glbls.date_time_str + '.py'
         ppg_glbls.prog_name_act_cfg = os.path.basename(outfile_path)
     # finally write code (adding timestamp in first line & lastline)
