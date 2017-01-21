@@ -4,8 +4,8 @@
 import os.path
 
 prog_name         = 'def_y_main.py' # default name of (new) program, configure in: >new_prog.ini<
-prog_path         = None            # default path: >./y_main/y_main.py<
-prog_changed      = False # x_main.py changed?
+prog_path         = None            # default path
+prog_changed      = False           # y_main.py changed?
 prog_name_new_cfg = prog_name       # name of program with new config version
 
 prefix    = None     # common prefix of y_main-specific dirs, paths, modules, functions, vars ...
@@ -16,11 +16,9 @@ cfg_dir   = None     # subdir  : >./y_main/cfg<, config files for >y_main.py<
 lib_dir   = None     # subdir  : >./y_main/lib<, utilities for >y_main.py<
 log_dir   = None     # subdir  : >./y_main/log<, log-files for >y_main.py<
 
-dir_DataIn  = None   # subdir  : >./y_main/DataIn<, DataIn-files for >y_main.py<
-dir_DataOut = None   # subdir  : >./y_main/DataOut<, DataOut-files for >y_main.py<
-
-cfg_fn    = None     # filename of cfg-file for for 'y_main.py'; usually: >y_main.py<
-cfg_path  = None     # path     of cfg-file for for 'y_main.py'; usually: >y_mainy/cfg/y_main.cfg<
+cfg_fn       = None  # filename of cfg-file for for 'y_main.py'; usually: >y_main.py<
+cfg_path     = None  # path     of cfg-file for for 'y_main.py'; usually: >y_mainy/cfg/y_main.cfg<
+cfg_changed  = False # y_main.cfg changed?
 
 cfg_fn_tmp   = None  # filename of temporary cfg-file for for 'y_main.py'; usually: >y_main_timestamp.py<
 cfg_path_tmp = None  # path     of temporary cfg-file for for 'y_main.py'; usually: >y_mainy/cfg/y_main_timestamp.cfg<
@@ -31,10 +29,11 @@ CAParser_func= None  # function name  (>def y_parser(): ...<)
 
 glbls_fn     = None  # name of globals file (OF NEW PROGRAM!); usually: >y_glbls.py<
 
-my_code_fn   = None  # name of your code; usually: >y_my_code.py<
-
 pos_arg_vars = None  # positional args
 opt_arg_vars = None  # optional args
+
+dir_DataIn  = None   # subdir  : >./y_main/DataIn<, DataIn-files for >y_main.py<
+dir_DataOut = None   # subdir  : >./y_main/DataOut<, DataOut-files for >y_main.py<
 
 date_time_str= None  # Date & Time
 

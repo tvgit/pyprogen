@@ -66,7 +66,7 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
             ppg_glbls.prog_name = ppg_glbls.prog_name + '.py'
             p_log_this('          =>' + ppg_glbls.prog_name)
     except ConfigParser.NoOptionError:
-        ppg_glbls.prog_name = 'z_main.py'
+        ppg_glbls.prog_name = 'default_main.py'
         p_log_this('no >prog_name< in: ' + cfg_path + ' !')
         p_log_this('prog_name set to: ' + ppg_glbls.prog_name)
 
@@ -288,7 +288,7 @@ def p_cfg_check_hash():
         for mssge in mssges:
             p_log_this (mssge)
         for mssge in mssges:
-            print(mssge + '\n')
+            print(mssge)
 
 
 def p_main_delete_identical_versions(list_of_paths):
@@ -296,7 +296,6 @@ def p_main_delete_identical_versions(list_of_paths):
     ppg_utils.p_note_this()
     for fn in list_of_paths:
         ppg_utils.p_file_delete(fn)
-        print fn
     ppg_utils.p_note_this()
 
 
