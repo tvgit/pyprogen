@@ -6,8 +6,11 @@
 y_main = dict()
 y_main[02] = """
 # YOUR code resides in THIS module.
-# It is respected if changed (modification results from different
-# hash code '>xxx...xxx<' in third line of source code of this module).
+# Your changes are respected if and only if:
+#  you rename this file to: >xx_main.py<
+# or
+#  you change the hash code '>xxx...xxx<' in the
+#  third line of this module (unsafe!).
 
 import lib.xx_CAParser as xx_CAParser
 import lib.ppg_utils     as p_utils
@@ -18,14 +21,6 @@ import copy
 
 # 'confargs' are your configuration parameters / cmdline arguments
 confargs = lib.xx_glbls.arg_ns
-
-def print_prog_name():
-    prog_name = p_utils.p_get_prog_name()
-    prog_dir  = p_utils.p_get_prog_dir()
-    print '-' * 8
-    print 'program name: ' + prog_name
-    print 'program dir : ' + prog_dir
-    print '-' * 8
 
 """
 
@@ -50,7 +45,7 @@ def main():
 
 y_main[80] = r"""
 if __name__ == "__main__":
-    print_prog_name()
+    p_utils.print_prog_name_dir()
     p_log_init(log_dir = 'log', log_fn = r'xx_main.log')
     p_log_start()
 
@@ -61,27 +56,26 @@ if __name__ == "__main__":
 
 y_main[84] = """ """
 
-
 y_main[86] = """
-    ## NB working with the confargs namespace:
-    ## http://stackoverflow.com/questions/16878315
-    ##   /... treat-argparse-namespace-as-a-dictionary
-    ## http://stackoverflow.com/questions/2799064
-    ##   /... merge-dictionaries
-    ## confargs_cpy = copy.deepcopy(confargs)
-    ## print vars(confargs_cpy)
-    ## print sorted(vars(confargs_cpy).items())
-    ## xx_CAParser.xx_parser( ... some new commands ...) => new confargs
-    ## Modify >confargs_cpy< with new confargs:
-    ## vars(confargs_cpy).update(vars(confargs))
-
-    # Here YOUR 'main()' is called:
     main()
 
     p_log_end()
     p_utils.p_success()
     p_utils.p_exit()
+
 """
+
+## NB working with the confargs namespace:
+## http://stackoverflow.com/questions/16878315
+##   /... treat-argparse-namespace-as-a-dictionary
+## http://stackoverflow.com/questions/2799064
+##   /... merge-dictionaries
+## confargs_cpy = copy.deepcopy(confargs)
+## print vars(confargs_cpy)
+## print sorted(vars(confargs_cpy).items())
+## xx_CAParser.xx_parser( ... some new commands ...) => new confargs
+## Modify >confargs_cpy< with new confargs:
+## vars(confargs_cpy).update(vars(confargs))
 
 # -------------- y_glbls.py
 

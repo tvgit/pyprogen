@@ -116,25 +116,8 @@ in p_utils make examples how to open files, scan dirs etc ...
     # 100.
     # Dark sides of py:
     # py can not protect vars inside a module from being modified from outside.
-    # [
-    # module want_be_private
-    # var_priv = 66
-    #
-    # module outside
-    # import want_be_private
-    # want_be_private.var_priv = 99   !!!
-    # ]
     #
     # py can not prevent creating attributes to this module from outside.
-    # [
-    # module want_be_private
-    # var_priv = 100
-    #
-    # module outside
-    # import want_be_private
-    # want_be_private.var_NEW = 1 # but inside >module want_be_private< you know nothing
-    #   about >var_NEW<!!!
-    # ]
     #
     # Badly bad:
     # Composing a path string by adding strings via >os.path.join()< and >os.path.normpath()<
@@ -143,6 +126,7 @@ in p_utils make examples how to open files, scan dirs etc ...
     # 'c:\my_path\x_program.sh' namely '\x', which is NOT prevented by >os.path.normpath()<!!
     #
     # </technical note>
+
 # ad decorator:
 # https://pythonconquerstheuniverse.wordpress.com/2012/04/29/python-decorators/
 
@@ -154,18 +138,18 @@ import shutil
 import subprocess
 import ppg_lib.ppg_glbls as p_glbls  # share global values
 import ppg_lib.ppg_utils as p_utils  # utils for pyprogen
-import ppg_lib.ppg_code  as p_code   # funcs generating python code
+import ppg_lib.ppg_code  as p_code   # functions generating python code
 from   ppg_lib.ppg_log   import p_log_init, p_log_start, p_log_this, p_log_end
 from   ppg_lib.ppg_ConfArgParser import p_create_ConfArgParser
 
-def create_maindir(prog_path) :
+def maindir_make(prog_path) :
     """ """
     p_log_this()
     p_glbls.main_dir = p_utils.p_subdir_make(prog_path)
     p_glbls.main_dir = os.path.join('.', p_glbls.main_dir)
 
 
-def create_subdirs(prog_path):
+def subdirs_make(prog_path):
     """ """
     p_log_this()
     p_glbls.cfg_dir = p_utils.p_subdir_make(os.path.join(prog_path, 'cfg'))
@@ -190,7 +174,7 @@ def create_subdirs(prog_path):
     p_glbls.dir_DataOut = os.path.join('.', p_glbls.dir_DataOut)
 
 
-def copy_p_utils_p_log_init():
+def copy_p_utils():
     # dammed '__init__.py'! 2 hrs of nirwana!
     # for every file in fn_list:
     p_log_this()
@@ -206,22 +190,23 @@ def copy_p_utils_p_log_init():
         shutil.copy(p_utils_srce_path, p_utils_dest_path)
         p_log_this( fn + 'copied')
 
-
-def create_ca_parser(prog_path):
+def ca_parser_make():
     """ Writes via p_create_ConfArgParser() in ./y_main/lib a new
     confargparser == >y_CAParser.py< for the new program >y_main.py<.
     Configure it according to >new_prog_args.cfg<
-
-    Then call >y_CAParser.py< via subprocess. Since >y_CAParser.py< is
-    prepared to write a conf file - if called as script - it will write
-    a config-file to >./y_main/cfg<.
-    It is this config-file that You will use to configure >y_main<.
     """
     p_log_this()
     p_create_ConfArgParser('./new_prog_args.cfg') # create confargparser for >y_main.py<
+
+def ca_parser_run():
+    """ Call >y_CAParser.py< via subprocess. >y_CAParser.py< is able
+    to write a conf file (if called as script), so it will write
+    the config-file to >./y_main/cfg<.
+    It is this config-file that You will use to configure >y_main<.
+    """
+
     subprocess_path  = p_glbls.CAParser_path
     p_log_this("subprocess_path   = " + subprocess_path)
-
     # http://pymotw.com/2/subprocess/
     # start new ConfArgParser to create cfg-file (aka >cfg_path_tmp<) for >y_main.py<
     cfg_path = p_glbls.cfg_path_tmp         # == >y_main_TimeStamp.cfg<
@@ -236,36 +221,31 @@ def pyprogen():
     # dwyns == Do what your name says
     p_log_this()                  # in ./ppg_log/pyprogen.log
     p_code.p_read_ini(".", "new_prog.ini")  # read >new_prog.ini< and create some global fn's, path's and var's
-                                  # These data is stored in module >ppg_glbls.py<
-    #
-    # >y_main< is in this comment the symbolic name of the generated program.
-    #
+                                  # This data will be stored in module >ppg_glbls.py<
+    # in the comments >y_main< is a symbolic the name of the generated program.
     prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
-    create_maindir(prog_path)     # create dir  ./y_main
-    create_subdirs(prog_path)     # create dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
-    copy_p_utils_p_log_init()     # copy some utilities to ./y_main/lib
+    maindir_make(prog_path)       # make dir  ./y_main
+    subdirs_make(prog_path)       # make dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
+    copy_p_utils()                # copy some utilities to ./y_main/lib
     #
-    create_ca_parser(prog_path)   # create & run: ./y_main/lib/y_CAParser.py
-                                  # => create: >y_main_TimeStamp.cfg<
-    p_code.p_cfg_create_hash()    # create hash for vars in >y_main_TimeStamp.cfg<
-    p_code.p_cfg_check_hash()     # check if >./y_main/y_main.cfg exists;<
-       # if (exists && changed): => keep it;
-       # else: => overwrite it with >y_main_TimeStamp.cfg_YYYY_MM_DD-HH_mm_SS.cfg<
-    #
+    ca_parser_make()              # make ./y_main/lib/y_CAParser.py
+    ca_parser_run()               # run: y_CAParser.py => create: >y_main_TimeStamp.cfg<
+
+    p_code.p_cfg_clear_versions() # check (via hash) if there are identical versions of >y_main_*.cfg<
+
     p_code.p_glbls_create()       # create modul ./y_main/lib/y_glbls.py
-    # Finally HERE >y_main.py< will be created:
-    p_code.p_main_create()        # create progr ./y_main/y_main.py
+
+    # Finally here >y_main.py< will be created:
+    p_code.p_main_make()          # create progr ./y_main/y_main.py
+
     p_code.p_inform_about_paths_and_filenames()   # dwyns
     p_glbls.print_p_cfg_and_args()# print variables and command line args in ./pyprogen/ppg_lib/ppg_glbls.
 
 
 if __name__ == "__main__":
     p_log_init(log_dir = 'ppg_log', log_fn = 'pyprogen')
-    p_log_start(p_utils.p_get_prog_name())
-    pyprogen()
-    p_log_end()
-    p_utils.p_success()
-    # p_utils.p_error()
-    # p_utils.p_note_this()
-    # p_utils.print_format_table()
-    p_utils.p_exit()
+    p_log_start()        # log is in ./ppg_log/pyprogen.log
+    pyprogen()           # python program generator
+    p_log_end()          # dwyns
+    p_utils.p_success()  # some visible sign
+    p_utils.p_exit()     # exit program

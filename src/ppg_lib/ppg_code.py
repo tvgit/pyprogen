@@ -55,7 +55,7 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
     cfg_file = parser.read(cfg_path)
     p_log_this('cfg file: ' + str(cfg_file))
 
-    # p_glbls.prog_name
+    # ppg_glbls.prog_name
     try:
         ppg_glbls.prog_name = parser.get("properties", "prog_name")
         p_log_this('prog_name = ' + ppg_glbls.prog_name)
@@ -70,11 +70,11 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
         p_log_this('no >prog_name< in: ' + cfg_path + ' !')
         p_log_this('prog_name set to: ' + ppg_glbls.prog_name)
 
-    # p_glbls.prog_path
+    # ppg_glbls.prog_path
     ppg_glbls.prog_path = os.path.normpath(ppg_glbls.prog_name[:-3])
     p_log_this("prog_path = " + ppg_glbls.prog_path)
 
-    # p_glbls.prefix
+    # ppg_glbls.prefix
     try:
         ppg_glbls.prefix = parser.get("properties", "prefix")
         p_log_this('prefix = ' + ppg_glbls.prefix)
@@ -86,7 +86,7 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
         ppg_glbls.prefix = ppg_glbls.prog_name[0] + '_'  # prefix for generated program
         p_log_this('prefix set to: ' + ppg_glbls.prefix)
 
-    # p_glbls.date_time_str
+    # ppg_glbls.date_time_str
     ppg_glbls.date_time_str = ppg_utils.p_make_act_date_str()
     # filename of globals of created program
     ppg_glbls.glbls_fn      = ppg_glbls.prefix + 'glbls.py'    # globals of ! >y_main.py< !
@@ -103,12 +103,13 @@ def p_inform_about_paths_and_filenames():
     mssge += '\n You will find the new version in: ' + os.path.join(ppg_glbls.main_dir, '')
     mssge += '\n Path of new version is:           ' + os.path.join(ppg_glbls.main_dir, ppg_glbls.prog_name_new_cfg)
     mssge += '\n Filename of new version is:       ' + ' '*len_dir_main + ppg_glbls.prog_name_new_cfg
-    # mssge += '(>' + p_glbls.prog_name + '< was not changed.)'
+    # mssge += '(>' + ppg_glbls.prog_name + '< was not changed.)'
     # cfg_path_tmp
+    mssge += '\n'
     len_cfg_dir = len(os.path.dirname(ppg_glbls.cfg_path_tmp)) + 1
     mssge += '\n Path of new cfg-file is:          ' + ppg_glbls.cfg_path_tmp
     mssge += '\n Filename of new cfg-file is:      ' + ' '*len_cfg_dir + os.path.basename(ppg_glbls.cfg_path_tmp)
-    # mssge += ' The new files have a timestamp  >' + p_glbls.prog_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
+    # mssge += ' The new files have a timestamp  >' + ppg_glbls.prog_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
     mssge += '\n'
     mssge += '\n You may configure the comand line _args_     of >' + ppg_glbls.prog_name + '<  via:  >new_prog_args.cfg<'
     mssge += '\n  ... but run >pyprogen.py< again!'
@@ -128,7 +129,7 @@ def p_create_paths_and_fns():
     # globals of ! >y_main.py< !
     ppg_glbls.glbls_fn      = ppg_glbls.prefix + 'glbls.py'
     # name of parser func in >y_CAParser<
-    # p_glbls.CAParser_func = p_glbls.prefix + 'parser'
+    # ppg_glbls.CAParser_func = ppg_glbls.prefix + 'parser'
 
 
 def p_subst_vars_in_patterns (input_dict):
@@ -207,7 +208,7 @@ def p_cfg_create_hash():
     """ Calculates the hash of default vars in section [defaults] in >y_main.cfg<.
     Then creates in >y_main.cfg< the section [signature] with items:
     >timestamp< and >hash<.
-    Called by >pyprogen.py< after >create_ca_parser< was called,
+    Called by >pyprogen.py< after >ca_parser_make< was called,
     i.e after a new >y_main_TimeStamp.cfg< was written."""
 
     p_log_this('cfg_path_tmp     = ' + ppg_glbls.cfg_path_tmp)
@@ -220,16 +221,17 @@ def p_cfg_create_hash():
         for key_val in defaults:   # type(defaults) == list[tuple, tuple ...]
             # vars_str += key_val[0] + key_val[1]
             vars_str += key_val[0]
-        hash_of_defaults = calc_hash_of_text(vars_str)
+        hash_of_vars = calc_hash_of_text(vars_str)
     except ConfigParser.NoSectionError:
         p_log_this("No section: 'defaults' in: >" + ppg_glbls.cfg_path_tmp + '< !')
         return
 
     # add to >y_main.cfg< a section "signature" with hash & time_stamp
     parser.add_section("signature")
-    parser.set("signature", "hash", hash_of_defaults)
+    parser.set("signature", "hash", hash_of_vars)
     parser.set("signature", "timestamp", ppg_glbls.date_time_str)
     parser.write(open(ppg_glbls.cfg_path_tmp, "w"))
+    return hash_of_vars
 
 def p_cfg_read_hash(cfg_path):
     """ return the val of var >hash< in cfg-file in section [signature] """
@@ -244,11 +246,8 @@ def p_cfg_read_hash(cfg_path):
         return
     return hash_val
 
-def p_cfg_check_hash():
-    """ called by >pyprogen.py< after >create_ca_parser< has
-    written >y_main.cfg< and after p_cfg_create_hash() has
-    added the hash of default vars to >./y_main/cfg/y_main_TimeStamp.cfg<
-    """
+def p_cfg_check_if_modified():
+    """ checks if y_main.cfg was modified (== hash of code is different) """
     p_log_this('cfg_path:      ' + ppg_glbls.cfg_path)
 
     mssges    = ['']*3 # dict of mssges
@@ -265,6 +264,8 @@ def p_cfg_check_hash():
             p_log_this (mssge)
         # move source to dest:
         shutil.move(ppg_glbls.cfg_path_tmp, dest_path)
+        ppg_glbls.cfg_path_tmp = dest_path
+        ppg_glbls.cfg_file_tmp = ppg_glbls.cfg_fn
         return
 
     # if there is already a >y_main.cfg<:
@@ -275,37 +276,70 @@ def p_cfg_check_hash():
 
     # if (act_hash == old_hash)
     if (hash_of_new_defaults == hash_of_old_defaults):
-        mssges[0] = ('section: "signature" in >' + ppg_glbls.cfg_path + '< unchanged. =>')
-        for mssge in mssges:
-            p_log_this (mssge)
-        # move source to dest: ?? should I ? Or not?
-        # shutil.move(p_glbls.cfg_path_tmp, dest_path)
+        mssges[0] = ('vars in [defaults] in >' + ppg_glbls.cfg_path + '< are not changed =>')
+        shutil.move(ppg_glbls.cfg_path_tmp, dest_path)
+        ppg_glbls.cfg_path_tmp = dest_path
+        ppg_glbls.cfg_file_tmp = ppg_glbls.cfg_fn
     else:  # act_hash != old_hash
-        mssges[0] = ('section: "signature" in >' + ppg_glbls.cfg_path + '< has been modified.')
+        mssges[0] = ('vars in [defaults] in >' + ppg_glbls.cfg_path + '< have been modified.')
         mssges[1] = (' => 1) leave >' + ppg_glbls.cfg_path + '< unchanged.')
-        mssges[2] = ('    2) most recent config file is: >' + ppg_glbls.cfg_path_tmp + '<.')
+        mssges[2] = ('    2) write new version of config file: >' + ppg_glbls.cfg_path_tmp + '<.')
 
-        for mssge in mssges:
-            p_log_this (mssge)
-        for mssge in mssges:
-            print(mssge)
+    for mssge in mssges:
+        p_log_this (mssge)
+    for mssge in mssges:
+        print(mssge)
 
+def p_cfg_find_identical_hash(hash):
+    """"find in dir >ppg_glbls.cfg_fn< files >y_main*.cfg< with identical hash-values"""
+    list_of_cfg_identical_hash   = []  # list of >y_main_timestamp.cfg< with identical hash
+    glob_path = os.path.join(ppg_glbls.cfg_dir, ppg_glbls.cfg_fn)
+    print '--------->>  ', glob_path
+    glob_path = glob_path[:-len('.cfg')]  + '*.cfg' # == .../y_main_*,cfg
+    print '--------->>  ', glob_path
 
-def p_main_delete_identical_versions(list_of_paths):
-    """"find in dir >outfile_path< files with identical hash-values in line 1 .. 5"""
+    for fn in glob.glob(glob_path):
+        print '>>>>>>>>>>>  ', fn
+        tmp_hash = p_cfg_read_hash(fn)
+        if tmp_hash == hash:
+            list_of_cfg_identical_hash.append(fn)
+            print fn, '    +     ', tmp_hash
+        else:
+            print fn, ' -------- ', tmp_hash
+
     ppg_utils.p_note_this()
-    for fn in list_of_paths:
-        ppg_utils.p_file_delete(fn)
-    ppg_utils.p_note_this()
+    return list_of_cfg_identical_hash
 
 
-def p_main_find_identical_versions(outfile_path, hash):
-    """"find in dir >outfile_path< files with identical hash-values in line 1 .. 5"""
-    y_main_identical = []      # list of >y_main_timestamp.py< with identical hash
+def p_cfg_clear_versions():
+    """ finds and deletes >y_main_timestamp.cfg< with identical hash
+    """
+
+    p_log_this('cfg_path:      ' + ppg_glbls.cfg_path)
+    hash = p_cfg_create_hash() # create hash for vars in most recent >y_main_TimeStamp.cfg<
+    p_cfg_check_if_modified()  # check if >./y_main/y_main.cfg exists<
+
+
+    list_of_cfg_w_identical_hash = p_cfg_find_identical_hash(hash)
+
+    if not ppg_glbls.cfg_path_tmp in list_of_cfg_w_identical_hash:
+        ppg_utils.p_error()
+    else:
+        list_of_cfg_w_identical_hash.remove(ppg_glbls.cfg_path_tmp)
+        p_delete_files_in_list(list_of_cfg_w_identical_hash)
+
+
+    # if (exists && changed): => keep it;
+    # else: => overwrite it with >y_main_TimeStamp.cfg_YYYY_MM_DD-HH_mm_SS.cfg<
+
+
+def p_main_find_identical_hash(y_main_path, hash):
+    """"find in dir >y_main_path< files with identical hash-values in line 1 .. 5"""
+    list_of_y_main_identical_hash = [] # list of >y_main_timestamp.py< with identical hash
     lngth = len(ppg_glbls.date_time_str + '.py')
-    outfile_path = outfile_path[:-lngth]  # == .../y_main_*
+    y_main_path = y_main_path[:-lngth]  # == .../y_main_*
     line_max = 6 # search hash in first 5 lines
-    for fn in glob.glob(outfile_path + '*'):
+    for fn in glob.glob(y_main_path + '*.py'):
         hash_found = False
         line_cnt = 1
         with open(fn) as fp:
@@ -314,15 +348,21 @@ def p_main_find_identical_versions(outfile_path, hash):
                 if (line_cnt > line_max):    # hash isn't found in line_max lines
                     break
                 if hash_found:
-                    y_main_identical.append(fn)
+                    list_of_y_main_identical_hash.append(fn)
                     break
                 line_cnt += 1
-    return y_main_identical
+    return list_of_y_main_identical_hash
 
 
-def p_main_check_if_modified(outfile_path):
+def p_delete_files_in_list(list_of_paths):
+    """"find in dir >outfile_path< files with identical hash-values in line 1 .. 5"""
+    for fn in list_of_paths:
+        ppg_utils.p_file_delete(fn)
+
+
+def p_main_check_if_modified(y_main_path):
     """ check if y_main.py was modified (== hash of code is different) """
-    old_main_file = ppg_utils.p_file_open(outfile_path, mode ='r')
+    old_main_file = ppg_utils.p_file_open(y_main_path, mode ='r')
     if not old_main_file:
         return False
     with old_main_file:
@@ -339,12 +379,12 @@ def p_main_check_if_modified(outfile_path):
 
     # identical hashes?
     if hash_of_old_code != hash_of_new_code:
-        mssge = ('>' + outfile_path + '< has been modified')
+        mssge = ('>' + y_main_path + '< has been modified')
         p_log_this (mssge) # ; print mssge
         ppg_glbls.prog_changed = True
         return True
     else:
-        p_log_this ('>' + outfile_path + '<  + is unchanged')
+        p_log_this ('>' + y_main_path + '<  + is unchanged')
         ppg_glbls.prog_changed = False
         return False
 
@@ -369,7 +409,7 @@ def p_main_make_code():
     patterns.y_main[10] = txt       # add txt to pattern
 
     # make code txt for optional reading of cfg-file via
-    # xx_CAParser.xx_parser('--conf-file', 'p_glbls.cfg_path')
+    # xx_CAParser.xx_parser('--conf-file', 'ppg_glbls.cfg_path')
     # (and adjust dir of config-file by removing highest dir level:)
     adjusted_cfg_path = adjust_cfg_path(ppg_glbls.cfg_path)
     txt =  ' '*4 + "# optional reading of cfg-file: (r' == raw string) \n"
@@ -390,10 +430,10 @@ def p_main_make_code():
 
     return code_lines
 
-def p_main_create():
+def p_main_make():
     # create code_lines > calc hash of code_lines
-
     code_lines = p_main_make_code()
+
     # => calculate hash:
     # hash_of_old_defaults
     hash_of_new_codelines = calc_hash_of_text(code_lines)  # calculate hash of code
@@ -403,25 +443,25 @@ def p_main_create():
     code_dict[1] = '# >' + hash_of_new_codelines + '< \n'    # second line of y_main.py
     code_dict[2] = code_lines
 
-    outfile_fn   = ppg_glbls.prog_name  # fn and path of future >y_main.py<
-    outfile_path = os.path.join(ppg_glbls.main_dir, outfile_fn)
-    p_log_this('creating: ' + outfile_path)
+    y_main_fn   = ppg_glbls.prog_name  # fn and path of future >y_main.py<
+    y_main_path = os.path.join(ppg_glbls.main_dir, y_main_fn)
+    p_log_this('creating: ' + y_main_path)
 
-    # if existing >y_main.py< was modified => new >y_main.py< gets timestamp in fn
-    if p_main_check_if_modified(outfile_path):
-        outfile_path = outfile_path[:-3] + '_' + ppg_glbls.date_time_str + '.py'
-        ppg_glbls.prog_name_act_cfg = os.path.basename(outfile_path)
+    # if existing >y_main.py< was modified => new >y_main.py< becomes >y_main_TIMESTAMP.py<
+    if p_main_check_if_modified(y_main_path):
+        y_main_path = y_main_path[:-3] + '_' + ppg_glbls.date_time_str + '.py'
+        ppg_glbls.prog_name_act_cfg = os.path.basename(y_main_path)
 
     # if there are existing >y_main_TIMESTAMP.py< with identical hash:
     # remember their names to delete them later:
-    list_of_y_main_identical_versions = []
-    list_of_y_main_identical_versions = p_main_find_identical_versions(outfile_path, hash_of_new_codelines)
+    list_of_main_w_identical_hash = []
+    list_of_main_w_identical_hash = p_main_find_identical_hash(y_main_path, hash_of_new_codelines)
 
     # finally write code (adding timestamp in first line & lastline)
-    p_write_code (code_dict, outfile_path)  # write >y_main(_+/-timestamp.py<
+    p_write_code (code_dict, y_main_path)  # write >y_main(_+/-timestamp.py<
 
-    if list_of_y_main_identical_versions:
-        p_main_delete_identical_versions (list_of_y_main_identical_versions)
+    if list_of_main_w_identical_hash:
+        p_delete_files_in_list (list_of_main_w_identical_hash)
 
 
 if __name__ == "__main__":
