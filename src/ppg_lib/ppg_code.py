@@ -293,21 +293,14 @@ def p_cfg_check_if_modified():
 def p_cfg_find_identical_hash(hash):
     """"find in dir >ppg_glbls.cfg_fn< files >y_main*.cfg< with identical hash-values"""
     list_of_cfg_identical_hash   = []  # list of >y_main_timestamp.cfg< with identical hash
+
     glob_path = os.path.join(ppg_glbls.cfg_dir, ppg_glbls.cfg_fn)
-    print '--------->>  ', glob_path
-    glob_path = glob_path[:-len('.cfg')]  + '*.cfg' # == .../y_main_*,cfg
-    print '--------->>  ', glob_path
+    glob_path = glob_path[:-len('.cfg')] + '*.cfg' # == >.../y_main_*.cfg<
 
     for fn in glob.glob(glob_path):
-        print '>>>>>>>>>>>  ', fn
         tmp_hash = p_cfg_read_hash(fn)
         if tmp_hash == hash:
             list_of_cfg_identical_hash.append(fn)
-            print fn, '    +     ', tmp_hash
-        else:
-            print fn, ' -------- ', tmp_hash
-
-    ppg_utils.p_note_this()
     return list_of_cfg_identical_hash
 
 
@@ -319,7 +312,6 @@ def p_cfg_clear_versions():
     hash = p_cfg_create_hash() # create hash for vars in most recent >y_main_TimeStamp.cfg<
     p_cfg_check_if_modified()  # check if >./y_main/y_main.cfg exists<
 
-
     list_of_cfg_w_identical_hash = p_cfg_find_identical_hash(hash)
 
     if not ppg_glbls.cfg_path_tmp in list_of_cfg_w_identical_hash:
@@ -327,10 +319,6 @@ def p_cfg_clear_versions():
     else:
         list_of_cfg_w_identical_hash.remove(ppg_glbls.cfg_path_tmp)
         p_delete_files_in_list(list_of_cfg_w_identical_hash)
-
-
-    # if (exists && changed): => keep it;
-    # else: => overwrite it with >y_main_TimeStamp.cfg_YYYY_MM_DD-HH_mm_SS.cfg<
 
 
 def p_main_find_identical_hash(y_main_path, hash):
@@ -427,8 +415,8 @@ def p_main_make_code():
     code_lines = ''
     for key, line in sorted(patterns.y_main.iteritems()):
         code_lines += line
-
     return code_lines
+
 
 def p_main_make():
     # create code_lines > calc hash of code_lines
@@ -465,5 +453,5 @@ def p_main_make():
 
 
 if __name__ == "__main__":
-    print ppg_glbls.my_name()
+    print ppg_glbls.prog_name
     ppg_utils.p_exit()

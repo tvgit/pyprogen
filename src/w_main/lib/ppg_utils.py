@@ -32,25 +32,25 @@ def print_format_table():
         print('\n')
 
 
-def p_note_this():
+def p_note_this(mssge = 'note this'):
     # http://stackoverflow.com/questions/287871
     #     ... print-in-terminal-with-colors-using-python
     # print('\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
-    print('\x1b[6;36;40m' + 'note this' + '\x1b[0m')
+    print('\x1b[6;36;40m' + mssge + '\x1b[0m')
     pass
 
-def p_error():
+def p_error(mssge = 'Error'):
     # http://stackoverflow.com/questions/287871
     #     ... print-in-terminal-with-colors-using-python
     # print('\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
-    print('\x1b[1;35;40m' + 'Error' + '\x1b[0m')
+    print('\x1b[1;35;40m' + mssge + '\x1b[0m')
     pass
 
-def p_success():
+def p_success(mssge = 'Success'):
     # http://stackoverflow.com/questions/287871
     #     ... print-in-terminal-with-colors-using-python
     # print('\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
-    print('\x1b[1;32;40m' + 'Success' + '\x1b[0m')
+    print('\x1b[1;32;40m' + mssge + '\x1b[0m')
     pass
 
 def scriptinfo():
@@ -77,6 +77,13 @@ def scriptinfo():
     scr_dict ={"name": trc, "source": trc, "dir": scriptdir}
     return scr_dict
 
+def print_prog_name_dir():
+    prog_name = p_get_prog_name()
+    prog_dir  = p_get_prog_dir()
+    print '-' * 8
+    print 'program name: ' + prog_name
+    print 'program dir : ' + prog_dir
+    print '-' * 8
 
 def p_get_prog_name():
     prog_info = scriptinfo()
@@ -223,10 +230,11 @@ def p_file_close(f):
     p_log_this(msg); print msg
 
 def p_file_delete(fn):
-    msg = ''
     if os.path.exists(fn):
         try:
             os.remove(fn)
+            msg = ("%s removed" % fn)
+            p_log_this(msg) #; print msg
         except OSError, err:
             msg = ("Error: %s - %s." % (err.fn, err.strerror))
             p_log_this(msg); print msg
@@ -251,13 +259,13 @@ def show_diff (txt_1, txt_2):
 
 
 if __name__ == "__main__":
-    p_log_init(log_dir='', log_fn='ppg_lib')
-    p_log_start()
+    p_error()
+    p_note_this()
+    print_format_table()
     print p_here('', 1)        # does not work
     prog_info = scriptinfo()
     prog_name = prog_info['name']
     print '\n' + '__main__ : ' + prog_name + '\n'
-    p_log_end('')
     p_exit('Program gentle exiting')
 else:
     # logger = p_log_init(log_fn='default')
