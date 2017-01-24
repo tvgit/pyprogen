@@ -62,17 +62,19 @@ def print_p_cfg_and_args(print_args=True):
     print ' glbls_fn      = '   + ' '*len_lib_dir + glbls_fn
     print ' glbls_path    = '   + os.path.join(lib_dir, glbls_fn)
     # print ' glbls_path    = '   + glbls_path
-    print ' date_time_str = '     + date_time_str
     print
     print ' dir_DataIn    = '     + dir_DataIn
     print ' dir_DataOut   = '     + dir_DataOut
+    print
+    print ' date_time_str = '     + date_time_str
+    print
 
     if print_args:
         print
         for arg in sorted(opt_arg_vars):
-            print '  opt. arg var: ' + arg
+            print '  Opt. command line variables: ' + arg
         for arg in sorted(pos_arg_vars):
-            print '  pos.-arg var: ' + arg
+            print '  Opt. positional arguments variables: ' + arg
 
     print
     print '-'*10 + ' ' + prog_name_new + ' ' + '-' *60 + '\n'

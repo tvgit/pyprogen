@@ -151,9 +151,11 @@ def maindir_make(prog_path) :
 def subdirs_make(prog_path):
     """ """
     p_log_this()
-    p_glbls.cfg_dir = p_utils.p_subdir_make(os.path.join(prog_path, 'cfg'))
-    p_glbls.cfg_fn  = prog_path + '.cfg'   # cfg-file of new y_main.py
-    p_glbls.cfg_path= os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn)
+    # p_utils.p_note_this()  # some visible sign
+
+    p_glbls.cfg_dir  = p_utils.p_subdir_make(os.path.join(prog_path, 'cfg'))
+    p_glbls.cfg_fn   = p_glbls.prog_name[:-3] + '.cfg'   # cfg-file of new y_main.py
+    p_glbls.cfg_path = os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn)
 
     p_glbls.cfg_fn_new   = p_glbls.cfg_fn[:-4] + '_' + p_glbls.date_time_str + p_glbls.cfg_fn[-4:]
     p_glbls.cfg_path_new = os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn_new)
@@ -168,17 +170,16 @@ def subdirs_make(prog_path):
     p_glbls.dir_DataIn  = p_utils.p_subdir_make(os.path.join(prog_path, 'DataIn'))
     p_glbls.dir_DataOut = p_utils.p_subdir_make(os.path.join(prog_path, 'DataOut'))
 
-
 def copy_p_utils():
     # dammed '__init__.py'! 2 hrs of nirwana!
     # for every file in fn_list:
     p_log_this()
     fn_list = ['ppg_utils.py', 'ppg_log.py', '__init__.py']
     for fn in fn_list:
-        # create an normalize source path:
+        # create and normalize source path:
         p_utils_srce_path = os.path.join('.', 'ppg_lib', fn)
         p_utils_srce_path = os.path.normpath(p_utils_srce_path)
-        # create an normalize destination path:
+        # create and normalize destination path:
         p_utils_dest_path = os.path.join('.', p_glbls.lib_dir, fn)
         p_utils_dest_path = os.path.normpath(p_utils_dest_path )
         # copy from source to dest
@@ -222,7 +223,6 @@ def pyprogen():
 
     # maindir_make(os.path.join('.',prog_dir))        # make dir  ./y_main
     maindir_make(prog_dir)        # make dir  ./y_main
-    # os.path.join('.', p_glbls.main_dir)
     subdirs_make(prog_dir)        # make dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
     copy_p_utils()                # copy some utilities to ./y_main/lib
     #
@@ -245,5 +245,6 @@ if __name__ == "__main__":
     p_log_start()        # log is in ./ppg_log/pyprogen.log
     pyprogen()           # python program generator
     p_log_end()          # dwyns
+    # p_utils.p_note_this()  # some visible sign
     p_utils.p_success()  # some visible sign
     p_utils.p_exit()     # exit program

@@ -152,7 +152,12 @@ def p_make_act_date_str():
 
 def p_dir_is_abs(dir):
     """ checks if dir is abs dir """
+    ldg = ''
+    if dir[:2] == '.' + os.path.sep:
+        ldg = dir[:2]
     dir = os.path.normpath(dir)
+    dir = ldg + dir
+
     if (os.path.isabs(dir)):
         mssg_1 = (' dir: >' + dir + '< is absolute, should be relative!')
         mssg_2 = (' please change dir: >' + dir + '<    to relative subdir (i.e. ./log) ')

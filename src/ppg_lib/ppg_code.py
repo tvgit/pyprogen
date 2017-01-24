@@ -61,10 +61,10 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
         p_log_this('prog_name = ' + ppg_glbls.prog_name)
         if (len(ppg_glbls.prog_name) < 4):
             ppg_glbls.prog_name = ppg_glbls.prog_name + '.py'
-            p_log_this('          =>' + ppg_glbls.prog_name)
+            p_log_this('         -> ' + ppg_glbls.prog_name)
         if ((string.lower(ppg_glbls.prog_name[-3:])) <> '.py'):
             ppg_glbls.prog_name = ppg_glbls.prog_name + '.py'
-            p_log_this('          =>' + ppg_glbls.prog_name)
+            p_log_this('         -> ' + ppg_glbls.prog_name)
     except ConfigParser.NoOptionError:
         ppg_glbls.prog_name = 'default_main.py'
         p_log_this('no >prog_name< in: ' + cfg_path + ' !')
@@ -73,12 +73,12 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
     # ppg_glbls.prog_dir
     ppg_glbls.prog_dir = os.path.normpath(ppg_glbls.prog_name[:-3])
     ppg_glbls.prog_dir = os.path.join('.', ppg_glbls.prog_dir)
-    p_log_this("prog_dir = " + ppg_glbls.prog_dir)
+    p_log_this("prog_dir  = " + ppg_glbls.prog_dir)
 
     # ppg_glbls.prefix
     try:
         ppg_glbls.prefix = parser.get("properties", "prefix")
-        p_log_this('prefix = ' + ppg_glbls.prefix)
+        p_log_this('prefix    = ' + ppg_glbls.prefix)
         if (len(ppg_glbls.prefix) < 2):
             p_log_this('prefix = ' + ppg_glbls.prefix)
             ppg_glbls.prefix = ppg_glbls.prog_name[0] + '_'  # prefix for generated program
@@ -103,7 +103,6 @@ def p_inform_about_paths_and_filenames():
     if ppg_glbls.cfg_changed:
         mssge = ('    3) corresponding new version of main >' + ppg_glbls.prog_name_new + '<.')
         print mssge
-
 
     cfg_path = os.path.join(ppg_glbls.cfg_dir, ppg_glbls.cfg_fn)
 
@@ -137,7 +136,7 @@ def p_inform_about_paths_and_filenames():
     mssge += '\n Do not change the >' + ppg_glbls.lib_dir + '\*.py< files!'
     mssge += '\n'
     mssge += headline
-    mssge += '\n'
+    # mssge += '\n'
     print (mssge)
 
 
@@ -268,20 +267,17 @@ def p_cfg_check_if_modified():
     p_log_this('cfg_path:      ' + ppg_glbls.cfg_path)
 
     mssges    = ['']*3 # dict of mssges
-    dest_path = ppg_glbls.cfg_path
-    mssges[0] = ('')
     mssges[1] = ('renaming:      ' + ppg_glbls.cfg_path_new)
-    mssges[2] = ('to:            ' + dest_path)
+    mssges[2] = ('to:            ' + ppg_glbls.cfg_path)
 
     # if there is no >y_main.cfg<:
     if not ppg_utils.p_file_exists (ppg_glbls.cfg_path):
-        dest_path = ppg_glbls.cfg_path
         mssges[0] = ('There is no    ' + ppg_glbls.cfg_path + ' =>')
         for mssge in mssges:
             p_log_this (mssge)
         # move source to dest:
-        shutil.move(ppg_glbls.cfg_path_new, dest_path)
-        ppg_glbls.cfg_path_new = dest_path
+        shutil.move(ppg_glbls.cfg_path_new, ppg_glbls.cfg_path)
+        ppg_glbls.cfg_path_new = ppg_glbls.cfg_path
         ppg_glbls.cfg_file_tmp = ppg_glbls.cfg_fn
         return
 
@@ -294,13 +290,13 @@ def p_cfg_check_if_modified():
     # if (act_hash == old_hash)
     if (hash_of_new_defaults == hash_of_old_defaults):
         mssges[0] = ('vars in [defaults] in >' + ppg_glbls.cfg_path + '< are not changed =>')
-        shutil.move(ppg_glbls.cfg_path_new, dest_path)
-        ppg_glbls.cfg_path_new = dest_path
+        shutil.move(ppg_glbls.cfg_path_new, ppg_glbls.cfg_path)
+        ppg_glbls.cfg_path_new = ppg_glbls.cfg_path
         ppg_glbls.cfg_file_tmp = ppg_glbls.cfg_fn
     else:  # act_hash != old_hash
         mssges[0] = ('vars in [defaults] in >' + ppg_glbls.cfg_path + '< have been modified.')
-        mssges[1] = (' => 1) leave >' + ppg_glbls.cfg_path + '< unchanged.')
-        mssges[2] = ('    2) write new version of config file: >' + ppg_glbls.cfg_path_new + '<.')
+        mssges[1] = (' => 1) old config file is: >' + ppg_glbls.cfg_path + '< (unchanged).')
+        mssges[2] = ('    2) new config file is: >' + ppg_glbls.cfg_path_new + '<.')
         ppg_glbls.cfg_changed = True
 
     for mssge in mssges:
