@@ -146,35 +146,27 @@ def maindir_make(prog_path) :
     """ """
     p_log_this()
     p_glbls.main_dir = p_utils.p_subdir_make(prog_path)
-    p_glbls.main_dir = os.path.join('.', p_glbls.main_dir)
 
 
 def subdirs_make(prog_path):
     """ """
     p_log_this()
     p_glbls.cfg_dir = p_utils.p_subdir_make(os.path.join(prog_path, 'cfg'))
-    p_glbls.cfg_dir = os.path.join('.', p_glbls.cfg_dir)  # cfg-dir of new y_main.py
-
     p_glbls.cfg_fn  = prog_path + '.cfg'   # cfg-file of new y_main.py
     p_glbls.cfg_path= os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn)
 
     p_glbls.cfg_fn_new   = p_glbls.cfg_fn[:-4] + '_' + p_glbls.date_time_str + p_glbls.cfg_fn[-4:]
     p_glbls.cfg_path_new = os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn_new)
 
-    p_glbls.lib_dir = p_utils.p_subdir_make(os.path.join(prog_path, 'lib'))
-    p_glbls.lib_dir = os.path.join('.', p_glbls.lib_dir)
+    p_glbls.lib_dir    = p_utils.p_subdir_make(os.path.join(prog_path, 'lib'))
 
     p_glbls.glbls_fn   = p_glbls.prefix + 'glbls.py'    # globals of ! >y_main.py< !
     p_glbls.glbls_path = os.path.join(p_glbls.lib_dir, p_glbls.glbls_fn)
 
     p_glbls.log_dir = p_utils.p_subdir_make(os.path.join(prog_path, 'log'))
-    p_glbls.log_dir = os.path.join('.', p_glbls.log_dir)
 
     p_glbls.dir_DataIn  = p_utils.p_subdir_make(os.path.join(prog_path, 'DataIn'))
-    p_glbls.dir_DataIn  = os.path.join('.', p_glbls.dir_DataIn)
-
     p_glbls.dir_DataOut = p_utils.p_subdir_make(os.path.join(prog_path, 'DataOut'))
-    p_glbls.dir_DataOut = os.path.join('.', p_glbls.dir_DataOut)
 
 
 def copy_p_utils():
@@ -226,11 +218,12 @@ def pyprogen():
     p_code.p_read_ini(".", "new_prog.ini")  # read >new_prog.ini< and create some global fn's, path's and var's
                                   # This data will be stored in module >ppg_glbls.py<
     # in the comments >y_main< is a symbolic the name of the generated program.
-    prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
-    # schlechter name 'prog_path' denn er ist >y_main<,
-    # dh basename ohne ext! dh gar kein Path.
-    maindir_make(prog_path)       # make dir  ./y_main
-    subdirs_make(prog_path)       # make dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
+    prog_dir = p_glbls.prog_dir   # ./y_main; >y_main.py< will live here
+
+    # maindir_make(os.path.join('.',prog_dir))        # make dir  ./y_main
+    maindir_make(prog_dir)        # make dir  ./y_main
+    # os.path.join('.', p_glbls.main_dir)
+    subdirs_make(prog_dir)        # make dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
     copy_p_utils()                # copy some utilities to ./y_main/lib
     #
     ca_parser_make()              # make ./y_main/lib/y_CAParser.py

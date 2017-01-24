@@ -4,7 +4,7 @@
 import os.path
 
 prog_name         = 'def_y_main.py' # default name of (new) program, configure in: >new_prog.ini<
-prog_path         = None            # default path
+prog_dir          = None            # default path
 prog_changed      = False           # y_main.py changed?
 prog_name_new     = prog_name       # name of program with new config version
 
