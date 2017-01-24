@@ -227,7 +227,7 @@ def p_file_close(f):
     fn = os.path.basename(f.name)
     msg = ('closing file: ' + fn)
     file.close(f)
-    p_log_this(msg); print msg
+    p_log_this(msg); #print msg
 
 def p_file_delete(fn):
     if os.path.exists(fn):

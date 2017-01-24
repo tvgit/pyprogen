@@ -158,11 +158,14 @@ def subdirs_make(prog_path):
     p_glbls.cfg_fn  = prog_path + '.cfg'   # cfg-file of new y_main.py
     p_glbls.cfg_path= os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn)
 
-    p_glbls.cfg_fn_tmp   = p_glbls.cfg_fn[:-4] + '_' + p_glbls.date_time_str + p_glbls.cfg_fn[-4:]
-    p_glbls.cfg_path_tmp = os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn_tmp)
+    p_glbls.cfg_fn_new   = p_glbls.cfg_fn[:-4] + '_' + p_glbls.date_time_str + p_glbls.cfg_fn[-4:]
+    p_glbls.cfg_path_new = os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn_new)
 
     p_glbls.lib_dir = p_utils.p_subdir_make(os.path.join(prog_path, 'lib'))
     p_glbls.lib_dir = os.path.join('.', p_glbls.lib_dir)
+
+    p_glbls.glbls_fn   = p_glbls.prefix + 'glbls.py'    # globals of ! >y_main.py< !
+    p_glbls.glbls_path = os.path.join(p_glbls.lib_dir, p_glbls.glbls_fn)
 
     p_glbls.log_dir = p_utils.p_subdir_make(os.path.join(prog_path, 'log'))
     p_glbls.log_dir = os.path.join('.', p_glbls.log_dir)
@@ -208,9 +211,9 @@ def ca_parser_run():
     subprocess_path  = p_glbls.CAParser_path
     p_log_this("subprocess_path   = " + subprocess_path)
     # http://pymotw.com/2/subprocess/
-    # start new ConfArgParser to create cfg-file (aka >cfg_path_tmp<) for >y_main.py<
-    cfg_path = p_glbls.cfg_path_tmp         # == >y_main_TimeStamp.cfg<
-    p_log_this("cfg_path_tmp      = " + cfg_path)
+    # start new ConfArgParser to create cfg-file (aka >cfg_path_new<) for >y_main.py<
+    cfg_path = p_glbls.cfg_path_new         # == >y_main_TimeStamp.cfg<
+    p_log_this("cfg_path_new      = " + cfg_path)
     subprocess.call([subprocess_path, cfg_path], shell=True)
 
 def pyprogen():
@@ -224,6 +227,8 @@ def pyprogen():
                                   # This data will be stored in module >ppg_glbls.py<
     # in the comments >y_main< is a symbolic the name of the generated program.
     prog_path = p_glbls.prog_path # ./y_main; >y_main.py< will live here
+    # schlechter name 'prog_path' denn er ist >y_main<,
+    # dh basename ohne ext! dh gar kein Path.
     maindir_make(prog_path)       # make dir  ./y_main
     subdirs_make(prog_path)       # make dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
     copy_p_utils()                # copy some utilities to ./y_main/lib
@@ -231,7 +236,7 @@ def pyprogen():
     ca_parser_make()              # make ./y_main/lib/y_CAParser.py
     ca_parser_run()               # run: y_CAParser.py => create: >y_main_TimeStamp.cfg<
 
-    p_code.p_cfg_clear_versions() # check (via hash) if there are identical versions of >y_main_*.cfg<
+    p_code.p_cfg_clear_versions() # check (via hash) if there are yet identical versions of >y_main_*.cfg<
 
     p_code.p_glbls_create()       # create modul ./y_main/lib/y_glbls.py
 
