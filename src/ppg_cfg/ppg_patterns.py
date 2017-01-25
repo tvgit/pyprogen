@@ -16,8 +16,6 @@ import lib.xx_CAParser as xx_CAParser
 import lib.ppg_utils     as p_utils
 from   lib.ppg_log       import p_log_init, p_log_start, p_log_this, p_log_end
 import lib.xx_glbls
-import copy
-
 
 # 'confargs' are your configuration parameters / cmdline arguments
 confargs = lib.xx_glbls.arg_ns
