@@ -32,21 +32,21 @@ def print_format_table():
         print('\n')
 
 
-def p_note_this(mssge = 'note this'):
+def p_terminal_mssge_note_this(mssge ='note this'):
     # http://stackoverflow.com/questions/287871
     #     ... print-in-terminal-with-colors-using-python
     # print('\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
     print('\x1b[6;36;40m' + mssge + '\x1b[0m')
     pass
 
-def p_error(mssge = 'Error'):
+def p_terminal_mssge_error(mssge ='Error'):
     # http://stackoverflow.com/questions/287871
     #     ... print-in-terminal-with-colors-using-python
     # print('\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
     print('\x1b[1;35;40m' + mssge + '\x1b[0m')
     pass
 
-def p_success(mssge = 'Success'):
+def p_terminal_mssge_success(mssge ='Success'):
     # http://stackoverflow.com/questions/287871
     #     ... print-in-terminal-with-colors-using-python
     # print('\x1b[6;30;42m' + 'Success!' + '\x1b[0m')
@@ -77,36 +77,36 @@ def scriptinfo():
     scr_dict ={"name": trc, "source": trc, "dir": scriptdir}
     return scr_dict
 
-def print_prog_name_dir():
-    prog_name = p_get_prog_name()
-    prog_dir  = p_get_prog_dir()
+def program_name_and_dir_print():
+    prog_name = p_program_name_get()
+    prog_dir  = p_program_dir_rtrn()
     print '-' * 8
     print 'program name: ' + prog_name
     print 'program dir : ' + prog_dir
     print '-' * 8
 
-def p_get_prog_name():
+def p_program_name_get():
     prog_info = scriptinfo()
     prog_name = prog_info['name']
     return prog_name
 
 
-def p_get_prog_dir():
+def p_program_dir_rtrn():
     prog_info = scriptinfo()
     prog_dir  = prog_info['dir']
     return prog_dir
 
 
-def p_act_dir_path():
+def p_current_module_path_rtrn():
+    """" print path of act module independent of calling program """
     # http://www.karoltomala.com/blog/?p=622
+    # http://stackoverflow.com/questions/247770/retrieving-python-module-path
     path = os.path.abspath(__file__)
     dir_path = os.path.dirname(path)
-    # see also:
-    # http://stackoverflow.com/questions/247770/retrieving-python-module-path
     return dir_path
 
 
-def p_get_datetime_str(txt_line):
+def p_datetime_str_rtrn(txt_line):
     """ thx to: http://txt2re.com"""
     re1='((?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3})))(?![\\d])'	# Year 1
     re2='(_)'	# Any Single Character 1
@@ -139,7 +139,7 @@ def p_get_datetime_str(txt_line):
     else:
         return '_UNKNOWN_DATE_TIME'
 
-def p_make_act_date_str():
+def p_act_date_str_rtrn():
     now     = datetime.datetime.now()
     now_str =                 str(now.year)
     now_str = now_str + '_' + str(now.month).zfill(2)
@@ -150,26 +150,25 @@ def p_make_act_date_str():
     return now_str
 
 
-def p_dir_is_abs(dir):
-    """ checks if dir is abs dir """
+def p_path_abs_is(path):
+    """ checks if path is abs path """
     ldg = ''
-    if dir[:2] == '.' + os.path.sep:
-        ldg = dir[:2]
-    dir = os.path.normpath(dir)
-    dir = ldg + dir
+    if path[:2] == '.' + os.path.sep:
+        ldg = path[:2]
+    path = ldg + os.path.normpath(path)
 
-    if (os.path.isabs(dir)):
-        mssg_1 = (' dir: >' + dir + '< is absolute, should be relative!')
-        mssg_2 = (' please change dir: >' + dir + '<    to relative subdir (i.e. ./log) ')
+    if (os.path.isabs(path)):
+        mssg_1 = (' path: >' + path + '< is absolute, but should be relative!')
+        mssg_2 = (' please change path: >' + path + '<    to relative subdir (i.e. ./log) ')
         mssg_3 = ('       ....  exiting!')
         print mssg_1 + mssg_2 + mssg_3
         p_log_this(mssg_1); p_log_this(mssg_2) ; p_log_this(mssg_3)
         p_exit()  # exit !
-    if (dir == ''): dir = '.'
-    return dir
+    if (path == ''): path = '.'
+    return path
 
 def p_dir_make(dir):
-    """ makes dir if dir """
+    """ if dir does not exist -> make dir """
     dir = os.path.normpath(dir)
     if not os.path.exists(dir):
         try:
@@ -184,9 +183,20 @@ def p_dir_make(dir):
 
 def p_subdir_make(dir):
     """ creates sub_dir """
-    dir = p_dir_is_abs(dir)
+    dir = p_path_abs_is(dir)
     p_dir_make(dir)
     return dir
+
+
+def p_dir_traverse_recursively(path, regex):
+    """http://stackoverflow.com/questions/7012921/recursive-grep-using-python"""
+    regObj = re.compile(regex)
+    result_list = []
+    for root, dirs, fnames in os.walk(path):
+        for fname in fnames:
+            if regObj.match(fname):
+                result_list.append(os.path.join(root, fname))
+    return sorted(result_list)
 
 
 def p_file_exists (fn, print_message = False):
@@ -264,8 +274,8 @@ def show_diff (txt_1, txt_2):
 
 
 if __name__ == "__main__":
-    p_error()
-    p_note_this()
+    p_terminal_mssge_error()
+    p_terminal_mssge_note_this()
     print_format_table()
     print p_here('', 1)        # does not work
     prog_info = scriptinfo()

@@ -88,7 +88,7 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
         p_log_this('prefix set to: ' + ppg_glbls.prefix)
 
     # ppg_glbls.date_time_str
-    ppg_glbls.date_time_str = ppg_utils.p_make_act_date_str()
+    ppg_glbls.date_time_str = ppg_utils.p_act_date_str_rtrn()
     # filename of globals of created program
     ppg_glbls.glbls_fn      = ppg_glbls.prefix + 'glbls.py'    # globals of ! >y_main.py< !
     # ppg_glbls.glbls_path    = os.path.join(ppg_glbls.lib_dir, ppg_glbls.glbls_fn)
@@ -96,16 +96,13 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
     ppg_glbls.glbls_path    = os.path.join('xxxxxx', ppg_glbls.glbls_fn)
 
 
-
 def p_inform_about_paths_and_filenames():
     """ """
-
     if ppg_glbls.cfg_changed:
         mssge = ('    3) corresponding new version of main >' + ppg_glbls.prog_name_new + '<.')
         print mssge
 
     cfg_path = os.path.join(ppg_glbls.cfg_dir, ppg_glbls.cfg_fn)
-
     headline = '\n' + '-'*10 + ' ' + ppg_glbls.prog_name_new + ' ' + '-' * 60 + '\n'
 
     mssge  = ''
@@ -329,7 +326,7 @@ def p_cfg_clear_versions():
     list_of_cfg_w_identical_hash = p_cfg_find_identical_hash(hash)
 
     if not ppg_glbls.cfg_path_new in list_of_cfg_w_identical_hash:
-        ppg_utils.p_error()
+        ppg_utils.p_terminal_mssge_error()
     else:
         list_of_cfg_w_identical_hash.remove(ppg_glbls.cfg_path_new)
         p_delete_files_in_list(list_of_cfg_w_identical_hash)
@@ -470,6 +467,6 @@ def p_main_make():
 
 if __name__ == "__main__":
     print ppg_glbls.prog_name
-    # ppg_utils.p_note_this()
-    # ppg_utils.p_note_this()
+    # ppg_utils.p_terminal_mssge_note_this()
+    # ppg_utils.p_terminal_mssge_note_this()
     ppg_utils.p_exit()

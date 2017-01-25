@@ -45,7 +45,7 @@ def main():
 
 y_main[80] = r"""
 if __name__ == "__main__":
-    p_utils.print_prog_name_dir()
+    p_utils.program_name_and_dir_print()
     p_log_init(log_dir = 'log', log_fn = r'xx_main.log')
     p_log_start()
 
@@ -60,7 +60,7 @@ y_main[86] = """
     main()
 
     p_log_end()
-    p_utils.p_success()
+    p_utils.p_terminal_mssge_success()
     p_utils.p_exit()
 
 """

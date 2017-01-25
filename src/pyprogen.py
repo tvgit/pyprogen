@@ -151,7 +151,7 @@ def maindir_make(prog_path) :
 def subdirs_make(prog_path):
     """ """
     p_log_this()
-    # p_utils.p_note_this()  # some visible sign
+    # p_utils.p_terminal_mssge_note_this()  # some visible sign
 
     p_glbls.cfg_dir  = p_utils.p_subdir_make(os.path.join(prog_path, 'cfg'))
     p_glbls.cfg_fn   = p_glbls.prog_name[:-3] + '.cfg'   # cfg-file of new y_main.py
@@ -245,6 +245,6 @@ if __name__ == "__main__":
     p_log_start()        # log is in ./ppg_log/pyprogen.log
     pyprogen()           # python program generator
     p_log_end()          # dwyns
-    # p_utils.p_note_this()  # some visible sign
-    p_utils.p_success()  # some visible sign
+    # p_utils.p_terminal_mssge_note_this()  # some visible sign
+    p_utils.p_terminal_mssge_success()  # some visible sign
     p_utils.p_exit()     # exit program
