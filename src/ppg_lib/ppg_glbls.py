@@ -6,7 +6,7 @@ import os.path
 prog_name         = 'def_y_main.py' # default name of (new) program, configure in: >new_prog.ini<
 prog_dir          = None            # default path
 prog_changed      = False           # y_main.py changed?
-prog_name_new     = prog_name       # name of program with new config version
+prog_new_name     = prog_name       # name of program with new config version
 
 prefix    = None     # common prefix of y_main-specific dirs, paths, modules, functions, vars ...
 arg_prefix= None     # common prefix of vars storing values of cmd-line args
@@ -77,6 +77,6 @@ def print_p_cfg_and_args(print_args=True):
             print '  Opt. positional arguments variables: ' + arg
 
     print
-    print '-'*10 + ' ' + prog_name_new + ' ' + '-' *60 + '\n'
+    print '-'*10 + ' ' + prog_new_name + ' ' + '-' * 60 + '\n'
 
 

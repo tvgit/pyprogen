@@ -99,11 +99,11 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
 def p_inform_about_paths_and_filenames():
     """ """
     if ppg_glbls.cfg_changed:
-        mssge = ('    3) corresponding new version of main >' + ppg_glbls.prog_name_new + '<.')
+        mssge = ('    3) corresponding new version of main >' + ppg_glbls.prog_new_name + '<.')
         print mssge
 
     cfg_path = os.path.join(ppg_glbls.cfg_dir, ppg_glbls.cfg_fn)
-    headline = '\n' + '-'*10 + ' ' + ppg_glbls.prog_name_new + ' ' + '-' * 60 + '\n'
+    headline = '\n' + '-'*10 + ' ' + ppg_glbls.prog_new_name + ' ' + '-' * 60 + '\n'
 
     mssge  = ''
     mssge += headline
@@ -112,9 +112,9 @@ def p_inform_about_paths_and_filenames():
     mssge += '\n Dir  of YOUR code is:        ' + os.path.join(ppg_glbls.main_dir, '')
     mssge += '\n Path of YOUR code is:        ' + os.path.join(ppg_glbls.main_dir, ppg_glbls.prog_name)
     mssge += '\n'
-    mssge += '\n Filename of new version is:  ' + ' '*len_dir_main + ppg_glbls.prog_name_new
+    mssge += '\n Filename of new version is:  ' + ' '*len_dir_main + ppg_glbls.prog_new_name
     mssge += '\n Dir  of new version is:      ' + os.path.join(ppg_glbls.main_dir, '')
-    mssge += '\n Path of new version is:      ' + os.path.join(ppg_glbls.main_dir, ppg_glbls.prog_name_new)
+    mssge += '\n Path of new version is:      ' + os.path.join(ppg_glbls.main_dir, ppg_glbls.prog_new_name)
     # mssge += '(>' + ppg_glbls.prog_name + '< was not changed.)'
     # cfg_path_new
     mssge += '\n'
@@ -450,7 +450,8 @@ def p_main_make():
     # if          >y_main.cfg< was modified => new >y_main.py< becomes >y_main_TIMESTAMP.py<
     if p_main_check_if_modified(new_main_path) or ppg_glbls.cfg_changed:
         new_main_path = new_main_path[:-3] + '_' + ppg_glbls.date_time_str + '.py'
-        ppg_glbls.prog_name_new = os.path.basename(new_main_path)
+
+    ppg_glbls.prog_new_name = os.path.basename(new_main_path)
 
     # if there is/are existing >y_main_TIMESTAMP.py< with identical hash:
     # remember their names to delete them later:
