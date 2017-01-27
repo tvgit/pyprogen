@@ -230,7 +230,6 @@ def pyprogen():
     ca_parser_run()               # run: y_CAParser.py => create: >y_main_TimeStamp.cfg<
 
     p_code.p_cfg_clear_versions() # check (via hash) if there are yet identical versions of >y_main_*.cfg<
-
     p_code.p_glbls_create()       # create modul ./y_main/lib/y_glbls.py
 
     # Finally here >y_main.py< will be created:
