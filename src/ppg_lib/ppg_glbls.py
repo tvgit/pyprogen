@@ -16,8 +16,9 @@ cfg_dir   = None     # subdir  : >./y_main/cfg<, config files for >y_main.py<
 lib_dir   = None     # subdir  : >./y_main/lib<, utilities for >y_main.py<
 log_dir   = None     # subdir  : >./y_main/log<, log-files for >y_main.py<
 
-cfg_fn       = None  # filename of cfg-file for for 'y_main.py'; usually: >y_main.py<
-cfg_path     = None  # path     of cfg-file for for 'y_main.py'; usually: >./y_mainy/cfg/y_main.cfg<
+cfg_fn       = None  # filename of cfg-file for 'y_main.py'; usually: >y_main.py<
+cfg_path     = None  # path     of cfg-file for 'y_main.py'; usually: >./y_mainy/cfg/y_main.cfg<
+cfg_exists   = False # y_main.cfg exists?
 cfg_changed  = False # y_main.cfg changed?
 
 cfg_fn_new   = None  # filename of new cfg-file for for 'y_main.py'; usually: >y_main_timestamp.py<

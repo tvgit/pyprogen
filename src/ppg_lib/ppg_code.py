@@ -224,7 +224,7 @@ def p_cfg_create_hash():
     Called by >pyprogen.py< after >ca_parser_make< was called,
     i.e after a new >y_main_TimeStamp.cfg< was written."""
 
-    p_log_this('cfg_path_new     = ' + ppg_glbls.cfg_path_new)
+    p_log_this('cfg_path_new  = ' + ppg_glbls.cfg_path_new)
 
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
     cfg_file = parser.read(ppg_glbls.cfg_path_new)
@@ -259,47 +259,59 @@ def p_cfg_read_hash(cfg_path):
         return
     return hash_val
 
+def p_cfg_check_if_modified_log_prt_mssges():
+    mssges    = ['']*6 # dict of mssges
+
+    if not ppg_glbls.cfg_exists:
+        mssges[0] = ('There is no    ' + ppg_glbls.cfg_path + ' =>')
+        mssges[1] = ('renaming:      ' + ppg_glbls.cfg_path_new)
+        mssges[2] = ('to:            ' + ppg_glbls.cfg_path)
+    else:
+        mssges[0] = ('There is already a          >' + ppg_glbls.cfg_path + '< ')
+        if ppg_glbls.cfg_changed:
+            mssges[3] = ('Since vars in [defaults] in >' + ppg_glbls.cfg_path + '< have been modified.')
+            mssges[4] = (' => 1) old config file:     >' + ppg_glbls.cfg_path + '< stays unchanged.')
+            mssges[5] = ('    2) new config file is:  >' + ppg_glbls.cfg_path_new + '<.')
+        else: # ppg_glbls.cfg_changed == False
+            mssges[3] = ('vars in [defaults] in >' + ppg_glbls.cfg_path + '< are not changed =>')
+
+    for mssge in mssges:
+        if mssge:
+            p_log_this (mssge)
+    for mssge in mssges:
+        if mssge:
+            print(mssge)
+
+
 def p_cfg_check_if_modified():
     """ checks if y_main.cfg was modified (== hash of code is different) """
-    p_log_this('cfg_path:      ' + ppg_glbls.cfg_path)
-
-    mssges    = ['']*3 # dict of mssges
-    mssges[1] = ('renaming:      ' + ppg_glbls.cfg_path_new)
-    mssges[2] = ('to:            ' + ppg_glbls.cfg_path)
-
+    # >ppg_glbls.cfg_path<  == path of cfg-file; usually: >./y_mainy/cfg/y_main.cfg<
+    p_log_this('cfg_path: ' + ppg_glbls.cfg_path)
     # if there is no >y_main.cfg<:
-    if not ppg_utils.p_file_exists (ppg_glbls.cfg_path):
-        mssges[0] = ('There is no    ' + ppg_glbls.cfg_path + ' =>')
-        for mssge in mssges:
-            p_log_this (mssge)
-        # move source to dest:
+    ppg_glbls.cfg_exists = ppg_utils.p_file_exists(ppg_glbls.cfg_path)
+    if not ppg_glbls.cfg_exists:
+        # move new cfg-file to >./y_mainy/cfg/y_main.cfg<
         shutil.move(ppg_glbls.cfg_path_new, ppg_glbls.cfg_path)
         ppg_glbls.cfg_path_new = ppg_glbls.cfg_path
         ppg_glbls.cfg_file_tmp = ppg_glbls.cfg_fn
-        return
+        return # !!
 
-    # if there is already a >y_main.cfg<:
-    hash_of_old_defaults = p_cfg_read_hash(ppg_glbls.cfg_path)     # >y_main.cfg<
-    p_log_this('hash_of_old_defaults =' + hash_of_old_defaults)
-    hash_of_new_defaults = p_cfg_read_hash(ppg_glbls.cfg_path_new) # >y_main_TimeStamp.cfg<
-    p_log_this('hash_of_new_defaults =' + hash_of_new_defaults)
+    else: # there is already a >y_main.cfg< -> compare hashes:
+        hash_of_old_defaults = p_cfg_read_hash(ppg_glbls.cfg_path)     # >y_main.cfg<
+        p_log_this('hash_of_old_defaults =' + hash_of_old_defaults)
+        hash_of_new_defaults = p_cfg_read_hash(ppg_glbls.cfg_path_new) # >y_main_TimeStamp.cfg<
+        p_log_this('hash_of_new_defaults =' + hash_of_new_defaults)
 
-    # if (act_hash == old_hash)
-    if (hash_of_new_defaults == hash_of_old_defaults):
-        mssges[0] = ('vars in [defaults] in >' + ppg_glbls.cfg_path + '< are not changed =>')
-        shutil.move(ppg_glbls.cfg_path_new, ppg_glbls.cfg_path)
-        ppg_glbls.cfg_path_new = ppg_glbls.cfg_path
-        ppg_glbls.cfg_file_tmp = ppg_glbls.cfg_fn
-    else:  # act_hash != old_hash
-        mssges[0] = ('vars in [defaults] in >' + ppg_glbls.cfg_path + '< have been modified.')
-        mssges[1] = (' => 1) old config file is: >' + ppg_glbls.cfg_path + '< (unchanged).')
-        mssges[2] = ('    2) new config file is: >' + ppg_glbls.cfg_path_new + '<.')
-        ppg_glbls.cfg_changed = True
+        # if (act_hash == old_hash)
+        if (hash_of_new_defaults == hash_of_old_defaults):
+            ppg_glbls.cfg_changed = False
+            shutil.move(ppg_glbls.cfg_path_new, ppg_glbls.cfg_path)
+            ppg_glbls.cfg_path_new = ppg_glbls.cfg_path
+            ppg_glbls.cfg_file_tmp = ppg_glbls.cfg_fn
+        else:  # act_hash != old_hash
+            ppg_glbls.cfg_changed = True
 
-    for mssge in mssges:
-        p_log_this (mssge)
-    for mssge in mssges:
-        print(mssge)
+    p_cfg_check_if_modified_log_prt_mssges()
 
 def p_cfg_find_identical_hash(hash):
     """"find in dir >ppg_glbls.cfg_fn< files >y_main*.cfg< with identical hash-values"""
@@ -319,7 +331,7 @@ def p_cfg_clear_versions():
     """ finds and deletes >y_main_timestamp.cfg< with identical hash
     """
 
-    p_log_this('cfg_path:      ' + ppg_glbls.cfg_path)
+    p_log_this('cfg_path:    ' + ppg_glbls.cfg_path)
     hash = p_cfg_create_hash() # create hash for vars in most recent >y_main_TimeStamp.cfg<
     p_cfg_check_if_modified()  # check if >./y_main/y_main.cfg exists<
 
