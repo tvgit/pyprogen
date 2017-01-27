@@ -190,11 +190,30 @@ def p_subdir_make(dir):
     return dir
 
 
-def p_dir_traverse_recursively(path, regex):
+# def p_dir_traverse_recursively(path, regex):
+#     """http://stackoverflow.com/questions/7012921/recursive-grep-using-python"""
+#     # http: // txt2re.com
+#     # regex = "(.+?)(\.[^.]*$|$)"  # == filename
+#     # regObj = re.compile(regex)
+#     # http://codereview.stackexchange.com/questions/19103/python-function-to-match-filenames-with-extension-names
+#     result_list = []
+#     for root, dirs, fnames in os.walk(path):
+#         for fname in fnames:
+#             if regObj.match(fname):
+#                 result_list.append(os.path.join(root, fname))
+#     return sorted(result_list)
+
+def p_check_filename_pattern():
+    regex = "(.+?)(\.[^.]*$|$)"  # == filename
+    regObj = re.compile(regex)
+    pass
+
+def p_dir_traverse_recursively(path):
     """http://stackoverflow.com/questions/7012921/recursive-grep-using-python"""
     # http: // txt2re.com
     # regex = "(.+?)(\.[^.]*$|$)"  # == filename
     # regObj = re.compile(regex)
+    # http://codereview.stackexchange.com/questions/19103/python-function-to-match-filenames-with-extension-names
     result_list = []
     for root, dirs, fnames in os.walk(path):
         for fname in fnames:
