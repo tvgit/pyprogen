@@ -34,10 +34,15 @@ glbls_path   = None  # path of globals file (OF NEW PROGRAM!); usually: >./y_mai
 pos_arg_vars = None  # positional args
 opt_arg_vars = None  # optional args
 
-dir_DataIn  = None   # subdir  : >./y_main/DataIn<, DataIn-files for >y_main.py<
-dir_DataOut = None   # subdir  : >./y_main/DataOut<, DataOut-files for >y_main.py<
+dir_DataIn   = None   # subdir  : >./y_main/DataIn<, DataIn-files for >y_main.py<
+dir_DataOut  = None   # subdir  : >./y_main/DataOut<, DataOut-files for >y_main.py<
 
 date_time_str= None  # Date & Time
+
+headline     = ('-' * 10 + ' ' + prog_new_name + ' ' + '-' * 10 + '\n')
+
+def print_headline():
+    print ('-' * 10 + ' ' + prog_name + ' ' + '-' * 10 + '\n')
 
 def print_p_cfg_and_args(print_args=True):
     print ' prog_name     =   '   + prog_name
@@ -78,6 +83,6 @@ def print_p_cfg_and_args(print_args=True):
             print '  Opt. positional arguments variables: ' + arg
 
     print
-    print '-'*10 + ' ' + prog_new_name + ' ' + '-' * 60 + '\n'
+    print_headline()
 
 

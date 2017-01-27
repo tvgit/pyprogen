@@ -98,15 +98,15 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
 
 def p_inform_about_paths_and_filenames():
     """ """
-    if ppg_glbls.cfg_changed:
-        mssge = ('    3) corresponding new version of main >' + ppg_glbls.prog_new_name + '<.')
-        print mssge
-
     cfg_path = os.path.join(ppg_glbls.cfg_dir, ppg_glbls.cfg_fn)
-    headline = '\n' + '-'*10 + ' ' + ppg_glbls.prog_new_name + ' ' + '-' * 60 + '\n'
+
+    ppg_glbls.print_headline()
+
+    p_log_or_print_cfg_mssges(do_print=True, do_log=False)
+
 
     mssge  = ''
-    mssge += headline
+    # mssge += headline
     len_dir_main = len(ppg_glbls.main_dir) + 1
     mssge += '\n Filename of YOUR code is:    ' + ' '*len_dir_main + ppg_glbls.prog_name
     mssge += '\n Dir  of YOUR code is:        ' + os.path.join(ppg_glbls.main_dir, '')
@@ -125,24 +125,16 @@ def p_inform_about_paths_and_filenames():
     mssge += '\n'
     mssge += '\n You may configure the comand line _args_     of >' + ppg_glbls.prog_name + '<  via:  >new_prog_args.cfg<'
     mssge += '\n  ... but run >pyprogen.py< again!'
+    mssge += '\n'
     mssge += '\n You may configure the comand line _defaults_ of >' + ppg_glbls.prog_name + '<  via:  >' + cfg_path + '<'
     mssge += '\n >' + cfg_path + '<  will be preserved, if changed. '
     mssge += '\n'
-    mssge += '\n  newer generated files will have a timestamp in their filename: >' + ppg_glbls.prog_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
+    mssge += '\n newer generated files will have a timestamp in their filename: >' + ppg_glbls.prog_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
     mssge += '\n'
     mssge += '\n Do not change the >' + ppg_glbls.lib_dir + '\*.py< files!'
     mssge += '\n'
-    mssge += headline
     # mssge += '\n'
     print (mssge)
-
-
-# def p_create_paths_and_fns():
-#     """ creates later needed filename  """
-#     # globals of ! >y_main.py< !
-#     ppg_glbls.glbls_fn      = ppg_glbls.prefix + 'glbls.py'
-#     # name of parser func in >y_CAParser<
-#     # ppg_glbls.CAParser_func = ppg_glbls.prefix + 'parser'
 
 
 def p_subst_vars_in_patterns (input_dict):
@@ -259,27 +251,29 @@ def p_cfg_read_hash(cfg_path):
         return
     return hash_val
 
-def p_cfg_check_if_modified_log_prt_mssges():
-    mssges    = ['']*6 # dict of mssges
-
+def p_log_or_print_cfg_mssges(do_print = False, do_log = False):
+    mssges = []
     if not ppg_glbls.cfg_exists:
-        mssges[0] = ('There is no    ' + ppg_glbls.cfg_path + ' =>')
-        mssges[1] = ('renaming:      ' + ppg_glbls.cfg_path_new)
-        mssges[2] = ('to:            ' + ppg_glbls.cfg_path)
+        mssges.append('There is no    ' + ppg_glbls.cfg_path + ' =>')
+        mssges.append('renaming:      ' + ppg_glbls.cfg_path_new)
+        mssges.append('to:            ' + ppg_glbls.cfg_path)
     else:
-        mssges[0] = ('There is already a          >' + ppg_glbls.cfg_path + '< ')
+        mssges.append('There is already a          >' + ppg_glbls.cfg_path + '< ')
         if ppg_glbls.cfg_changed:
-            mssges[3] = ('Since vars in [defaults] in >' + ppg_glbls.cfg_path + '< have been modified.')
-            mssges[4] = (' => 1) old config file:     >' + ppg_glbls.cfg_path + '< stays unchanged.')
-            mssges[5] = ('    2) new config file is:  >' + ppg_glbls.cfg_path_new + '<.')
+            mssges.append('Since vars in [defaults] in >' + ppg_glbls.cfg_path + '< have been modified.')
+            mssges.append(' => 1) old config file:     >' + ppg_glbls.cfg_path + '< stays unchanged.')
+            mssges.append('    2) new config file is:  >' + ppg_glbls.cfg_path_new + '<.')
+        if ppg_glbls.cfg_changed and do_print:
+            mssges.append('    3) corresponding new version of main >' + ppg_glbls.prog_new_name + '<.')
         else: # ppg_glbls.cfg_changed == False
-            mssges[3] = ('vars in [defaults] in >' + ppg_glbls.cfg_path + '< are not changed =>')
+            mssges.append('vars in [defaults] in >' + ppg_glbls.cfg_path + '< are not changed =>')
 
-    for mssge in mssges:
-        if mssge:
+    if do_log:
+        for mssge in mssges:
             p_log_this (mssge)
-    for mssge in mssges:
-        if mssge:
+
+    if do_print:
+        for mssge in mssges:
             print(mssge)
 
 
@@ -311,7 +305,7 @@ def p_cfg_check_if_modified():
         else:  # act_hash != old_hash
             ppg_glbls.cfg_changed = True
 
-    p_cfg_check_if_modified_log_prt_mssges()
+    p_log_or_print_cfg_mssges(do_print = False, do_log = True)
 
 def p_cfg_find_identical_hash(hash):
     """"find in dir >ppg_glbls.cfg_fn< files >y_main*.cfg< with identical hash-values"""

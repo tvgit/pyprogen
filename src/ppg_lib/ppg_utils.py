@@ -12,8 +12,10 @@ import os
 import sys
 
 import datetime
-import inspect
 import difflib
+import inspect
+import re
+
 
 from   ppg_log   import p_log_init, p_log_start, p_log_this, p_log_end
 
@@ -190,7 +192,9 @@ def p_subdir_make(dir):
 
 def p_dir_traverse_recursively(path, regex):
     """http://stackoverflow.com/questions/7012921/recursive-grep-using-python"""
-    regObj = re.compile(regex)
+    # http: // txt2re.com
+    # regex = "(.+?)(\.[^.]*$|$)"  # == filename
+    # regObj = re.compile(regex)
     result_list = []
     for root, dirs, fnames in os.walk(path):
         for fname in fnames:
