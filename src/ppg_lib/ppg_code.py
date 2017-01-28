@@ -75,10 +75,10 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
     ppg_glbls.prog_dir = os.path.join('.', ppg_glbls.prog_dir)
     p_log_this("prog_dir  = " + ppg_glbls.prog_dir)
 
-    # ppg_glbls.prog_dir
+    # ppg_glbls.confarg_dir
     ppg_glbls.cnfarg_dir = os.path.normpath(ppg_glbls.prog_name[:-3])
-    ppg_glbls.prog_dir = os.path.join('.', ppg_glbls.prog_dir)
-    p_log_this("prog_dir  = " + ppg_glbls.prog_dir)
+    ppg_glbls.cnfarg_dir = os.path.join('.', ppg_glbls.prog_dir)
+    p_log_this("cnfarg_dir  = " + ppg_glbls.cnfarg__dir)
 
     # ppg_glbls.prefix
     try:
@@ -120,7 +120,6 @@ def p_inform_about_paths_and_filenames():
     mssge += '\n Filename of new version is:  ' + ' '*len_dir_main + ppg_glbls.prog_new_name
     mssge += '\n Dir  of new version is:      ' + os.path.join(ppg_glbls.main_dir, '')
     mssge += '\n Path of new version is:      ' + os.path.join(ppg_glbls.main_dir, ppg_glbls.prog_new_name)
-    # mssge += '(>' + ppg_glbls.prog_name + '< was not changed.)'
     # cfg_path_new
     mssge += '\n'
     len_cfg_dir = len(os.path.dirname(ppg_glbls.cfg_path_new)) + 1
@@ -469,6 +468,8 @@ def p_main_make():
 
     # if existing >y_main.py<  was modified => new >y_main.py< becomes >y_main_TIMESTAMP.py<
     # if          >y_main.cfg< was modified => new >y_main.py< becomes >y_main_TIMESTAMP.py<
+    ppg_glbls.prog_changed = p_main_check_if_modified(new_main_path)
+
     if p_main_check_if_modified(new_main_path) or ppg_glbls.cfg_changed:
         new_main_path = new_main_path[:-3] + '_' + ppg_glbls.date_time_str + '.py'
 
