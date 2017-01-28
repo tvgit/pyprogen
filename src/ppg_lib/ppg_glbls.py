@@ -11,8 +11,9 @@ main_new_name     = ''              # name of new version: >y_main.py< or >y_mai
 main_new_path     = ''              # corresponding path
 
 # function in >y_main.py< which evals cmd-line args and/or conf-file args (always read by ConfArgParser)
-confarg_name      = 'evaluate_confargs' # function >evaluate_confargs() in separate file: >evaluate_confargs.py<
-confarg_dir       = main_dir        # default path
+confarg_name      = 'evaluate_confargs.py' # function >evaluate_confargs() in separate file: >evaluate_confargs.py<
+confarg_dir       = main_dir        # default dir
+confarg_path      = ''              # default path
 confarg_changed   = False           # file: >evaluate_confargs.py< changed?
 confarg_new_name  = ''              # name of new version: >eval_confargs_TIMESTAMP<
 confarg_new_path  = ''              # corresponding path
