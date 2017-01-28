@@ -3,14 +3,14 @@
 #
 import os.path
 
-prog_name         = 'def_y_main.py' # default name of (new) main program, configure in: >new_prog.ini<
-prog_dir          = None            # default path
-prog_changed      = False           # y_main.py changed?
-prog_new_name     = prog_name       # name of new version: >y_main.py< or >y_main_TIMESTAMP.py<
+main_name         = 'def_y_main.py' # default name of (new) main program, configure in: >new_prog.ini<
+main_dir          = None            # default path
+main_changed      = False           # y_main.py changed?
+main_new_name     = main_name       # name of new version: >y_main.py< or >y_main_TIMESTAMP.py<
 
 # function in >y_main.py< which evals cmd-line args and/or conf-file args (always read by ConfArgParser)
 confarg_name      = 'evaluate_confargs' # function >evaluate_confargs() in separate file: >evaluate_confargs.py<
-confarg_dir       = prog_dir        # default path
+confarg_dir       = main_dir        # default path
 confarg_changed   = False           # file: >evaluate_confargs.py< changed?
 confarg_new_name  = confarg_name    # name of new version: >eval_confargs_TIMESTAMP<
 
@@ -45,13 +45,13 @@ dir_DataOut  = None   # subdir  : >./y_main/DataOut<, DataOut-files for >y_main.
 
 date_time_str= None  # Date & Time
 
-headline     = ('-' * 10 + ' ' + prog_new_name + ' ' + '-' * 10 + '\n')
+headline     = ('-' * 10 + ' ' + main_new_name + ' ' + '-' * 10 + '\n')
 
 def print_headline():
-    print ('-' * 10 + ' ' + prog_name + ' ' + '-' * 10 + '\n')
+    print ('-' * 10 + ' ' + main_name + ' ' + '-' * 10 + '\n')
 
 def print_p_cfg_and_args(print_args=True):
-    print ' prog_name     =   '   + prog_name
+    print ' main_name     =   ' + main_name
     print ' prefix        =   '   + prefix
     print
     print ' main_dir      = ' + main_dir

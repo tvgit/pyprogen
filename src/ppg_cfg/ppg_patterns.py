@@ -212,7 +212,7 @@ if __name__ == "__main__":
         mssge = '| xx_CAParser: Setting output path to: ' + str(cfg_path_new)
         print mssge ; p_log_this(mssge)
     else:
-        mssge = '| output path for cfg-file = ' + str(cfg_path_new)
+        mssge = '| output path for cfg-file:            ' + str(cfg_path_new)
         print mssge ; p_log_this(mssge)
     xx_parser('--export-conf-file', cfg_path_new)
     # NOTE: in func >xx_parser()<

@@ -56,10 +56,10 @@ def p_subst_vars_in_patterns (input_dict):
     patts = dict()
     for key, patt in input_dict.iteritems():
         txt = patt.replace("xx_CAParser", ppg_glbls.CAParser_fn[:-3])
-        txt =  txt.replace("xx_main", ppg_glbls.prog_name[:-3])
+        txt =  txt.replace("xx_main", ppg_glbls.main_name[:-3])
         txt =  txt.replace("xx_glbls", ppg_glbls.glbls_fn[:-3])
         txt =  txt.replace("xx_parser", ppg_glbls.CAParser_func)
-        txt =  txt.replace("xx_program_name", ppg_glbls.prog_name)
+        txt =  txt.replace("xx_program_name", ppg_glbls.main_name)
         txt =  txt.replace("xx_dir_log", ppg_glbls.log_dir)
         patts[key] = txt
     return patts

@@ -20,7 +20,7 @@ import ppg_cfg.ppg_patterns as patterns
 # may be used in: def p_read_ini():
 # pyprogen_ini = """
 # [properties]
-# prog_name = y_main
+# main_name = y_main
 # """
 # read it via:
 # parser.readfp(io.BytesIO(pyprogen_ini))
@@ -55,29 +55,32 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
     cfg_file = parser.read(cfg_path)
     p_log_this('cfg file: ' + str(cfg_file))
 
-    # ppg_glbls.prog_name
+    # ppg_glbls.main_name
     try:
-        ppg_glbls.prog_name = parser.get("properties", "prog_name")
-        p_log_this('prog_name = ' + ppg_glbls.prog_name)
-        if (len(ppg_glbls.prog_name) < 4):
-            ppg_glbls.prog_name = ppg_glbls.prog_name + '.py'
-            p_log_this('         -> ' + ppg_glbls.prog_name)
-        if ((string.lower(ppg_glbls.prog_name[-3:])) <> '.py'):
-            ppg_glbls.prog_name = ppg_glbls.prog_name + '.py'
-            p_log_this('         -> ' + ppg_glbls.prog_name)
+        ppg_glbls.main_name = parser.get("properties", "main_name")
+        p_log_this('main_name = ' + ppg_glbls.main_name)
+        if (len(ppg_glbls.main_name) < 4):
+            ppg_glbls.main_name = ppg_glbls.main_name + '.py'
+            p_log_this('         -> ' + ppg_glbls.main_name)
+        if ((string.lower(ppg_glbls.main_name[-3:])) <> '.py'):
+            ppg_glbls.main_name = ppg_glbls.main_name + '.py'
+            p_log_this('         -> ' + ppg_glbls.main_name)
     except ConfigParser.NoOptionError:
-        ppg_glbls.prog_name = 'default_main.py'
-        p_log_this('no >prog_name< in: ' + cfg_path + ' !')
-        p_log_this('prog_name set to: ' + ppg_glbls.prog_name)
+        mssges = []
+        mssges.append('no >main_name< in: ' + cfg_path + ' !')
+        mssges.append('main_name set to: ' + ppg_glbls.main_name)
+        for mssge in mssges:
+            p_log_this(mssge)
+            ppg_utils.p_terminal_mssge_error(mssge)
 
-    # ppg_glbls.prog_dir
-    ppg_glbls.prog_dir = os.path.normpath(ppg_glbls.prog_name[:-3])
-    ppg_glbls.prog_dir = os.path.join('.', ppg_glbls.prog_dir)
-    p_log_this("prog_dir  = " + ppg_glbls.prog_dir)
+    # ppg_glbls.main_dir
+    ppg_glbls.main_dir = os.path.normpath(ppg_glbls.main_name[:-3])
+    ppg_glbls.main_dir = os.path.join('.', ppg_glbls.main_dir)
+    p_log_this("main_dir  = " + ppg_glbls.main_dir)
 
     # ppg_glbls.confarg_dir
-    ppg_glbls.confarg_dir = os.path.normpath(ppg_glbls.prog_name[:-3])
-    ppg_glbls.confarg_dir = os.path.join('.', ppg_glbls.prog_dir)
+    ppg_glbls.confarg_dir = os.path.normpath(ppg_glbls.main_name[:-3])
+    ppg_glbls.confarg_dir = os.path.join('.', ppg_glbls.main_dir)
     p_log_this("confarg_dir  = " + ppg_glbls.confarg_dir)
 
     # ppg_glbls.prefix
@@ -86,10 +89,10 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
         p_log_this('prefix    = ' + ppg_glbls.prefix)
         if (len(ppg_glbls.prefix) < 2):
             p_log_this('prefix = ' + ppg_glbls.prefix)
-            ppg_glbls.prefix = ppg_glbls.prog_name[0] + '_'  # prefix for generated program
+            ppg_glbls.prefix = ppg_glbls.main_name[0] + '_'  # prefix for generated program
             p_log_this('prefix set to: ' + ppg_glbls.prefix)
     except ConfigParser.NoOptionError:
-        ppg_glbls.prefix = ppg_glbls.prog_name[0] + '_'  # prefix for generated program
+        ppg_glbls.prefix = ppg_glbls.main_name[0] + '_'  # prefix for generated program
         p_log_this('prefix set to: ' + ppg_glbls.prefix)
 
     # ppg_glbls.date_time_str
@@ -113,27 +116,27 @@ def p_inform_about_paths_and_filenames():
     mssge  = ''
     # mssge += headline
     len_dir_main = len(ppg_glbls.main_dir) + 1
-    mssge += '\n Filename of YOUR code is:    ' + ' '*len_dir_main + ppg_glbls.prog_name
+    mssge += '\n Filename of YOUR code is:    ' + ' '*len_dir_main + ppg_glbls.main_name
     mssge += '\n Dir  of YOUR code is:        ' + os.path.join(ppg_glbls.main_dir, '')
-    mssge += '\n Path of YOUR code is:        ' + os.path.join(ppg_glbls.main_dir, ppg_glbls.prog_name)
+    mssge += '\n Path of YOUR code is:        ' + os.path.join(ppg_glbls.main_dir, ppg_glbls.main_name)
     mssge += '\n'
-    mssge += '\n Filename of new version is:  ' + ' '*len_dir_main + ppg_glbls.prog_new_name
+    mssge += '\n Filename of new version is:  ' + ' '*len_dir_main + ppg_glbls.main_new_name
     mssge += '\n Dir  of new version is:      ' + os.path.join(ppg_glbls.main_dir, '')
-    mssge += '\n Path of new version is:      ' + os.path.join(ppg_glbls.main_dir, ppg_glbls.prog_new_name)
+    mssge += '\n Path of new version is:      ' + os.path.join(ppg_glbls.main_dir, ppg_glbls.main_new_name)
     # cfg_path_new
     mssge += '\n'
     len_cfg_dir = len(os.path.dirname(ppg_glbls.cfg_path_new)) + 1
     mssge += '\n Path of new cfg-file is:     ' + ppg_glbls.cfg_path_new
     mssge += '\n Filename of new cfg-file is: ' + ' '*len_cfg_dir + os.path.basename(ppg_glbls.cfg_path_new)
-    # mssge += ' The new files have a timestamp  >' + ppg_glbls.prog_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
+    # mssge += ' The new files have a timestamp  >' + ppg_glbls.main_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
     mssge += '\n'
-    mssge += '\n You may configure the comand line _args_     of >' + ppg_glbls.prog_name + '<  via:  >new_prog_args.cfg<'
+    mssge += '\n You may configure the comand line _args_     of >' + ppg_glbls.main_name + '<  via:  >new_prog_args.cfg<'
     mssge += '\n  ... but run >pyprogen.py< again!'
     mssge += '\n'
-    mssge += '\n You may configure the comand line _defaults_ of >' + ppg_glbls.prog_name + '<  via:  >' + cfg_path + '<'
+    mssge += '\n You may configure the comand line _defaults_ of >' + ppg_glbls.main_name + '<  via:  >' + cfg_path + '<'
     mssge += '\n >' + cfg_path + '<  will be preserved, if changed. '
     mssge += '\n'
-    mssge += '\n newer generated files will have a timestamp in their filename: >' + ppg_glbls.prog_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
+    mssge += '\n newer generated files will have a timestamp in their filename: >' + ppg_glbls.main_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
     mssge += '\n'
     mssge += '\n Do not change the >' + ppg_glbls.lib_dir + '\*.py< files!'
     mssge += '\n'
@@ -146,7 +149,7 @@ def p_subst_vars_in_patterns (input_dict):
     pattern = dict()
     for key, patt in input_dict.iteritems():
         txt = patt.replace("xx_CAParser", ppg_glbls.CAParser_fn[:-3])
-        txt =  txt.replace("xx_main", ppg_glbls.prog_name[:-3])
+        txt =  txt.replace("xx_main", ppg_glbls.main_name[:-3])
         txt =  txt.replace("xx_parser", ppg_glbls.CAParser_func)
         txt =  txt.replace("xx_glbls", ppg_glbls.glbls_fn[:-3])
         pattern[key] = txt
@@ -268,7 +271,7 @@ def p_log_or_print_cfg_mssges(do_print = False, do_log = False):
             mssges.append(' => 1) old config file:     >' + ppg_glbls.cfg_path + '< stays unchanged.')
             mssges.append('    2) new config file is:  >' + ppg_glbls.cfg_path_new + '<.')
         if ppg_glbls.cfg_changed and do_print:
-            mssges.append('    3) corresponding new version of main >' + ppg_glbls.prog_new_name + '<.')
+            mssges.append('    3) corresponding new version of main >' + ppg_glbls.main_new_name + '<.')
         else: # ppg_glbls.cfg_changed == False
             mssges.append('vars in [defaults] in >' + ppg_glbls.cfg_path + '< are not changed =>')
 
@@ -389,11 +392,11 @@ def p_main_check_if_modified(y_main_path):
     if hash_of_old_code != hash_of_new_code:
         mssge = ('>' + y_main_path + '< has been modified')
         p_log_this (mssge) # ; print mssge
-        ppg_glbls.prog_changed = True
+        ppg_glbls.main_changed = True
         return True
     else:
         p_log_this ('>' + y_main_path + '<  + is unchanged')
-        ppg_glbls.prog_changed = False
+        ppg_glbls.main_changed = False
         return False
 
 def p_main_make_evaluate_confargs_code():
@@ -462,18 +465,18 @@ def p_main_make():
     code_dict[1] = '# >' + hash_of_new_codelines + '< \n'    # second line of y_main.py
     code_dict[2] = code_lines
 
-    new_main_fn   = ppg_glbls.prog_name  # fn and path of future >y_main.py<
+    new_main_fn   = ppg_glbls.main_name  # fn and path of future >y_main.py<
     new_main_path = os.path.join(ppg_glbls.main_dir, new_main_fn)
     p_log_this('creating: ' + new_main_path)
 
     # if existing >y_main.py<  was modified => new >y_main.py< becomes >y_main_TIMESTAMP.py<
     # if          >y_main.cfg< was modified => new >y_main.py< becomes >y_main_TIMESTAMP.py<
-    ppg_glbls.prog_changed = p_main_check_if_modified(new_main_path)
+    ppg_glbls.main_changed = p_main_check_if_modified(new_main_path)
 
     if p_main_check_if_modified(new_main_path) or ppg_glbls.cfg_changed:
         new_main_path = new_main_path[:-3] + '_' + ppg_glbls.date_time_str + '.py'
 
-    ppg_glbls.prog_new_name = os.path.basename(new_main_path)
+    ppg_glbls.main_new_name = os.path.basename(new_main_path)
 
     # if there is/are existing >y_main_TIMESTAMP.py< with identical hash:
     # remember their names to delete them later:
@@ -489,7 +492,7 @@ def p_main_make():
 
 
 if __name__ == "__main__":
-    print ppg_glbls.prog_name
+    print ppg_glbls.main_name
     # ppg_utils.p_terminal_mssge_note_this()
     # ppg_utils.p_terminal_mssge_note_this()
     ppg_utils.p_exit()

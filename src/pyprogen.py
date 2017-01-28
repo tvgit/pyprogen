@@ -95,7 +95,7 @@ in p_utils make examples how to open files, scan dirs etc ...
     <new_prog.ini>
 
     [properties]
-    prog_name  = s_create_subdirs
+    main_name  = s_create_subdirs
     prefix     = s_
 
     </new_prog.ini>
@@ -154,7 +154,7 @@ def subdirs_make(prog_path):
     # p_utils.p_terminal_mssge_note_this()  # some visible sign
 
     p_glbls.cfg_dir  = p_utils.p_subdir_make(os.path.join(prog_path, 'cfg'))
-    p_glbls.cfg_fn   = p_glbls.prog_name[:-3] + '.cfg'   # cfg-file of new y_main.py
+    p_glbls.cfg_fn   = p_glbls.main_name[:-3] + '.cfg'   # cfg-file of new y_main.py
     p_glbls.cfg_path = os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn)
 
     p_glbls.cfg_fn_new   = p_glbls.cfg_fn[:-4] + '_' + p_glbls.date_time_str + p_glbls.cfg_fn[-4:]
@@ -219,9 +219,9 @@ def pyprogen():
     p_code.p_read_ini(".", "new_prog.ini")  # read >new_prog.ini< and create some global fn's, path's and var's
                                   # This data will be stored in module >ppg_glbls.py<
     # in the comments >y_main< is a symbolic the name of the generated program.
-    prog_dir = p_glbls.prog_dir   # ./y_main; >y_main.py< will live here
+    prog_dir = p_glbls.main_dir   # ./y_main; >y_main.py< will live here
 
-    # maindir_make(os.path.join('.',prog_dir))        # make dir  ./y_main
+    # maindir_make(os.path.join('.',main_dir))        # make dir  ./y_main
     maindir_make(prog_dir)        # make dir  ./y_main
     subdirs_make(prog_dir)        # make dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
     copy_p_utils()                # copy some utilities to ./y_main/lib
