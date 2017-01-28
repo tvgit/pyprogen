@@ -184,7 +184,7 @@ def copy_p_utils():
         p_utils_dest_path = os.path.normpath(p_utils_dest_path )
         # copy from source to dest
         shutil.copy(p_utils_srce_path, p_utils_dest_path)
-        p_log_this( fn + 'copied')
+        p_log_this( fn + ' copied')
 
 def ca_parser_make():
     """ Writes via p_create_ConfArgParser() in ./y_main/lib a new

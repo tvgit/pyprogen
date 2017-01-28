@@ -73,14 +73,15 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
             p_log_this(mssge)
             ppg_utils.p_terminal_mssge_error(mssge)
 
-    # ppg_glbls.main_dir
+    # ppg_glbls.main_dir & ppg_glbls.main_path
     ppg_glbls.main_dir = os.path.normpath(ppg_glbls.main_name[:-3])
     ppg_glbls.main_dir = os.path.join('.', ppg_glbls.main_dir)
     p_log_this("main_dir  = " + ppg_glbls.main_dir)
+    ppg_glbls.main_path= os.path.join(ppg_glbls.main_dir, ppg_glbls.main_name)
+    p_log_this("main_path = " + ppg_glbls.main_dir)
 
     # ppg_glbls.confarg_dir
-    ppg_glbls.confarg_dir = os.path.normpath(ppg_glbls.main_name[:-3])
-    ppg_glbls.confarg_dir = os.path.join('.', ppg_glbls.main_dir)
+    ppg_glbls.confarg_dir = ppg_glbls.main_dir
     p_log_this("confarg_dir  = " + ppg_glbls.confarg_dir)
 
     # ppg_glbls.prefix
@@ -100,18 +101,14 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
     # filename of globals of created program
     ppg_glbls.glbls_fn      = ppg_glbls.prefix + 'glbls.py'    # globals of ! >y_main.py< !
     # ppg_glbls.glbls_path    = os.path.join(ppg_glbls.lib_dir, ppg_glbls.glbls_fn)
-    print ppg_glbls.lib_dir
     ppg_glbls.glbls_path    = os.path.join('xxxxxx', ppg_glbls.glbls_fn)
 
 
 def p_inform_about_paths_and_filenames():
     """ """
     cfg_path = os.path.join(ppg_glbls.cfg_dir, ppg_glbls.cfg_fn)
-
     ppg_glbls.print_headline()
-
     p_log_or_print_cfg_mssges(do_print=True, do_log=False)
-
 
     mssge  = ''
     # mssge += headline
@@ -267,11 +264,11 @@ def p_log_or_print_cfg_mssges(do_print = False, do_log = False):
     else:
         mssges.append('There is already a          >' + ppg_glbls.cfg_path + '< ')
         if ppg_glbls.cfg_changed:
-            mssges.append('Since vars in [defaults] in >' + ppg_glbls.cfg_path + '< have been modified.')
-            mssges.append(' => 1) old config file:     >' + ppg_glbls.cfg_path + '< stays unchanged.')
+            mssges.append('Since vars in [defaults] in >' + ppg_glbls.cfg_path + '<      have changed:')
+            mssges.append(' => 1)     config file:     >' + ppg_glbls.cfg_path + '<      stays unchanged.')
             mssges.append('    2) new config file is:  >' + ppg_glbls.cfg_path_new + '<.')
-        if ppg_glbls.cfg_changed and do_print:
-            mssges.append('    3) corresponding new version of main >' + ppg_glbls.main_new_name + '<.')
+            if ppg_glbls.main_changed :
+                mssges.append('    3) corresponding new version of main: >' + ppg_glbls.main_new_name + '<.')
         else: # ppg_glbls.cfg_changed == False
             mssges.append('vars in [defaults] in >' + ppg_glbls.cfg_path + '< are not changed =>')
 
@@ -373,12 +370,13 @@ def p_delete_files_in_list(list_of_paths):
 
 def p_main_check_if_modified(y_main_path):
     """ check if y_main.py was modified (== hash of code is different) """
+    ppg_utils.p_terminal_mssge_note_this(y_main_path)
     old_main_file = ppg_utils.p_file_open(y_main_path, mode ='r')
+    ppg_utils.p_terminal_mssge_note_this(y_main_path)
     if not old_main_file:
         return False
     with old_main_file:
         code_lines = old_main_file.readlines()
-    # ppg_utils.p_file_close(old_main_file)
 
     code_line = code_lines[0]    # line 0 contains coding, i.e.: -*- coding: utf-8 -*-
     date_line = code_lines[1]    # line 1 contains date-time string
@@ -465,18 +463,18 @@ def p_main_make():
     code_dict[1] = '# >' + hash_of_new_codelines + '< \n'    # second line of y_main.py
     code_dict[2] = code_lines
 
-    new_main_fn   = ppg_glbls.main_name  # fn and path of future >y_main.py<
-    new_main_path = os.path.join(ppg_glbls.main_dir, new_main_fn)
-    p_log_this('creating: ' + new_main_path)
-
     # if existing >y_main.py<  was modified => new >y_main.py< becomes >y_main_TIMESTAMP.py<
     # if          >y_main.cfg< was modified => new >y_main.py< becomes >y_main_TIMESTAMP.py<
-    ppg_glbls.main_changed = p_main_check_if_modified(new_main_path)
+    ppg_glbls.main_changed = p_main_check_if_modified(ppg_glbls.main_path)
 
-    if p_main_check_if_modified(new_main_path) or ppg_glbls.cfg_changed:
+    # preliminary (or final) name of new >Y_main.py<:
+    new_main_fn   = ppg_glbls.main_name  #
+    new_main_path = os.path.join(ppg_glbls.main_dir, new_main_fn)
+    if ppg_glbls.main_changed or ppg_glbls.cfg_changed:
         new_main_path = new_main_path[:-3] + '_' + ppg_glbls.date_time_str + '.py'
-
+    ppg_glbls.main_new_path = new_main_path
     ppg_glbls.main_new_name = os.path.basename(new_main_path)
+    p_log_this('creating: ' + ppg_glbls.main_new_path)
 
     # if there is/are existing >y_main_TIMESTAMP.py< with identical hash:
     # remember their names to delete them later:

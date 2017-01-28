@@ -56,6 +56,8 @@ y_main[86] = """
 
     p_log_end()
     p_utils.p_terminal_mssge_success()
+    # p_utils.p_terminal_mssge_note_this()
+    # p_utils.p_terminal_mssge_error()
     p_utils.p_exit()
 
 """

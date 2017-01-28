@@ -4,20 +4,23 @@
 import os.path
 
 main_name         = 'def_y_main.py' # default name of (new) main program, configure in: >new_prog.ini<
-main_dir          = None            # default path
+main_dir          = ''              # default dir
+main_path         = ''              # default path
 main_changed      = False           # y_main.py changed?
-main_new_name     = main_name       # name of new version: >y_main.py< or >y_main_TIMESTAMP.py<
+main_new_name     = ''              # name of new version: >y_main.py< or >y_main_TIMESTAMP.py<
+main_new_path     = ''              # corresponding path
 
 # function in >y_main.py< which evals cmd-line args and/or conf-file args (always read by ConfArgParser)
 confarg_name      = 'evaluate_confargs' # function >evaluate_confargs() in separate file: >evaluate_confargs.py<
 confarg_dir       = main_dir        # default path
 confarg_changed   = False           # file: >evaluate_confargs.py< changed?
-confarg_new_name  = confarg_name    # name of new version: >eval_confargs_TIMESTAMP<
+confarg_new_name  = ''              # name of new version: >eval_confargs_TIMESTAMP<
+confarg_new_path  = ''              # corresponding path
 
 prefix    = None     # common prefix of y_main-specific dirs, paths, modules, functions, vars ...
 arg_prefix= None     # common prefix of vars storing values of cmd-line args
 
-main_dir  = None     # main dir: >./y_main<, where >y_main.py< lives in
+main_dir  = None     # main dir: >./y_main<, where >y_main.py< and >evaluate_confargs.py< are living
 cfg_dir   = None     # subdir  : >./y_main/cfg<, config files for >y_main.py<
 lib_dir   = None     # subdir  : >./y_main/lib<, utilities for >y_main.py<
 log_dir   = None     # subdir  : >./y_main/log<, log-files for >y_main.py<
@@ -45,10 +48,10 @@ dir_DataOut  = None   # subdir  : >./y_main/DataOut<, DataOut-files for >y_main.
 
 date_time_str= None  # Date & Time
 
-headline     = ('-' * 10 + ' ' + main_new_name + ' ' + '-' * 10 + '\n')
+# headline     = ('-' * 10 + ' ' + main_new_name + ' ' + '-' * 10 + '\n')
 
 def print_headline():
-    print ('-' * 10 + ' ' + main_name + ' ' + '-' * 10 + '\n')
+    print ('-' * 10 + ' ' + main_new_name + ' ' + '-' * 10 + '\n')
 
 def print_p_cfg_and_args(print_args=True):
     print ' main_name     =   ' + main_name
