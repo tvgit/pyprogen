@@ -75,6 +75,11 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
     ppg_glbls.prog_dir = os.path.join('.', ppg_glbls.prog_dir)
     p_log_this("prog_dir  = " + ppg_glbls.prog_dir)
 
+    # ppg_glbls.prog_dir
+    ppg_glbls.cnfarg_dir = os.path.normpath(ppg_glbls.prog_name[:-3])
+    ppg_glbls.prog_dir = os.path.join('.', ppg_glbls.prog_dir)
+    p_log_this("prog_dir  = " + ppg_glbls.prog_dir)
+
     # ppg_glbls.prefix
     try:
         ppg_glbls.prefix = parser.get("properties", "prefix")
@@ -330,7 +335,6 @@ def p_cfg_clear_versions():
     p_cfg_check_if_modified()  # check if >./y_main/y_main.cfg exists<
 
     list_of_cfg_w_identical_hash = p_cfg_find_identical_hash(hash)
-
     if not ppg_glbls.cfg_path_new in list_of_cfg_w_identical_hash:
         ppg_utils.p_terminal_mssge_error()
     else:
@@ -393,6 +397,23 @@ def p_main_check_if_modified(y_main_path):
         ppg_glbls.prog_changed = False
         return False
 
+def p_main_make_evaluate_confargs_code():
+    # create code of function >evaluate_confargs()< in: >y_main.py<
+    # make code txt for >if<'s for >confarg_vars< as of >new_prog_args.cfg<
+    txt = ''
+    txt += 'def evaluate_confargs():\n'
+    txt += '    p_log_this()\n'
+    txt += '    # xx_glbls.print_arg_ns()\n'
+    txt += '    # eval cmd-line args and/or conf-file args (always read by ConfArgParser):\n'
+
+    for arg in ppg_glbls.opt_arg_vars:
+        txt +=  '    if ' + 'confargs.' + arg + ' == confargs.' + arg + ':\n'
+        txt +=  '        eval_confarg(confargs.' + arg +')\n'
+        txt +=  '\n'
+    # patterns.y_main[10] = txt       # add txt to pattern
+    return txt
+
+
 def p_main_make_code():
     # create code of new main program: >y_main.py<
     # - Some variables (and their logic) in the new >y_main.py< are
@@ -404,14 +425,7 @@ def p_main_make_code():
     # >ppg_patterns.py< is a _dict_ whose elements contain parts of
     # program patterns.
 
-    # Make code for >def evaluate_opt_args():< in >y_main.py<
-    # make code txt for >if<'s for >confarg_vars< as of >new_prog_args.cfg<
-    txt = ' '*4 + '# optional args(ConfArgParser):\n'
-    for arg in ppg_glbls.opt_arg_vars:
-        txt +=  ' '*4 + 'if ' + 'confargs.' + arg + ' == confargs.' + arg + ':\n'
-        txt +=  ' '*8 + 'eval_arg(confargs.' + arg +')\n'
-        txt +=  '\n'
-    patterns.y_main[10] = txt       # add txt to pattern
+    patterns.y_main[10] = p_main_make_evaluate_confargs_code()
 
     # make code txt for optional reading of cfg-file via
     # xx_CAParser.xx_parser('--conf-file', 'ppg_glbls.cfg_path')
@@ -422,6 +436,7 @@ def p_main_make_code():
     txt += str(adjusted_cfg_path)
     txt += "')" + '\n'
     patterns.y_main[84] = txt       # add txt to pattern
+
 
     # adjust some var names in >patterns.y_main< .
     patterns.y_main = p_subst_vars_in_patterns(patterns.y_main)

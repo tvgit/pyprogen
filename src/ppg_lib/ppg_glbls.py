@@ -3,10 +3,16 @@
 #
 import os.path
 
-prog_name         = 'def_y_main.py' # default name of (new) program, configure in: >new_prog.ini<
+prog_name         = 'def_y_main.py' # default name of (new) main program, configure in: >new_prog.ini<
 prog_dir          = None            # default path
 prog_changed      = False           # y_main.py changed?
-prog_new_name     = prog_name       # name of program with new config version
+prog_new_name     = prog_name       # name of new version: >y_main.py< or >y_main_TIMESTAMP.py<
+
+# function in >y_main.py< which evals cmd-line args and/or conf-file args (always read by ConfArgParser)
+confarg_name      = 'evaluate_confargs' # function >evaluate_confargs() in separate file: >evaluate_confargs.py<
+confarg_dir       = prog_dir        # default path
+confarg_changed   = False           # file: >evaluate_confargs.py< changed?
+confarg_new_name  = confarg_name    # name of new version: >eval_confargs_TIMESTAMP<
 
 prefix    = None     # common prefix of y_main-specific dirs, paths, modules, functions, vars ...
 arg_prefix= None     # common prefix of vars storing values of cmd-line args

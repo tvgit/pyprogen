@@ -1,5 +1,5 @@
 # -------------- y_main.py
-# (first time run of y_main.py)
+# (first run of y_main.py)
 # INFO       2015-07-18 20:36:05  p_log_start:  y_main.py Logging started
 # INFO       2015-07-18 20:36:05  p_log_end:  y_main.py Logging end
 
@@ -23,13 +23,10 @@ confargs = lib.xx_glbls.arg_ns
 """
 
 y_main[04] = """
-def eval_arg(arg):
+def eval_confarg(arg):
     print 'do something with: ' + str(arg)
     return arg
 
-def evaluate_opt_args():
-    p_log_this()
-    # xx_glbls.print_arg_ns()
 """
 
 y_main[10] = """ """
@@ -37,7 +34,7 @@ y_main[10] = """ """
 y_main[60] = """
 def main():
     p_log_this('begin')
-    evaluate_opt_args()
+    evaluate_confargs()
     p_log_this('end')
 """
 
