@@ -76,9 +76,9 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
     p_log_this("prog_dir  = " + ppg_glbls.prog_dir)
 
     # ppg_glbls.confarg_dir
-    ppg_glbls.cnfarg_dir = os.path.normpath(ppg_glbls.prog_name[:-3])
-    ppg_glbls.cnfarg_dir = os.path.join('.', ppg_glbls.prog_dir)
-    p_log_this("cnfarg_dir  = " + ppg_glbls.cnfarg__dir)
+    ppg_glbls.confarg_dir = os.path.normpath(ppg_glbls.prog_name[:-3])
+    ppg_glbls.confarg_dir = os.path.join('.', ppg_glbls.prog_dir)
+    p_log_this("confarg_dir  = " + ppg_glbls.confarg_dir)
 
     # ppg_glbls.prefix
     try:
