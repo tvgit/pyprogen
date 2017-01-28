@@ -232,8 +232,8 @@ def pyprogen():
     p_code.p_cfg_clear_versions() # check (via hash) if there are yet identical versions of >y_main_*.cfg<
     p_code.p_glbls_create()       # create modul ./y_main/lib/y_glbls.py
 
-    # Finally here >y_main.py< will be created:
-    p_code.p_main_make()          # create progr ./y_main/y_main.py
+    # Finally create >./y_main/y_main.py< or >./y_main/evaluate_confargs.py<
+    p_code.p_code_make()          # create progr >./y_main/y_main.py< or >./y_main/evaluate_confargs.py<
 
     p_code.p_inform_about_paths_and_filenames()   # dwyns
     p_glbls.print_p_cfg_and_args()# print variables and command line args in ./pyprogen/ppg_lib/ppg_glbls.
