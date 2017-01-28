@@ -491,9 +491,11 @@ def p_calc_hash_of_new_codelines(code_lines):
 def p_code_make():
     """ create >./y_main/y_main.py< or >./y_main/evaluate_confargs.py< """
 
-    ppg_utils.p_terminal_mssge_note_this(ppg_glbls.main_new_name)
+    if ppg_utils.p_file_exists()
 
-    tmp_f_new_name = ppg_glbls.main_name  #
+    ppg_utils.p_terminal_mssge_note_this('p_code_make')
+
+    tmp_f_new_name = ppg_glbls.main_name
 
     f_name         = ppg_glbls.main_name
     f_path         = ppg_glbls.main_path
