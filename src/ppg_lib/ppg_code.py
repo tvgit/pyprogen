@@ -78,7 +78,7 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
     ppg_glbls.main_dir = os.path.join('.', ppg_glbls.main_dir)
     p_log_this("main_dir  = " + ppg_glbls.main_dir)
     ppg_glbls.main_path= os.path.join(ppg_glbls.main_dir, ppg_glbls.main_name)
-    p_log_this("main_path = " + ppg_glbls.main_dir)
+    p_log_this("main_path = " + ppg_glbls.main_path)
 
     # ppg_glbls.confarg_dir
     ppg_glbls.confarg_dir = ppg_glbls.main_dir
@@ -477,7 +477,7 @@ def p_check_via_hash_if_modified(file_path):
         return False
 
 
-def p_calc_hash_of_new_codelines(code_lines):
+def p_calc_hash_add_hash_str(code_lines):
     # calculate hash:
     hash_of_new_codelines = calc_hash(code_lines)  # calculate hash of code
 
@@ -485,18 +485,72 @@ def p_calc_hash_of_new_codelines(code_lines):
     code_dict    = dict()     # p_write_code wants dict as input
     code_dict[1] = '# >' + hash_of_new_codelines + '< \n'    # third line of >y_main.py<
     code_dict[2] = code_lines
-    return hash_of_new_codelines, code_dict
+    return code_dict, hash_of_new_codelines
 
 
 def p_code_make():
     """ create >./y_main/y_main.py< or >./y_main/evaluate_confargs.py< """
 
-    if ppg_utils.p_file_exists()
+    # ppg_glbls.confarg_new_path = os.path.join(ppg_glbls.confarg_dir, ppg_glbls.confarg_new_name)
+    # p_log_this('creating: ' + ppg_glbls.confarg_new_path)
 
-    ppg_utils.p_terminal_mssge_note_this('p_code_make')
+
+    if not ppg_utils.p_file_exists(ppg_glbls.main_path):
+        ppg_utils.p_terminal_mssge_note_this('p_code_make(): no main: ' + ppg_glbls.main_path)
+
+        tmp_f_new_name = ppg_glbls.main_name
+        f_name         = ppg_glbls.main_name
+        f_path         = ppg_glbls.main_path
+        # f_new_name     = ppg_glbls.main_new_name
+        # f_changed      = ppg_glbls.main_changed
+
+        f_changed      = p_check_via_hash_if_modified(f_path)
+        if f_changed or ppg_glbls.cfg_changed:
+            f_new_name = tmp_f_new_name[:-3] + '_' + ppg_glbls.date_time_str + '.py'
+        else:
+            f_new_name = tmp_f_new_name
+
+        # ppg_glbls.main_dir is dir of >y_main.py< AND of >evaluate_confargs.py<
+        f_new_path     = os.path.join(ppg_glbls.main_dir, f_new_name)
+
+        p_log_this('creating: ' + f_new_path)
+
+        # # ppg_glbls.main_name     = f_name
+        # ppg_glbls.main_new_name = f_new_name
+        # # ppg_glbls.main_name     = tmp_f_new_name
+        # ppg_glbls.main_new_path = f_new_path
+        # ppg_glbls.main_changed  = f_changed
+
+        p_log_this('creating: ' + ppg_glbls.main_new_path)
+        # path of new >evaluate_confargs.py<:
+
+        # just as shorthands:
+        main_new_path   = ppg_glbls.main_new_path
+
+        # if there is/are existing >y_main_TIMESTAMP.py< with identical hash:
+        # remember their names to delete them later:
+
+        list_of_files_w_identical_hash = []
+        code_dict, hash_of_new_codelines = p_calc_hash_add_hash_str(code_lines = p_main_make_code())
+
+        # list_of_files_w_identical_hash = p_find_files_w_identical_hash(main_new_path, hash_of_new_codelines)
+        list_of_files_w_identical_hash = p_find_files_w_identical_hash(f_new_path, hash_of_new_codelines)
+
+        # write >y_main.py< respectively >evaluate_confargs_+/-timestamp.py< :
+
+        p_write_code (code_dict, f_new_path)
+
+        if list_of_files_w_identical_hash:
+            p_delete_files_in_list (list_of_files_w_identical_hash)
+
+    ppg_utils.p_terminal_mssge_note_this('p_code_make(): end')
+    return
+
+
+    if not ppg_utils.p_file_exists(ppg_glbls.main_path):
+        ppg_utils.p_terminal_mssge_note_this('p_code_make() ' + ppg_glbls.main_path)
 
     tmp_f_new_name = ppg_glbls.main_name
-
     f_name         = ppg_glbls.main_name
     f_path         = ppg_glbls.main_path
     # f_new_name     = ppg_glbls.main_new_name
@@ -520,14 +574,8 @@ def p_code_make():
     ppg_glbls.main_new_path = f_new_path
     ppg_glbls.main_changed  = f_changed
 
-    ppg_utils.p_terminal_mssge_note_this(f_new_name)
-
-    # path of new >y_main.py<:
-    # ppg_glbls.main_new_path = os.path.join(ppg_glbls.main_dir, ppg_glbls.main_new_name)
     p_log_this('creating: ' + ppg_glbls.main_new_path)
     # path of new >evaluate_confargs.py<:
-    ppg_glbls.confarg_new_path = os.path.join(ppg_glbls.confarg_dir, ppg_glbls.confarg_new_name)
-    p_log_this('creating: ' + ppg_glbls.confarg_new_path)
 
     # just as shorthands:
     main_new_path   = ppg_glbls.main_new_path
@@ -537,8 +585,7 @@ def p_code_make():
     # remember their names to delete them later:
     list_of_files_w_identical_hash = []
 
-    hash_of_new_codelines, code_dict = p_calc_hash_of_new_codelines(code_lines = p_main_make_code())
-
+    code_dict, hash_of_new_codelines = p_calc_hash_add_hash_str(code_lines = p_main_make_code())
 
     # list_of_files_w_identical_hash = p_find_files_w_identical_hash(main_new_path, hash_of_new_codelines)
     list_of_files_w_identical_hash = p_find_files_w_identical_hash(f_new_path, hash_of_new_codelines)
@@ -546,10 +593,12 @@ def p_code_make():
     # Now finally write code of new >y_main(_+/-timestamp.py<
     # and add timestamp in first line & lastline
     # p_write_code (code_dict, main_new_path)  # write >y_main(_+/-timestamp.py<
+
     p_write_code (code_dict, f_new_path)  # write >y_main(_+/-timestamp.py<
 
     if list_of_files_w_identical_hash:
         p_delete_files_in_list (list_of_files_w_identical_hash)
+
 
 
 def p_main_make_ORG():
