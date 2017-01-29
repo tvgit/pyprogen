@@ -286,7 +286,8 @@ def p_cfg_check_if_modified():
     """ checks if y_main.cfg was modified (== hash of code is different) """
     # >ppg_glbls.cfg_path<  == path of cfg-file; usually: >./y_mainy/cfg/y_main.cfg<
     p_log_this('cfg_path: ' + ppg_glbls.cfg_path)
-    # if there is no >y_main.cfg<:
+
+    # first run of pyprogen with >.new_prog.ini<: there is no >y_main.cfg<:
     ppg_glbls.cfg_exists = ppg_utils.p_file_exists(ppg_glbls.cfg_path)
     if not ppg_glbls.cfg_exists:
         # move new cfg-file to >./y_mainy/cfg/y_main.cfg<
@@ -304,7 +305,7 @@ def p_cfg_check_if_modified():
         # if (act_hash == old_hash)
         if (hash_of_new_defaults == hash_of_old_defaults):
             ppg_glbls.cfg_changed = False
-            shutil.move(ppg_glbls.cfg_path_new, ppg_glbls.cfg_path)
+            # shutil.move(ppg_glbls.cfg_path_new, ppg_glbls.cfg_path)
             ppg_glbls.cfg_path_new = ppg_glbls.cfg_path
             ppg_glbls.cfg_file_tmp = ppg_glbls.cfg_fn
         else:  # act_hash != old_hash

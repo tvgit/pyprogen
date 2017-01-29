@@ -215,8 +215,9 @@ def p_dir_traverse_recursively(path):
     result_list = []
     for root, dirs, fnames in os.walk(path):
         for fname in fnames:
-            if regObj.match(fname):
-                result_list.append(os.path.join(root, fname))
+            result_list.append(os.path.join(root, fname))
+            # if regObj.match(fname):
+            #     result_list.append(os.path.join(root, fname))
     return sorted(result_list)
 
 def grep_in_file(filepath, regex):
