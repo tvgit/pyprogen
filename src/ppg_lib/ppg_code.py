@@ -526,10 +526,12 @@ def p_code_make():
         # f_changed      = ppg_glbls.confarg_changed
 
         f_changed      = p_check_via_hash_if_modified(f_path)
-        if f_changed or ppg_glbls.cfg_changed:
+        # if f_changed or ppg_glbls.cfg_changed:
+        if ppg_glbls.cfg_changed:
             f_new_name = tmp_f_new_name[:-3] + '_' + ppg_glbls.date_time_str + '.py'
         else:
-            f_new_name = tmp_f_new_name
+            return
+            # f_new_name = tmp_f_new_name
 
         f_new_path     = os.path.join(f_dir, f_new_name)
 
@@ -560,62 +562,7 @@ def p_code_make():
     if list_of_files_w_identical_hash:
         p_delete_files_in_list (list_of_files_w_identical_hash)
 
-    ppg_utils.p_terminal_mssge_note_this('p_code_make(): end')
-    return
-
-
-    if not ppg_utils.p_file_exists(ppg_glbls.main_path):
-        ppg_utils.p_terminal_mssge_note_this('p_code_make() ' + ppg_glbls.main_path)
-
-    tmp_f_new_name = ppg_glbls.main_name
-    f_name         = ppg_glbls.main_name
-    f_path         = ppg_glbls.main_path
-    # f_new_name     = ppg_glbls.main_new_name
-    # f_changed      = ppg_glbls.main_changed
-
-    f_changed      = p_check_via_hash_if_modified(f_path)
-    if f_changed or ppg_glbls.cfg_changed:
-        f_new_name = tmp_f_new_name[:-3] + '_' + ppg_glbls.date_time_str + '.py'
-    else:
-        f_new_name = tmp_f_new_name
-
-    # ppg_glbls.main_dir is dir of >y_main.py< AND of >eval_confargs.py<
-    f_new_path     = os.path.join(ppg_glbls.main_dir, f_new_name)
-
-    p_log_this('creating: ' + f_new_path)
-
-
-    # ppg_glbls.main_name     = f_name
-    ppg_glbls.main_new_name = f_new_name
-    # ppg_glbls.main_name     = tmp_f_new_name
-    ppg_glbls.main_new_path = f_new_path
-    ppg_glbls.main_changed  = f_changed
-
-    p_log_this('creating: ' + ppg_glbls.main_new_path)
-    # path of new >eval_confargs.py<:
-
-    # just as shorthands:
-    main_new_path   = ppg_glbls.main_new_path
-    cnfarg_new_path = ppg_glbls.confarg_new_path
-
-    # if there is/are existing >y_main_TIMESTAMP.py< with identical hash:
-    # remember their names to delete them later:
-    list_of_files_w_identical_hash = []
-
-    code_dict, hash_of_new_codelines = p_calc_hash_add_hash_str(code_lines = p_main_make_code())
-
-    # list_of_files_w_identical_hash = p_find_files_w_identical_hash(main_new_path, hash_of_new_codelines)
-    list_of_files_w_identical_hash = p_find_files_w_identical_hash(f_new_path, hash_of_new_codelines)
-
-    # Now finally write code of new >y_main(_+/-timestamp.py<
-    # and add timestamp in first line & lastline
-    # p_write_code (code_dict, main_new_path)  # write >y_main(_+/-timestamp.py<
-
-    p_write_code (code_dict, f_new_path)  # write >y_main(_+/-timestamp.py<
-
-    if list_of_files_w_identical_hash:
-        p_delete_files_in_list (list_of_files_w_identical_hash)
-
+    # ppg_utils.p_terminal_mssge_note_this('p_code_make(): end')
 
 
 def p_main_make_ORG():
