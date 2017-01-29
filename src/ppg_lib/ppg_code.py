@@ -530,14 +530,11 @@ def p_code_make():
     code_dict, hash_of_new_codelines = p_calc_hash_add_hash_str(code_lines)
     list_of_files_w_identical_hash = []
     list_of_files_w_identical_hash = p_find_files_w_identical_hash(f_new_path, hash_of_new_codelines)
-
-    # write >y_main.py< respectively >eval_confargs_+/-timestamp.py< :
-
-    p_write_code (code_dict, f_new_path)
-
     if list_of_files_w_identical_hash:
         p_delete_files_in_list (list_of_files_w_identical_hash)
-    # ppg_utils.p_terminal_mssge_note_this('p_code_make(): end')
+
+    # write >y_main.py< respectively >eval_confargs_+/-timestamp.py< :
+    p_write_code (code_dict, f_new_path)
 
 
 if __name__ == "__main__":
