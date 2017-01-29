@@ -157,13 +157,11 @@ def subdirs_make(prog_path):
     p_glbls.cfg_fn   = p_glbls.main_name[:-3] + '.cfg'   # cfg-file of new y_main.py
     p_glbls.cfg_path = os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn)
 
-    p_glbls.cfg_fn_new   = p_glbls.cfg_fn[:-4] + '_' + p_glbls.date_time_str + p_glbls.cfg_fn[-4:]
+    # p_glbls.cfg_fn_new   = p_glbls.cfg_fn[:-4] + '_' + p_glbls.date_time_str + p_glbls.cfg_fn[-4:]
+    p_glbls.cfg_fn_new   = p_glbls.cfg_fn
     p_glbls.cfg_path_new = os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn_new)
 
     p_glbls.lib_dir    = p_utils.p_subdir_make(os.path.join(prog_path, 'lib'))
-
-    p_glbls.glbls_fn   = p_glbls.prefix + 'glbls.py'    # globals of ! >y_main.py< !
-    p_glbls.glbls_path = os.path.join(p_glbls.lib_dir, p_glbls.glbls_fn)
 
     p_glbls.log_dir = p_utils.p_subdir_make(os.path.join(prog_path, 'log'))
 
