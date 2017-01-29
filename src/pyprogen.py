@@ -95,7 +95,7 @@ in p_utils make examples how to open files, scan dirs etc ...
     <new_prog.ini>
 
     [properties]
-    main_name  = s_create_subdirs
+    main_name  = s_my_new_program
     prefix     = s_
 
     </new_prog.ini>
