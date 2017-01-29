@@ -19,7 +19,7 @@ confargs = lib.xx_glbls.arg_ns
 
 y_main[04] = """
 def evaluate(arg):
-    print 'do something with: ' + str(arg)
+    print 'do something with: >' + str(arg) + '<'
     return arg
 """
 
