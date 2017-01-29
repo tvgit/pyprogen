@@ -11,17 +11,21 @@ main_new_name     = ''              # name of new version: >y_main.py< or >y_mai
 main_new_path     = ''              # corresponding path
 
 # function in >y_main.py< which evals cmd-line args and/or conf-file args (always read by ConfArgParser)
-confarg_name      = 'evaluate_confargs.py' # function >evaluate_confargs() in separate file: >evaluate_confargs.py<
+confarg_name      = 'eval_confargs.py' # function >eval_confargs() in separate file: >eval_confargs.py<
 confarg_dir       = main_dir        # default dir
 confarg_path      = ''              # default path
-confarg_changed   = False           # file: >evaluate_confargs.py< changed?
+confarg_changed   = False           # file: >eval_confargs.py< changed?
 confarg_new_name  = ''              # name of new version: >eval_confargs_TIMESTAMP<
 confarg_new_path  = ''              # corresponding path
+
+# name of file with new code: >y_main.py< or >eval_confargs.py< or >eval_confargs_TIMESTAMP.py<
+code_new_name     = ''              #
+code_new_path     = ''              #
 
 prefix    = None     # common prefix of y_main-specific dirs, paths, modules, functions, vars ...
 arg_prefix= None     # common prefix of vars storing values of cmd-line args
 
-main_dir  = None     # main dir: >./y_main<, where >y_main.py< and >evaluate_confargs.py< are living
+main_dir  = None     # main dir: >./y_main<, where >y_main.py< and >eval_confargs.py< are living
 cfg_dir   = None     # subdir  : >./y_main/cfg<, config files for >y_main.py<
 lib_dir   = None     # subdir  : >./y_main/lib<, utilities for >y_main.py<
 log_dir   = None     # subdir  : >./y_main/log<, log-files for >y_main.py<
@@ -52,7 +56,7 @@ date_time_str= None  # Date & Time
 # headline     = ('-' * 10 + ' ' + main_new_name + ' ' + '-' * 10 + '\n')
 
 def print_headline():
-    print ('-' * 10 + ' ' + main_new_name + ' ' + '-' * 10 + '\n')
+    print ('-' * 10 + ' ' + code_new_name + ' ' + '-' * 10 + '\n')
 
 def print_p_cfg_and_args(print_args=True):
     print ' main_name     =   ' + main_name
@@ -83,14 +87,14 @@ def print_p_cfg_and_args(print_args=True):
     print ' dir_DataOut   = '     + dir_DataOut
     print
     print ' date_time_str = '     + date_time_str
-    print
+    # print
 
     if print_args:
         print
         for arg in sorted(opt_arg_vars):
-            print '  Opt. command line variables: ' + arg
+            print '  Opt. command line variable: ' + arg
         for arg in sorted(pos_arg_vars):
-            print '  Opt. positional arguments variables: ' + arg
+            print '  Opt. positional arguments variable: ' + arg
 
     print
     print_headline()

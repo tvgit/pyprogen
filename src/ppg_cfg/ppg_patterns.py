@@ -6,11 +6,6 @@
 y_main = dict()
 y_main[02] = """
 # YOUR code resides in THIS module.
-# Your changes are respected if and only if:
-#  you rename this file to: >xx_main.py<
-# or
-#  you change the hash code '>xxx...xxx<' in the
-#  third line of this module (unsafe!).
 
 import lib.xx_CAParser as xx_CAParser
 import lib.ppg_utils     as p_utils
@@ -23,10 +18,9 @@ confargs = lib.xx_glbls.arg_ns
 """
 
 y_main[04] = """
-def eval_confarg(arg):
+def evaluate(arg):
     print 'do something with: ' + str(arg)
     return arg
-
 """
 
 y_main[10] = """ """
@@ -34,7 +28,7 @@ y_main[10] = """ """
 y_main[60] = """
 def main():
     p_log_this('begin')
-    evaluate_confargs()
+    eval_confargs()
     p_log_this('end')
 """
 
