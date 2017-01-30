@@ -214,34 +214,47 @@ def calc_hash(txt):
     return hash_md5.hexdigest()
 
 
-def p_cfg_create_hash():
-    """ Calculates the hash of default vars in section [defaults] in >y_main.cfg<.
-    Then creates in >y_main.cfg< the section [signature] with items:
-    >timestamp< and >hash<.
-    Called by >pyprogen.py< after >ca_parser_make< was called,
-    i.e after a new >y_main_TimeStamp.cfg< was written."""
-
-    p_log_this('cfg_path_new  = ' + ppg_glbls.cfg_path_new)
-
+def p_cfg_calc_hash():
+    """ Calculates the hash of default vars in section [defaults] 
+    in >y_main_tmp.cfg<. Called after >ca_parser_make< was called,
+    i.e after a new >y_main_tmp.cfg< was written."""
+    
+    cfg_path_new = ppg_glbls.cfg_path_new
+    p_log_this('cfg_path_new  = ' + cfg_path_new)
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
-    cfg_file = parser.read(ppg_glbls.cfg_path_new)
+    cfg_file = parser.read(cfg_path_new)
     try:  # read defaults and calc their hash
         defaults = parser.items("defaults")  # read section "defaults"
         vars_str = ''
         for key_val in defaults:   # type(defaults) == list[tuple, tuple ...]
             # vars_str += key_val[0] + key_val[1]
             vars_str += key_val[0]
-        hash_of_vars = calc_hash(vars_str)
     except ConfigParser.NoSectionError:
-        p_log_this("No section: 'defaults' in: >" + ppg_glbls.cfg_path_new + '< !')
+        p_log_this("No section: 'defaults' in: >" + cfg_path_new + '< !')
         return
 
-    # add to >y_main.cfg< a section "signature" with hash & time_stamp
-    parser.add_section("signature")
-    parser.set("signature", "hash", hash_of_vars)
-    parser.set("signature", "timestamp", ppg_glbls.date_time_str)
-    parser.write(open(ppg_glbls.cfg_path_new, "w"))
+    hash_of_vars = calc_hash(vars_str)
     return hash_of_vars
+
+def p_cfg_write_section_signature(hash_of_vars):
+    """ writes section [signature] (hash and timestamp) to >y_main_tmp.cfg<."""
+
+    cfg_path_new = ppg_glbls.cfg_path_new
+    p_log_this('cfg_path_new  = ' + cfg_path_new)
+
+    parser = ConfigParser.SafeConfigParser(allow_no_value=True)
+    cfg_file = parser.read(cfg_path_new)
+
+    # add to >y_main_tmp.cfg< a section "signature" with hash & time_stamp
+    try:
+        parser.add_section("signature")
+        parser.set("signature", "hash", hash_of_vars)
+        parser.set("signature", "timestamp", ppg_glbls.date_time_str)
+        parser.write(open(cfg_path_new, "w"))
+    except ConfigParser.Error:
+        p_log_this("Error writing section [signature] in: >" + cfg_path_new + '< !')
+        return
+
 
 def p_cfg_read_hash(cfg_path):
     """ return the val of var >hash< in cfg-file in section [signature] """
@@ -284,33 +297,33 @@ def p_log_or_print_cfg_mssges(do_print = False, do_log = False):
 
 def p_cfg_check_if_modified():
     """ checks if y_main.cfg was modified (== hash of code is different) """
-    # >ppg_glbls.cfg_path<  == path of cfg-file; usually: >./y_mainy/cfg/y_main.cfg<
+    # >ppg_glbls.cfg_path<  == path of cfg-file == >./y_main/cfg/y_main.cfg<
+
     p_log_this('cfg_path: ' + ppg_glbls.cfg_path)
 
-    # first run of pyprogen with >.new_prog.ini<: there is no >y_main.cfg<:
+    # if it was first run of pyprogen with >.new_prog.ini<:
     ppg_glbls.cfg_exists = ppg_utils.p_file_exists(ppg_glbls.cfg_path)
+
+    # there is no >y_main.cfg<:
     if not ppg_glbls.cfg_exists:
-        # move new cfg-file to >./y_mainy/cfg/y_main.cfg<
-        shutil.move(ppg_glbls.cfg_path_new, ppg_glbls.cfg_path)
+        # rename >y_main_tmp.cfg< to >y_main.cfg<
+        os.rename(ppg_glbls.cfg_path_new, ppg_glbls.cfg_path)
         ppg_glbls.cfg_path_new = ppg_glbls.cfg_path
-        ppg_glbls.cfg_file_tmp = ppg_glbls.cfg_fn
+        ppg_glbls.p_file_delete(fn)
         return # !!
+    else: # there is already a >y_main.cfg< => compare hashes:
+        hash_of_old_vars = p_cfg_read_hash(ppg_glbls.cfg_path)     # >y_main.cfg<
+        p_log_this('hash_of_old_vars =' + hash_of_old_vars)
+        hash_of_new_vars = p_cfg_read_hash(ppg_glbls.cfg_path_new) # >y_main_tmp.cfg<
+        p_log_this('hash_of_new_vars =' + hash_of_new_vars)
 
-    else: # there is already a >y_main.cfg< -> compare hashes:
-        hash_of_old_defaults = p_cfg_read_hash(ppg_glbls.cfg_path)     # >y_main.cfg<
-        p_log_this('hash_of_old_defaults =' + hash_of_old_defaults)
-        hash_of_new_defaults = p_cfg_read_hash(ppg_glbls.cfg_path_new) # >y_main_TimeStamp.cfg<
-        p_log_this('hash_of_new_defaults =' + hash_of_new_defaults)
-
-        # if (act_hash == old_hash)
-        if (hash_of_new_defaults == hash_of_old_defaults):
+        # if (hash_of_new_vars == hash_of_old_vars )
+        if (hash_of_new_vars == hash_of_old_vars):
             ppg_glbls.cfg_changed = False
             # shutil.move(ppg_glbls.cfg_path_new, ppg_glbls.cfg_path)
             ppg_glbls.cfg_path_new = ppg_glbls.cfg_path
-            ppg_glbls.cfg_file_tmp = ppg_glbls.cfg_fn
         else:  # act_hash != old_hash
             ppg_glbls.cfg_changed = True
-
     p_log_or_print_cfg_mssges(do_print = False, do_log = True)
 
 def p_cfg_find_identical_hash(hash):
@@ -328,15 +341,19 @@ def p_cfg_find_identical_hash(hash):
 
 
 def p_cfg_clear_versions():
-    """ finds and deletes >y_main_timestamp.cfg< with identical hash
-    """
+    """ finds and deletes >y_main_timestamp.cfg< with hash identical to >y_main_tmp.cfg< """
 
     p_log_this()
     p_log_this('cfg_path:    ' + ppg_glbls.cfg_path)
-    hash = p_cfg_create_hash() # create hash for vars in most recent >y_main_TimeStamp.cfg<
+
+    # create hash for vars in >y_main_tmp.cfg<
+    hash_of_vars = p_cfg_calc_hash()
+    # write hash_of_vars in section [signature] in >y_main_tmp.cfg<
+    p_cfg_write_section_signature(hash_of_vars)
+
     p_cfg_check_if_modified()  # check if >./y_main/y_main.cfg exists<
 
-    list_of_cfg_w_identical_hash = p_cfg_find_identical_hash(hash)
+    list_of_cfg_w_identical_hash = p_cfg_find_identical_hash(hash_of_vars)
     if not ppg_glbls.cfg_path_new in list_of_cfg_w_identical_hash:
         ppg_utils.p_terminal_mssge_error()
     else:

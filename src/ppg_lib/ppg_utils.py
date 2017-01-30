@@ -212,6 +212,9 @@ def p_check_filename_pattern():
 
 def p_dir_traverse_recursively(path):
     """http://stackoverflow.com/questions/7012921/recursive-grep-using-python"""
+    msg = (p_here('', 2) + ' traversing dir: >' + path )
+    p_log_this(msg)
+
     result_list = []
     for root, dirs, fnames in os.walk(path):
         for fname in fnames:
