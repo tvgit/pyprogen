@@ -48,10 +48,10 @@ def p_read_ini(dir_cfg='.', cfg_fn='new_prog.ini'):
     """ reads defaults for generated program: name ..."""
     # http://www.karoltomala.com/blog/?p=622
     p_log_this()
-    cfg_path = os.path.join(dir_cfg, cfg_fn)     # cfg_path_new of >pyprogen.py< !
+    cfg_path = os.path.join(dir_cfg, cfg_fn)     # cfg_path_tmp of >pyprogen.py< !
     cfg_path = os.path.normpath(cfg_path)        #      not of >y_main.py<  !!
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
-    p_log_this('cfg_path_new: ' + cfg_path)
+    p_log_this('cfg_path_tmp: ' + cfg_path)
     cfg_file = parser.read(cfg_path)
     p_log_this('cfg file: ' + str(cfg_file))
 
@@ -111,24 +111,23 @@ def eval_confargs():
 def p_inform_about_paths_and_filenames():
     """ """
     cfg_path = os.path.join(ppg_glbls.cfg_dir, ppg_glbls.cfg_fn)
-    ppg_glbls.print_headline()
     p_log_or_print_cfg_mssges(do_print=True, do_log=False)
 
     mssge  = ''
     # mssge += headline
     len_dir_main = len(ppg_glbls.main_dir) + 1
-    mssge += '\n Filename of YOUR code is:    ' + ' '*len_dir_main + ppg_glbls.main_name
-    mssge += '\n Dir  of YOUR code is:        ' + os.path.join(ppg_glbls.main_dir, '')
-    mssge += '\n Path of YOUR code is:        ' + os.path.join(ppg_glbls.main_dir, ppg_glbls.main_name)
+    mssge += '\n Filename of YOUR code is:      ' + ' '*len_dir_main + ppg_glbls.main_name
+    mssge += '\n Dir  of YOUR code is:          ' + os.path.join(ppg_glbls.main_dir, '')
+    mssge += '\n Path of YOUR code is:          ' + os.path.join(ppg_glbls.main_dir, ppg_glbls.main_name)
     mssge += '\n'
-    mssge += '\n Filename of new code is:     ' + ' '*len_dir_main + ppg_glbls.code_new_name
-    mssge += '\n Dir  of new code is:         ' + os.path.join(ppg_glbls.main_dir, '')
-    mssge += '\n Path of new code is:         ' + ppg_glbls.code_new_path
-    # cfg_path_new
+    mssge += '\n Filename of new code is:       ' + ' '*len_dir_main + ppg_glbls.code_new_name
+    mssge += '\n Dir  of new code is:           ' + os.path.join(ppg_glbls.main_dir, '')
+    mssge += '\n Path of new code is:           ' + ppg_glbls.code_new_path
+    # cfg_path_tmp
     mssge += '\n'
-    len_cfg_dir = len(os.path.dirname(ppg_glbls.cfg_path_new)) + 1
-    mssge += '\n Path of new cfg-file is:     ' + ppg_glbls.cfg_path_new
-    mssge += '\n Filename of new cfg-file is: ' + ' '*len_cfg_dir + os.path.basename(ppg_glbls.cfg_path_new)
+    len_cfg_dir = len(os.path.dirname(ppg_glbls.cfg_path)) + 1
+    mssge += '\n Path of valid cfg-file is:     ' + ppg_glbls.cfg_path
+    mssge += '\n Filename of valid cfg-file is: ' + ' '*len_cfg_dir + os.path.basename(ppg_glbls.cfg_path)
     # mssge += ' The new files have a timestamp  >' + ppg_glbls.main_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
     mssge += '\n'
     mssge += '\n You may configure the comand line _args_     of >' + ppg_glbls.main_name + '<  via:  >new_prog_args.cfg<'
@@ -143,6 +142,7 @@ def p_inform_about_paths_and_filenames():
     mssge += '\n'
     # mssge += '\n'
     print (mssge)
+    ppg_glbls.print_headline()
 
 
 def p_subst_vars_in_patterns (input_dict):
@@ -219,8 +219,8 @@ def p_cfg_calc_hash():
     in >y_main_tmp.cfg<. Called after >ca_parser_make< was called,
     i.e after a new >y_main_tmp.cfg< was written."""
     
-    cfg_path_new = ppg_glbls.cfg_path_new
-    p_log_this('cfg_path_new  = ' + cfg_path_new)
+    cfg_path_new = ppg_glbls.cfg_path_tmp
+    p_log_this('cfg_path_tmp  = ' + cfg_path_new)
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
     cfg_file = parser.read(cfg_path_new)
     try:  # read defaults and calc their hash
@@ -239,8 +239,8 @@ def p_cfg_calc_hash():
 def p_cfg_write_section_signature(hash_of_vars):
     """ writes section [signature] (hash and timestamp) to >y_main_tmp.cfg<."""
 
-    cfg_path_new = ppg_glbls.cfg_path_new
-    p_log_this('cfg_path_new  = ' + cfg_path_new)
+    cfg_path_new = ppg_glbls.cfg_path_tmp
+    p_log_this('cfg_path_tmp  = ' + cfg_path_new)
 
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
     cfg_file = parser.read(cfg_path_new)
@@ -273,14 +273,14 @@ def p_log_or_print_cfg_mssges(do_print = False, do_log = False):
     mssges = []
     if not ppg_glbls.cfg_exists:
         mssges.append('There is no    ' + ppg_glbls.cfg_path + ' =>')
-        mssges.append('renaming:      ' + ppg_glbls.cfg_path_new)
+        mssges.append('renaming:      ' + ppg_glbls.cfg_path_tmp)
         mssges.append('to:            ' + ppg_glbls.cfg_path)
     else:
         mssges.append('There is already a          >' + ppg_glbls.cfg_path + '< ')
         if ppg_glbls.cfg_changed:
             mssges.append('Since vars in [defaults] in >' + ppg_glbls.cfg_path + '<      have changed:')
             mssges.append(' => 1)     config file:     >' + ppg_glbls.cfg_path + '<      stays unchanged.')
-            mssges.append('    2) new config file is:  >' + ppg_glbls.cfg_path_new + '<.')
+            mssges.append('    2) new config file is:  >' + ppg_glbls.cfg_path_tmp + '<.')
             if ppg_glbls.main_changed :
                 mssges.append('    3) corresponding new version of main: >' + ppg_glbls.main_new_name + '<.')
         else: # ppg_glbls.cfg_changed == False
@@ -307,23 +307,23 @@ def p_cfg_check_if_modified():
     # there is no >y_main.cfg<:
     if not ppg_glbls.cfg_exists:
         # rename >y_main_tmp.cfg< to >y_main.cfg<
-        os.rename(ppg_glbls.cfg_path_new, ppg_glbls.cfg_path)
-        ppg_glbls.cfg_path_new = ppg_glbls.cfg_path
-        ppg_glbls.p_file_delete(fn)
-        return # !!
+        os.rename(ppg_glbls.cfg_path_tmp, ppg_glbls.cfg_path)
+        # ppg_glbls.cfg_path_tmp = ppg_glbls.cfg_path
+        # ppg_glbls.cfg_path_tmp = ''
     else: # there is already a >y_main.cfg< => compare hashes:
         hash_of_old_vars = p_cfg_read_hash(ppg_glbls.cfg_path)     # >y_main.cfg<
         p_log_this('hash_of_old_vars =' + hash_of_old_vars)
-        hash_of_new_vars = p_cfg_read_hash(ppg_glbls.cfg_path_new) # >y_main_tmp.cfg<
+        hash_of_new_vars = p_cfg_read_hash(ppg_glbls.cfg_path_tmp) # >y_main_tmp.cfg<
         p_log_this('hash_of_new_vars =' + hash_of_new_vars)
 
         # if (hash_of_new_vars == hash_of_old_vars )
-        if (hash_of_new_vars == hash_of_old_vars):
+        if (hash_of_old_vars == hash_of_new_vars):
             ppg_glbls.cfg_changed = False
-            # shutil.move(ppg_glbls.cfg_path_new, ppg_glbls.cfg_path)
-            ppg_glbls.cfg_path_new = ppg_glbls.cfg_path
+            # shutil.move(ppg_glbls.cfg_path_tmp, ppg_glbls.cfg_path)
+            ppg_glbls.cfg_path_tmp = ppg_glbls.cfg_path
         else:  # act_hash != old_hash
             ppg_glbls.cfg_changed = True
+
     p_log_or_print_cfg_mssges(do_print = False, do_log = True)
 
 def p_cfg_find_identical_hash(hash):
@@ -337,6 +337,7 @@ def p_cfg_find_identical_hash(hash):
         tmp_hash = p_cfg_read_hash(fn)
         if tmp_hash == hash:
             list_of_cfg_identical_hash.append(fn)
+
     return list_of_cfg_identical_hash
 
 
@@ -354,10 +355,11 @@ def p_cfg_clear_versions():
     p_cfg_check_if_modified()  # check if >./y_main/y_main.cfg exists<
 
     list_of_cfg_w_identical_hash = p_cfg_find_identical_hash(hash_of_vars)
-    if not ppg_glbls.cfg_path_new in list_of_cfg_w_identical_hash:
-        ppg_utils.p_terminal_mssge_error()
+    if not ppg_glbls.cfg_path_tmp in list_of_cfg_w_identical_hash:
+        pass
+        ppg_utils.p_terminal_mssge_error('p_cfg_clear_versions: no >' + ppg_glbls.cfg_path_tmp + '<' )
     else:
-        list_of_cfg_w_identical_hash.remove(ppg_glbls.cfg_path_new)
+        list_of_cfg_w_identical_hash.remove(ppg_glbls.cfg_path_tmp)
         p_delete_files_in_list(list_of_cfg_w_identical_hash)
 
 
@@ -491,47 +493,21 @@ def p_code_make():
 
     # First run: there is no >y_main.py<
     if not ppg_utils.p_file_exists(ppg_glbls.main_path):
-        ppg_utils.p_terminal_mssge_note_this('p_code_make(): no main: ' + ppg_glbls.main_path)
-
-        f_name         = ppg_glbls.main_name
-        f_path         = ppg_glbls.main_path
-        tmp_f_new_name = ppg_glbls.main_name
-        # f_new_name     = ppg_glbls.main_new_name
-        # f_changed      = ppg_glbls.main_changed
-        f_new_name     = tmp_f_new_name
+        f_new_name     = ppg_glbls.main_name
         f_new_path     = os.path.join(f_dir, f_new_name)
 
         p_log_this('creating: ' + f_new_path)
 
-        # ppg_glbls.main_name     = f_name
         ppg_glbls.main_new_name = f_new_name
-        # ppg_glbls.main_name     = tmp_f_new_name
         ppg_glbls.main_new_path = f_new_path
         ppg_glbls.main_changed  = True
         code_lines = p_main_make_code()
     else:
-        f_name         = ppg_glbls.confarg_name
         f_path         = ppg_glbls.confarg_path
-        tmp_f_new_name = ppg_glbls.confarg_name
-        # f_new_name     = ppg_glbls.confarg_new_name
-        # f_changed      = ppg_glbls.confarg_changed
-
-        f_changed      = p_check_via_hash_if_modified(f_path)
-        # if f_changed or ppg_glbls.cfg_changed:
-        # if ppg_glbls.cfg_changed:
-        #     f_new_name = tmp_f_new_name[:-3] + '_' + ppg_glbls.date_time_str + '.py'
-        # else:
-        #     f_new_name = tmp_f_new_name
-        #     # ppg_glbls.code_new_path = f_new_path
-        #     return
-        #     # f_new_name = tmp_f_new_name
-
-        f_new_name = tmp_f_new_name
+        f_new_name     = ppg_glbls.confarg_name
         f_new_path = os.path.join(f_dir, f_new_name)
-
-        # ppg_glbls.confarg_name     = f_name
+        f_changed      = p_check_via_hash_if_modified(f_path)
         ppg_glbls.confarg_new_name = f_new_name
-        # ppg_glbls.confarg_name     = tmp_f_new_name
         ppg_glbls.confarg_new_path = f_new_path
         ppg_glbls.confarg_changed  = f_changed
 

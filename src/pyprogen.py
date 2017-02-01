@@ -157,10 +157,10 @@ def subdirs_make(prog_path):
     p_glbls.cfg_fn   = p_glbls.main_name[:-3] + '.cfg'   # cfg-file of new y_main.py
     p_glbls.cfg_path = os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn)
 
-    # p_glbls.cfg_fn_new   = p_glbls.cfg_fn[:-4] + '_' + p_glbls.date_time_str + p_glbls.cfg_fn[-4:]
-    # p_glbls.cfg_fn_new   = p_glbls.cfg_fn
-    p_glbls.cfg_fn_new   = p_glbls.cfg_fn[:-4] + '_tmp' + p_glbls.cfg_fn[-4:]
-    p_glbls.cfg_path_new = os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn_new)
+    # p_glbls.cfg_fn_tmp   = p_glbls.cfg_fn[:-4] + '_' + p_glbls.date_time_str + p_glbls.cfg_fn[-4:]
+    # p_glbls.cfg_fn_tmp   = p_glbls.cfg_fn
+    p_glbls.cfg_fn_tmp   = p_glbls.cfg_fn[:-4] + '_tmp' + p_glbls.cfg_fn[-4:]
+    p_glbls.cfg_path_tmp = os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn_tmp)
 
     p_glbls.lib_dir    = p_utils.p_subdir_make(os.path.join(prog_path, 'lib'))
 
@@ -203,10 +203,10 @@ def ca_parser_run():
     subprocess_path  = p_glbls.CAParser_path
     p_log_this("subprocess_path   = " + subprocess_path)
     # http://pymotw.com/2/subprocess/
-    # start new ConfArgParser to create cfg-file (aka >cfg_path_new<) for >y_main.py<
-    cfg_path = p_glbls.cfg_path_new         # == >y_main_TimeStamp.cfg<
-    p_log_this("cfg_path_new      = " + cfg_path)
-    subprocess.call([subprocess_path, cfg_path], shell=True)
+    # start new ConfArgParser to create cfg-file (aka >cfg_path_tmp<) for >y_main.py<
+    cfg_path_tmp = p_glbls.cfg_path_tmp         # == >y_main_TimeStamp.cfg<
+    p_log_this("cfg_path_tmp      = " + cfg_path_tmp)
+    subprocess.call([subprocess_path, cfg_path_tmp], shell=True)
 
 def pyprogen():
     """
@@ -234,8 +234,8 @@ def pyprogen():
     # Finally create >./y_main/y_main.py< or >./y_main/evaluate_confargs.py<
     p_code.p_code_make()          # create progr >./y_main/y_main.py< or >./y_main/evaluate_confargs.py<
 
-    p_code.p_inform_about_paths_and_filenames()   # dwyns
     p_glbls.print_p_cfg_and_args()# print variables and command line args in ./pyprogen/ppg_lib/ppg_glbls.
+    p_code.p_inform_about_paths_and_filenames()   # dwyns
 
 
 if __name__ == "__main__":

@@ -142,7 +142,7 @@ def args_to_glbls (args):
 """
 
 CA_Parser[40] = """
-def xx_parser(command = '', cfg_path_new=''):
+def xx_parser(command = '', cfg_path_tmp=''):
     # p_log_this()
     parser = confargparse.ConfArgParser(description='Program: xx_program_name')
     # exclude positional args when exporting conf-file
@@ -162,16 +162,16 @@ CA_Parser[48] = """
     # args_log (args)
 
     if (command == '--export-conf-file'):
-        mssge = '| xx_CAParser.py: generating & writing: ' + cfg_path_new
+        mssge = '| xx_CAParser.py: generating & writing: ' + cfg_path_tmp
         print mssge ; print '-' * 20 ; p_log_this(mssge)
         # NOTE: >parser.parse_args('--export-conf-file' ...) will EXIT!<
-        parser.parse_args(['--export-conf-file', cfg_path_new])
+        parser.parse_args(['--export-conf-file', cfg_path_tmp])
         # xx_CAParser has written cfg-file
-        # nota: parser.parse_args(['--export-conf-file', cfg_path_new]) exits module!
-    elif ((command == '--conf-file') and str(cfg_path_new != '')):
+        # nota: parser.parse_args(['--export-conf-file', cfg_path_tmp]) exits module!
+    elif ((command == '--conf-file') and str(cfg_path_tmp != '')):
         # read conf-file:
-        param_list = [command, cfg_path_new]
-        p_log_this('Trying to read from:' + str(cfg_path_new))
+        param_list = [command, cfg_path_tmp]
+        p_log_this('Trying to read from:' + str(cfg_path_tmp))
         args = parser.parse_args(param_list)
         args_to_glbls (args)  # set values in >xx_glbls.arg_ns<
     else:
@@ -200,17 +200,17 @@ if __name__ == "__main__":
     p_log_init(log_dir = r'xx_dir_log', log_fn = r'xx_CAParser')
     p_log_start()
     p_log_this(' generating cfg-file')
-    cfg_path_new = sys.argv[1]
-    if not cfg_path_new:
+    cfg_path_tmp = sys.argv[1]
+    if not cfg_path_tmp:
         mssge =   '| xx_CAParser: No output path for cfg-file?? '
         print mssge ; p_log_this(mssge)
-        cfg_path_new = os.path.join('.', 'main\cfg', 'conf.ini')
-        mssge = '| xx_CAParser: Setting output path to: ' + str(cfg_path_new)
+        cfg_path_tmp = os.path.join('.', 'main\cfg', 'conf.ini')
+        mssge = '| xx_CAParser: Setting output path to: ' + str(cfg_path_tmp)
         print mssge ; p_log_this(mssge)
     else:
-        mssge = '| output path for cfg-file:            ' + str(cfg_path_new)
+        mssge = '| output path for cfg-file:            ' + str(cfg_path_tmp)
         print mssge ; p_log_this(mssge)
-    xx_parser('--export-conf-file', cfg_path_new)
+    xx_parser('--export-conf-file', cfg_path_tmp)
     # NOTE: in func >xx_parser()<
     # calling >parser.parse_args('--export-conf-file' ...)
     # will EXIT!

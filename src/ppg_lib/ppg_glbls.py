@@ -38,6 +38,9 @@ cfg_changed  = False # y_main.cfg changed?
 cfg_fn_new   = None  # filename of new cfg-file for for 'y_main.py'; usually: >y_main_timestamp.py<
 cfg_path_new = None  # path     of new cfg-file for for 'y_main.py'; usually: >./y_mainy/cfg/y_main_timestamp.cfg<
 
+cfg_fn_tmp   = None  # filename of tmp cfg-file for for 'y_main.py': >y_main_tmp.cfg<
+cfg_path_tmp = None  # path     of mpw cfg-file for for 'y_main.py': >./y_mainy/cfg/y_main_tmp.cfg<
+
 CAParser_fn  = None  # filename of arg-parser of 'y_main.py'  (>y_ConfArgParser.py<)
 CAParser_path= None  # path     of arg-parser of 'y_main.py'  (>./y_main/lib/y_ConfArgParser.py<)
 CAParser_func= None  # function name  (>def y_parser(): ...<)
@@ -68,8 +71,8 @@ def print_p_cfg_and_args(print_args=True):
     print ' cfg_fn        = '   + ' '*len_cfg_dir + cfg_fn
     print ' cfg_path      = '   + os.path.join(cfg_dir, cfg_fn)
     print
-    print ' cfg_file_new  = '     + ' '*len_cfg_dir + os.path.basename(cfg_path_new)
-    print ' cfg_path_new  = ' + cfg_path_new
+    print ' cfg_file_new  = '     + ' '*len_cfg_dir + os.path.basename(cfg_path_tmp)
+    print ' cfg_path_tmp  = ' + cfg_path_tmp
     print
     len_lib_dir = len(lib_dir) + 1
     print ' CAParser_fn   = '   + ' '*len_lib_dir + CAParser_fn
