@@ -382,13 +382,13 @@ def p_cfg_clear_versions():
             else:
                 list_of_cfg_w_identical_hash.remove(ppg_glbls.cfg_path_tmp)
                 p_delete_files_in_list(list_of_cfg_w_identical_hash)
-So:
-1- rename existing (old) version w identical hash (could be modified, di not loose modifications)
-2- delete new version, i.e.  ppg_glbls.cfg_path_tmp.
-            p_log_this('rename >%s< to: >%s< ' % (ppg_glbls.cfg_path, cfg_fn_new))
-            os.rename(ppg_glbls.cfg_path, cfg_fn_new)
-            p_log_this('rename >%s< to: >%s< ' % (ppg_glbls.cfg_path_tmp, ppg_glbls.cfg_path))
-            os.rename(ppg_glbls.cfg_path_tmp, ppg_glbls.cfg_path)
+# So:
+# 1- rename existing (old) version w identical hash (could be modified, di not loose modifications)
+# 2- delete new version, i.e.  ppg_glbls.cfg_path_tmp.
+                p_log_this('rename >%s< to: >%s< ' % (ppg_glbls.cfg_path, cfg_fn_new))
+                os.rename(ppg_glbls.cfg_path, cfg_fn_new)
+                p_log_this('rename >%s< to: >%s< ' % (ppg_glbls.cfg_path_tmp, ppg_glbls.cfg_path))
+                os.rename(ppg_glbls.cfg_path_tmp, ppg_glbls.cfg_path)
 
 
             # ppg_utils.p_file_delete(ppg_glbls.cfg_path_tmp)
