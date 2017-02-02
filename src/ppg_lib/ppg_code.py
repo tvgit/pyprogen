@@ -214,12 +214,12 @@ def calc_hash(txt):
     return hash_md5.hexdigest()
 
 
-def p_cfg_calc_hash():
+def p_cfg_calc_hash(cfg_path_new = ppg_glbls.cfg_path_tmp):
     """ Calculates the hash of default vars in section [defaults] 
     in >y_main_tmp.cfg<. Called after >ca_parser_make< was called,
     i.e after a new >y_main_tmp.cfg< was written."""
     
-    cfg_path_new = ppg_glbls.cfg_path_tmp
+    # cfg_path_new = ppg_glbls.cfg_path_tmp
     p_log_this('cfg_path_tmp  = ' + cfg_path_new)
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
     cfg_file = parser.read(cfg_path_new)
@@ -236,10 +236,10 @@ def p_cfg_calc_hash():
     hash_of_vars = calc_hash(vars_str)
     return hash_of_vars
 
-def p_cfg_write_section_signature(hash_of_vars):
+def p_cfg_write_section_signature(hash_of_vars, cfg_path_new = ppg_glbls.cfg_path_tmp):
     """ writes section [signature] (hash and timestamp) to >y_main_tmp.cfg<."""
 
-    cfg_path_new = ppg_glbls.cfg_path_tmp
+    # cfg_path_new = ppg_glbls.cfg_path_tmp
     p_log_this('cfg_path_tmp  = ' + cfg_path_new)
 
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
@@ -254,6 +254,24 @@ def p_cfg_write_section_signature(hash_of_vars):
     except ConfigParser.Error:
         p_log_this("Error writing section [signature] in: >" + cfg_path_new + '< !')
         return
+
+
+def p_cfg_read_section_option(cfg_path, section, option):
+    """ return the val of option >option< in cfg-file in section [section] """
+    parser = ConfigParser.SafeConfigParser(allow_no_value=True)
+    # cfg_file = parser.read(cfg_path)
+    parser.read(cfg_path)
+    try:  # read val of option hash
+        val = parser.get(section, option)
+    except ConfigParser.NoSectionError or ConfigParser.NoOptionError:
+        if ConfigParser.NoSectionError:
+            p_log_this('>' + ppg_glbls.cfg_path + '<')
+            p_log_this('No section: >[' + section +']< in: >' + ppg_glbls.cfg_path + '< !')
+        if ConfigParser.NoOptionError:
+            p_log_this('>' + ppg_glbls.cfg_path + '<')
+            p_log_this('No option: >[' + option +']< in: section: >[' + section +']<')
+        return
+    return val
 
 
 def p_cfg_read_hash(cfg_path):
@@ -295,43 +313,12 @@ def p_log_or_print_cfg_mssges(do_print = False, do_log = False):
             print(mssge)
 
 
-def p_cfg_check_if_modified():
-    """ checks if y_main.cfg was modified (== hash of code is different) """
-    # >ppg_glbls.cfg_path<  == path of cfg-file == >./y_main/cfg/y_main.cfg<
-
-    p_log_this('cfg_path: ' + ppg_glbls.cfg_path)
-
-    # if it was first run of pyprogen with >.new_prog.ini<:
-    ppg_glbls.cfg_exists = ppg_utils.p_file_exists(ppg_glbls.cfg_path)
-
-    # there is no >y_main.cfg<:
-    if not ppg_glbls.cfg_exists:
-        # rename >y_main_tmp.cfg< to >y_main.cfg<
-        os.rename(ppg_glbls.cfg_path_tmp, ppg_glbls.cfg_path)
-        # ppg_glbls.cfg_path_tmp = ppg_glbls.cfg_path
-        # ppg_glbls.cfg_path_tmp = ''
-    else: # there is already a >y_main.cfg< => compare hashes:
-        hash_of_old_vars = p_cfg_read_hash(ppg_glbls.cfg_path)     # >y_main.cfg<
-        p_log_this('hash_of_old_vars =' + hash_of_old_vars)
-        hash_of_new_vars = p_cfg_read_hash(ppg_glbls.cfg_path_tmp) # >y_main_tmp.cfg<
-        p_log_this('hash_of_new_vars =' + hash_of_new_vars)
-
-        # if (hash_of_new_vars == hash_of_old_vars )
-        if (hash_of_old_vars == hash_of_new_vars):
-            ppg_glbls.cfg_changed = False
-            # shutil.move(ppg_glbls.cfg_path_tmp, ppg_glbls.cfg_path)
-            ppg_glbls.cfg_path_tmp = ppg_glbls.cfg_path
-        else:  # act_hash != old_hash
-            ppg_glbls.cfg_changed = True
-
-    p_log_or_print_cfg_mssges(do_print = False, do_log = True)
-
 def p_cfg_find_identical_hash(hash):
     """"find in dir >ppg_glbls.cfg_fn< files >y_main*.cfg< with identical hash-values"""
     list_of_cfg_identical_hash   = []  # list of >y_main_timestamp.cfg< with identical hash
 
     glob_path = os.path.join(ppg_glbls.cfg_dir, ppg_glbls.cfg_fn)
-    glob_path = glob_path[:-len('.cfg')] + '*.cfg' # == >.../y_main_*.cfg<
+    glob_path = glob_path[:-len('.cfg') + 1] + '*.cfg' # == >.../y_main*.cfg<
 
     for fn in glob.glob(glob_path):
         tmp_hash = p_cfg_read_hash(fn)
@@ -348,19 +335,65 @@ def p_cfg_clear_versions():
     p_log_this('cfg_path:    ' + ppg_glbls.cfg_path)
 
     # create hash for vars in >y_main_tmp.cfg<
-    hash_of_vars = p_cfg_calc_hash()
+    hash_of_vars = p_cfg_calc_hash(ppg_glbls.cfg_path_tmp)
     # write hash_of_vars in section [signature] in >y_main_tmp.cfg<
-    p_cfg_write_section_signature(hash_of_vars)
+    p_cfg_write_section_signature(hash_of_vars, ppg_glbls.cfg_path_tmp)
 
-    p_cfg_check_if_modified()  # check if >./y_main/y_main.cfg exists<
+    ppg_glbls.cfg_exists = ppg_utils.p_file_exists(ppg_glbls.cfg_path)
+    # there is no >y_main.cfg<:
+    if not ppg_glbls.cfg_exists:
+        p_log_this('cfg_path: >' + ppg_glbls.cfg_path + '< does not exist =>')
+        p_log_this('writing : >' + ppg_glbls.cfg_path + '<.')
+        os.rename(ppg_glbls.cfg_path_tmp, ppg_glbls.cfg_path)
+    else: # there is already a >y_main.cfg< => compare hashes:
+        p_log_this('cfg_path: >' + ppg_glbls.cfg_path + '< does exist.')
+        p_log_this('cfg_path: ' + ppg_glbls.cfg_path)
+        # hash_of_old_vars = hash in >y_main.cfg<
+        hash_of_old_vars = p_cfg_read_section_option(cfg_path, 'signature', 'hash')
+        p_log_this('hash_of_old_vars =' + hash_of_old_vars)
+        # hash_of_new_vars = hash in >y_main_tmp.cfg<
+        hash_of_new_vars = p_cfg_read_section_option(ppg_glbls.cfg_path_tmp, 'signature', 'hash')
+        p_log_this('hash_of_new_vars =' + hash_of_new_vars)
 
-    list_of_cfg_w_identical_hash = p_cfg_find_identical_hash(hash_of_vars)
-    if not ppg_glbls.cfg_path_tmp in list_of_cfg_w_identical_hash:
-        pass
-        ppg_utils.p_terminal_mssge_error('p_cfg_clear_versions: no >' + ppg_glbls.cfg_path_tmp + '<' )
-    else:
-        list_of_cfg_w_identical_hash.remove(ppg_glbls.cfg_path_tmp)
-        p_delete_files_in_list(list_of_cfg_w_identical_hash)
+        # if (hash_of_new_vars == hash_of_old_vars )
+        if (hash_of_old_vars == hash_of_new_vars):
+            ppg_glbls.cfg_changed = False
+            p_log_this('hashes are identical =>' + hash_of_old_vars)
+            p_log_this('>' + ppg_glbls.cfg_path + '< unchanged.')
+            ppg_glbls.cfg_path_tmp = ppg_glbls.cfg_path
+            # >y_main_tmp.cfg< not needed anymore
+            ppg_utils.p_file_delete(ppg_glbls.cfg_path_tmp)
+        else:  # act_hash != old_hash
+            ppg_glbls.cfg_changed = True
+
+            p_log_this('hashes are different =>')
+
+            timestamp = p_cfg_read_section_option(ppg_glbls.cfg_path, 'signature', 'timestamp')
+            p_log_this('timestamp of >%s< : >%s< ' % (ppg_glbls.cfg_path, timestamp))
+            cfg_fn_new = ppg_glbls.cfg_path[:-3] + '_' + timestamp + '.cfg'
+            p_log_this('rename >%s< to: >%s< ' % (ppg_glbls.cfg_path, cfg_fn_new))
+
+            list_of_cfg_w_identical_hash = p_cfg_find_identical_hash(hash_of_new_vars)
+            if not ppg_glbls.cfg_path_tmp in list_of_cfg_w_identical_hash:
+                mssge = '>%s< should be in >list_of_cfg_w_identical_hash< ?! ' % (ppg_glbls.cfg_path_tmp)
+                p_log_this(mssge)
+                mssge += 'p_cfg_clear_versions(): '
+                ppg_utils.p_terminal_mssge_error(mssge)
+            else:
+                list_of_cfg_w_identical_hash.remove(ppg_glbls.cfg_path_tmp)
+                p_delete_files_in_list(list_of_cfg_w_identical_hash)
+So:
+1- rename existing (old) version w identical hash (could be modified, di not loose modifications)
+2- delete new version, i.e.  ppg_glbls.cfg_path_tmp.
+            p_log_this('rename >%s< to: >%s< ' % (ppg_glbls.cfg_path, cfg_fn_new))
+            os.rename(ppg_glbls.cfg_path, cfg_fn_new)
+            p_log_this('rename >%s< to: >%s< ' % (ppg_glbls.cfg_path_tmp, ppg_glbls.cfg_path))
+            os.rename(ppg_glbls.cfg_path_tmp, ppg_glbls.cfg_path)
+
+
+            # ppg_utils.p_file_delete(ppg_glbls.cfg_path_tmp)
+
+    p_log_or_print_cfg_mssges(do_print = False, do_log = True)
 
 
 def p_find_files_w_identical_hash(file_path, hash):
