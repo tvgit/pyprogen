@@ -223,7 +223,7 @@ def calc_hash(txt):
 def p_cfg_calc_hash(path=ppg_glbls.cfg_path_tmp):
     """ Calculates the hash of the strings of the opts in section [defaults] """
 
-    p_log_this('cfg_path_tmp  = ' + path)
+    p_log_this('cfg_path_tmp:     ' + path)
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
     cfg_file = parser.read(path)
     try:  # read defaults and calc their hash
@@ -243,7 +243,7 @@ def p_cfg_calc_hash(path=ppg_glbls.cfg_path_tmp):
 def p_cfg_write_section_option(path, section, option, option_value):
     """ sets in the section [section] the option >option< to option_value """
 
-    p_log_this('path = ' + path)
+    p_log_this('path:  ' + path)
 
     parser = ConfigParser.SafeConfigParser(allow_no_value=True)
     parser.read(path)
@@ -334,56 +334,60 @@ def p_cfg_clear_versions():
     p_cfg_write_section_option(ppg_glbls.cfg_path_tmp, "signature", "hash", hash_of_opts)
     p_cfg_write_section_option(ppg_glbls.cfg_path_tmp, "signature", "timestamp", ppg_glbls.date_time_str)
 
-
-    # is there a >y_main.cfg<:
+    # is there already a >y_main.cfg< ?
     ppg_glbls.cfg_exists = ppg_utils.p_file_exists(ppg_glbls.cfg_path)
     # there is no >y_main.cfg<:
     if not ppg_glbls.cfg_exists:
-        p_log_this('cfg_path: >' + ppg_glbls.cfg_path + '< does not exist =>')
-        p_log_this('writing : >' + ppg_glbls.cfg_path + '<.')
+        # > y_main_TMP.cfg< becomes >y_main.cfg<
+        p_log_this('cfg_path:   >' + ppg_glbls.cfg_path + '< does not exist =>')
+        p_log_this('writing :   >' + ppg_glbls.cfg_path + '<.')
         os.rename(ppg_glbls.cfg_path_tmp, ppg_glbls.cfg_path)
     else:  # there is already a >y_main.cfg< => compare hashes:
-        p_log_this('cfg_path: >' + ppg_glbls.cfg_path + '< does exist.')
+        p_log_this('cfg_path:   >' + ppg_glbls.cfg_path + '< does exist.')
         # compare >y_main.cfg< and >y_main_TMP.cfg< using the hashes
         # hash_of_old_opts = hash in >y_main.cfg<
         hash_of_old_opts = p_cfg_read_section_option(ppg_glbls.cfg_path, 'signature', 'hash')
-        p_log_this('hash_of_old_opts =' + hash_of_old_opts)
         # hash_of_new_opts = hash in >y_main_tmp.cfg<
         hash_of_new_opts = p_cfg_read_section_option(ppg_glbls.cfg_path_tmp, 'signature', 'hash')
+
+        p_log_this('hash_of_old_opts =' + hash_of_old_opts)
         p_log_this('hash_of_new_opts =' + hash_of_new_opts)
 
         # if (hash_of_new_opts == hash_of_old_opts )
         if (hash_of_old_opts == hash_of_new_opts):
             ppg_glbls.cfg_changed = False
-            p_log_this('hashes are identical =>' + hash_of_old_opts)
-            p_log_this('>' + ppg_glbls.cfg_path + '< remains unchanged.')
-            ppg_glbls.cfg_path_tmp = ppg_glbls.cfg_path
-            # >y_main_tmp.cfg< not needed anymore
+
+            p_log_this('hashes are identical =>')
+            p_log_this('            >' + ppg_glbls.cfg_path + '< remains unchanged.')
+            # >y_main_TMP.cfg< not needed anymore:
             p_log_this('delete file: ' + ppg_glbls.cfg_path_tmp)
             ppg_utils.p_file_delete(ppg_glbls.cfg_path_tmp)
+
         else:  # act_hash != old_hash
             ppg_glbls.cfg_changed = True
-
             p_log_this('hashes are different =>')
+
             # 1. >y_main.cfg< rename to: >y_main_timestamp.cfg<
-            # 2. if there is no >y_main_timestamp.cfg< with identical timestamp
-            #       (identical to timestamp of >y_main_tmp.cfg<
+            # 2. if there is no >y_main_timestamp.cfg< with identical timestamp ... \
+            #       ... (identical to timestamp of >y_main_tmp.cfg<)
             #    then
             #       rename >y_main_tmp.cfg< to: >y_main.cfg<
             #    else:
             #       rename >y_main_timestamp.cfg< to: >y_main.cfg<
             #       delete >y_main_tmp.cfg<
 
-            # >y_main.cfg< becomes >y_main_timestamp.cfg< (timestamp from section [signature]
+            # >y_main.cfg< becomes >y_main_timestamp.cfg< (timestamp from section [signature] in >y_main.cfg<)
             timestamp = p_cfg_read_section_option(ppg_glbls.cfg_path, 'signature', 'timestamp')
             p_log_this('timestamp of >%s< is: >%s< ' % (ppg_glbls.cfg_path, timestamp))
-            cfg_fn_new = ppg_glbls.cfg_path[:-4] + '_' + timestamp + '.cfg'
-            p_log_this('rename >%s< to: >%s< ' % (ppg_glbls.cfg_path, cfg_fn_new))
+            cfg_fn_timestamp = ppg_glbls.cfg_path[:-4] + '_' + timestamp + '.cfg'
+            p_log_this('rename >%s< to: >%s< ' % (ppg_glbls.cfg_path, cfg_fn_timestamp))
+            os.rename(ppg_glbls.cfg_path, cfg_fn_timestamp)
 
-            # is there already a >y_main_timestamp.cfg< with hash identical to hash of >y_main_tmp.cfg<?
-            # 1 oldest of existing files with this hash becomes >y_main.cfg
+            # is there already some >y_main_timestamp.cfg< with hash identical to hash of >y_main_tmp.cfg<?
+            #   (timestamp may be different but hash identical)
+            # 1 oldest of existing files with this hash becomes >y_main.cfg<
             # 2 all other files in list are deleted
-            # 3 >y_main_timestamp.cfg is deleted
+            # 3 >y_main_timestamp.cfg< is deleted
 
             # make list of this file(s)
             list_of_cfg_w_identical_hash = p_cfg_find_identical_hash(hash_of_new_opts)
@@ -391,24 +395,11 @@ def p_cfg_clear_versions():
             if not ppg_glbls.cfg_path_tmp in list_of_cfg_w_identical_hash:
                 mssge = '>%s< should be in >list_of_cfg_w_identical_hash< ?! ' % (ppg_glbls.cfg_path_tmp)
                 p_log_this(mssge)
-                # mssge += 'p_cfg_clear_versions(): '
-                # ppg_utils.p_terminal_mssge_error(mssge)
             else:
-                # list_of_cfg_w_identical_hash.remove(ppg_glbls.cfg_path_tmp)
+                # valid_cfg_path == path of oldest >y_main_timestamp.cfg< with identical hash
                 valid_cfg_path = p_delete_recent_files_in_list(list_of_cfg_w_identical_hash)
+                ppg_utils.p_file_delete(ppg_glbls.cfg_path)
                 os.rename(valid_cfg_path, ppg_glbls.cfg_path)
-
-                # So:
-                # 1- rename existing (old) version w identical hash (could be modified, di not loose modifications)
-                # 2- delete new version, i.e.  ppg_glbls.cfg_path_tmp.
-
-                # p_log_this('rename >%s< to: >%s< ' % (ppg_glbls.cfg_path, cfg_fn_new))
-                # os.rename(ppg_glbls.cfg_path, cfg_fn_new)
-                # p_log_this('rename >%s< to: >%s< ' % (ppg_glbls.cfg_path_tmp, ppg_glbls.cfg_path))
-                # os.rename(ppg_glbls.cfg_path_tmp, ppg_glbls.cfg_path)
-                # ppg_utils.p_file_delete(ppg_glbls.cfg_path_tmp)
-
-    p_log_or_print_cfg_mssges(do_print=False, do_log=True)
 
 
 def p_find_files_w_identical_hash(file_path, hash):
@@ -446,7 +437,7 @@ def p_delete_recent_files_in_list(list_of_paths):
 
     len_sorted_list = len(sorted_list)
     if len_sorted_list > 1:
-        oldest = sorted_list[0][0]
+        oldest = sorted_list[0][1]
         for tpl in sorted_list[1:]:
             print tpl[1] + ' -------- '
             ppg_utils.p_file_delete(tpl[1])
@@ -568,6 +559,10 @@ def p_code_make():
 
         p_log_this('creating: ' + f_new_path)
 
+        f_new_name = ppg_glbls.main_name
+        f_new_path = os.path.join(f_dir, f_new_name)
+
+
         ppg_glbls.main_new_name = f_new_name
         ppg_glbls.main_new_path = f_new_path
         ppg_glbls.main_changed = True
@@ -592,10 +587,6 @@ def p_code_make():
     # if there is/are existing >f_name_TIMESTAMP.py< with identical hash:
     # remember their names to delete them later:
     code_dict, hash_of_new_codelines = p_calc_hash_add_hash_str(code_lines)
-    # list_of_files_w_identical_hash = []
-    # list_of_files_w_identical_hash = p_find_files_w_identical_hash(f_new_path, hash_of_new_codelines)
-    # if list_of_files_w_identical_hash:
-    #     p_delete_recent_files_in_list(list_of_files_w_identical_hash)
 
     # write >y_main.py< respectively >eval_confargs_+/-timestamp.py< :
     p_write_code(code_dict, f_new_path)

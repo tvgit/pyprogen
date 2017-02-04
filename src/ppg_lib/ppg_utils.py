@@ -254,8 +254,8 @@ def p_file_open(fn, mode = 'r'):
             msg = (p_here('', 2) + 'unable to open file : >' + fn + '< EnvironmentError!')
             p_log_this(msg, 'error') ; print msg
         else:
-            msg = (p_here('', 2) + ' file : >' + fn + '< open for ' + mode)
-            p_log_this(msg)
+            msg = (p_here('', 2) + ' file open: >' + fn + '< for ' + mode)
+            p_log_this(msg, '', False)
             return f_open
     elif (mode == 'w'):
         open(fn, 'w').close()
@@ -275,19 +275,21 @@ def p_file_open(fn, mode = 'r'):
 
 def p_file_close(f):
     fn = os.path.basename(f.name)
-    msg = ('closing file: ' + fn)
+    msg = ('file closed: ' + fn)
     file.close(f)
-    p_log_this(msg); #print msg
+    p_log_this(msg, '', False) ; #print msg
 
 def p_file_delete(fn):
+    # level = 2
+    # mssge = inspect.stack()[level][3] + ': '
     if os.path.exists(fn):
         try:
             os.remove(fn)
-            msg = ("%s removed" % fn)
-            p_log_this(msg) #; print msg
+            msg = ("file removed: " + fn)
+            p_log_this(msg, '', False);  # print msg
         except OSError, err:
             msg = ("Error: %s - %s." % (err.fn, err.strerror))
-            p_log_this(msg); print msg
+            p_log_this(msg, '', False);  # print msg
     else:
         msg = ("Error: %s - %s." % (err.fn, err.strerror))
         p_log_this(msg); print msg

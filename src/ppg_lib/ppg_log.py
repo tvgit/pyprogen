@@ -152,6 +152,7 @@ def p_log_end(txt=''):
         logging.shutdown()
         print 'Logger ended'
 
+
 def p_log_this(txt='', level=''):
     """ log_s mssge with the global logger """
     global p_logger
@@ -171,6 +172,53 @@ def p_log_this(txt='', level=''):
         p_logger.log(lvl, here('', 2) + txt)
     else:
         print 'No logging!' + here('', 2) + txt
+
+
+# def p_log_this_org(txt='', level=''):
+#     """ log_s mssge with the global logger """
+#     global p_logger
+#     # testen ob string oder integer. Wenn string -> Integer umwandeln
+#     if p_logger:
+#         if type(level) == str:
+#             level = level.lower()
+#             if level in ['debug', 'info', 'warning', 'error', 'critical']:
+#                 lvl = {'debug': 50, 'info': 40, 'warning': 30, 'error': 20, 'critical': 10}.get(level)
+#             elif level <> '':
+#                 lvl = 20
+#             else:
+#                 lvl = p_logger.level
+#         else:
+#             lvl = p_logger.level
+#         p_logger.log(lvl, here('', 2) + txt)
+#     else:
+#         print 'No logging!' + here('', 2) + txt
+#
+
+def p_log_this(txt='', level='', callee=True):
+    """ log_s mssge with the global logger """
+    global p_logger
+    # testen ob string oder integer. Wenn string -> Integer umwandeln
+    if p_logger:
+        lvl = p_logger.level
+        if type(level) == str:
+            level = level.lower()
+            if level in ['debug', 'info', 'warning', 'error', 'critical']:
+                lvl = {'debug': 50, 'info': 40, 'warning': 30, 'error': 20, 'critical': 10}.get(level)
+            elif level <> '':
+                lvl = 20
+                msge = 'unknown logging level: >' + level + '<'
+                # p_logger.log(lvl, here('', 2) + 'unknown logging level: >' + level + '<')
+
+        msge = txt
+        # p_logger.log(lvl, here('', 2) + txt)
+
+        if callee:
+            msge = here('', 2) + msge
+            # p_logger.log(lvl, here('', 2) + 'unknown logging level: >' + level + '<')
+        p_logger.log(lvl, msge)
+    else:
+        print 'No logging!' + here('', 2) + txt
+
 
 def p_log_status(txt=''):
     global p_logger
