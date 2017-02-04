@@ -23,34 +23,6 @@ __author__ = "rh"
 __date__   = "$05.05.2015 21:55:22$"
 
 """
-Also: zusätzlich zum Beschriebenen, (nicht ausreichend Dokumentierten), macht das
-Programm folgendes:
-
-1. Veränderungen in >y_main.cfg<
- Wenn pyprogen läuft, wird immer eine aktuelle >y_main_TIMESTAMP.cfg< File erzeugt.
- Diese wird dann mit der bisher gültigen >y_main.cfg< verglichen, und zwar
-
- über den Vergleich von Hash Werten der Sektion [defaults]
- oder
- über den Vergleich von Hash Werten der Variablen (nicht deren Werte) der Sektion [defaults]
-
-
- in den beiden cfg - Files: Falls sich hier nichts verändert hat,
- dann bleibt >y_main.cfg< unverändert,
-
-2. erkläre warum die Parameter so seltsame Namen haben (x_glbls.arg_ns.fn_data_in)
- (wg Namespace + der Name des Parameters aus der *.cfg) oder:
- benenne das Ganze in y_main.py beim import um:
- import lib.x_glbls.arg_ns    as args
-
-finde heraus wo/wann die >y_main.cfg< geschrieben wird =>
-    sortiere output in >y_main.cfg< alphabetisch
-
-doc: erkläre, was es mit dem prefix auf sich hat (i.e. automatisch generierte variablen).
-
-Die Namen der Log-Files, Data-Files etc überprüfen: zB in y_main.cfg ...
-names of out_file (? what is this) in /y_main/cfg/y_main.cfg is wrong: P:log etc instead of y_main.log
-
 in p_utils make examples how to open files, scan dirs etc ...
 """
 
@@ -75,7 +47,7 @@ in p_utils make examples how to open files, scan dirs etc ...
         /DataIn/*.*   # DataIn files (proposal)
         /DataOut/*.*  # DataOut files (proposal)
 
-    Pyprogen gets some information by two configuration files:
+    Pyprogen gets its information by two configuration files:
 
     >new_prog.ini<:
     Here You configure the name of the generated python
@@ -101,9 +73,8 @@ in p_utils make examples how to open files, scan dirs etc ...
     </new_prog.ini>
 
 """
-    # <technical note>
-    # >ConfArgParse< is able to read and to write (!) configuration files.
-    # This ability is used by >pyprogen<:
+    # >ConfArgParse< is able to read and to write configuration files.
+    # This latter ability is used by >pyprogen<:
     # in a first step >pyprogen< writes the code for >y_main.py<'s parser
     # >y_CAParser.py<.
     # Then it executes this program (>y_CAParser.py<) with the
@@ -112,20 +83,6 @@ in p_utils make examples how to open files, scan dirs etc ...
     # for your new >y_main.py< in the ./y_main/cfg/ dir.
     #
     # (http://martin-thoma.com/configuration-files-in-python/)
-    #
-    # 100.
-    # Dark sides of py:
-    # py can not protect vars inside a module from being modified from outside.
-    #
-    # py can not prevent creating attributes to this module from outside.
-    #
-    # Badly bad:
-    # Composing a path string by adding strings via >os.path.join()< and >os.path.normpath()<
-    # for example joining 'c:' plus 'my_path' plus 'x_program.sh'
-    # in Windows eventually there may be coming up a string containing an unexpected escape sequence:
-    # 'c:\my_path\x_program.sh' namely '\x', which is NOT prevented by >os.path.normpath()<!!
-    #
-    # </technical note>
 
 # ad decorator:
 # https://pythonconquerstheuniverse.wordpress.com/2012/04/29/python-decorators/
@@ -153,18 +110,16 @@ def subdirs_make(prog_path):
     p_log_this()
     # p_utils.p_terminal_mssge_note_this()  # some visible sign
 
-    p_glbls.cfg_dir  = p_utils.p_subdir_make(os.path.join(prog_path, 'cfg'))
-    p_glbls.cfg_fn   = p_glbls.main_name[:-3] + '.cfg'   # cfg-file of new y_main.py
-    p_glbls.cfg_path = os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn)
+    p_glbls.cfg_dir     = p_utils.p_subdir_make(os.path.join(prog_path, 'cfg'))
+    p_glbls.cfg_fn      = p_glbls.main_name[:-3] + '.cfg'   # cfg-file of new y_main.py
+    p_glbls.cfg_path    = os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn)
 
-    # p_glbls.cfg_fn_tmp   = p_glbls.cfg_fn[:-4] + '_' + p_glbls.date_time_str + p_glbls.cfg_fn[-4:]
-    # p_glbls.cfg_fn_tmp   = p_glbls.cfg_fn
-    p_glbls.cfg_fn_tmp   = p_glbls.cfg_fn[:-4] + '_tmp' + p_glbls.cfg_fn[-4:]
-    p_glbls.cfg_path_tmp = os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn_tmp)
+    p_glbls.cfg_fn_tmp  = p_glbls.cfg_fn[:-4] + '_Tmp' + p_glbls.cfg_fn[-4:]
+    p_glbls.cfg_path_tmp= os.path.join(p_glbls.cfg_dir, p_glbls.cfg_fn_tmp)
 
-    p_glbls.lib_dir    = p_utils.p_subdir_make(os.path.join(prog_path, 'lib'))
+    p_glbls.lib_dir     = p_utils.p_subdir_make(os.path.join(prog_path, 'lib'))
 
-    p_glbls.log_dir = p_utils.p_subdir_make(os.path.join(prog_path, 'log'))
+    p_glbls.log_dir     = p_utils.p_subdir_make(os.path.join(prog_path, 'log'))
 
     p_glbls.dir_DataIn  = p_utils.p_subdir_make(os.path.join(prog_path, 'DataIn'))
     p_glbls.dir_DataOut = p_utils.p_subdir_make(os.path.join(prog_path, 'DataOut'))
@@ -220,7 +175,6 @@ def pyprogen():
     # in the comments >y_main< is a symbolic the name of the generated program.
     prog_dir = p_glbls.main_dir   # ./y_main; >y_main.py< will live here
 
-    # maindir_make(os.path.join('.',main_dir))        # make dir  ./y_main
     maindir_make(prog_dir)        # make dir  ./y_main
     subdirs_make(prog_dir)        # make dirs ./y_main/lib; ./y_main/log; ./y_main/cfg
     copy_p_utils()                # copy some utilities to ./y_main/lib
