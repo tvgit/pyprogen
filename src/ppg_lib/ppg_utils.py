@@ -291,8 +291,8 @@ def p_file_delete(fn):
             msg = ("Error: %s - %s." % (err.fn, err.strerror))
             p_log_this(msg, '', False);  # print msg
     else:
-        msg = ("Error: %s - %s." % (err.fn, err.strerror))
-        p_log_this(msg); print msg
+        msg = ("file not existing: " + fn + " !!")
+        p_log_this(msg, '', False); print msg
 
 def p_exit(txt=''):
     """ gentle program p_exit  """
