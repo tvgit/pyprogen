@@ -403,27 +403,6 @@ def p_cfg_clear_versions():
                 os.rename(valid_cfg_path, ppg_glbls.cfg_path)
 
 
-def p_find_files_w_identical_hash(file_path, hash):
-    """"find in >file_path< files with identical hash-str in line 1 or 2 or .. 5"""
-    list_of_files_w_identical_hash = []  # list of >y_main_timestamp.py< with identical hash
-    lngth = len(ppg_glbls.date_time_str + '.py')  # == length of timestamp
-    file_path = file_path[:-lngth]  # == .../y_main_*
-    line_max = 6  # search hash in first 5 lines
-    for fn in glob.glob(file_path + '*.py'):
-        hash_found = False
-        line_cnt = 1
-        with open(fn) as fp:
-            for line in fp:
-                hash_found = hash in line
-                if (line_cnt > line_max):  # hash isn't found in line_max lines
-                    break
-                if hash_found:
-                    list_of_files_w_identical_hash.append(fn)
-                    break
-                line_cnt += 1
-    return list_of_files_w_identical_hash
-
-
 def p_delete_recent_files_in_list(list_of_paths):
     """" delete in list of files all but oldest one """
     list_to_sort = []
