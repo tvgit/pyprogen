@@ -21,34 +21,48 @@ __author__ = "rh"
 __date__   = "$05.05.2015 21:55:22$"
 
 """
-    0. First do a >pip install ConfArgParse< (as admin in windows)
+    pyprogen needs >ConfArgParse<. So first of all do a
+    >pip install ConfArgParse< (as admin in windows).
 
     pyprogen:
-    generates a very simple python program, that offers a basic functionality,
-    (initialising and logging) and the corresponding directory structure.
+    generates a very simple python program, that offers some basic functionality,
+    (initialising and logging) and a corresponding directory structure.
 
     The generated python program may be initialised via command line arguments
     and/or via a configuration file (*.cfg).
 
-    Assume the name of the new program is >y_main.py<.
+    Assume the name of the new program is >my_main.py<.
     Then the generated directory structure is:
 
-    y_main/y_main.py  # y_main.py == new generated python prog
-        /cfg/*.cfg    # configuration file(s)
-        /lib/*.py     # some py modules
-        /log/*.log    # log-files
-        /DataIn/*.*   # DataIn files (proposal)
-        /DataOut/*.*  # DataOut files (proposal)
+    my_main/my_main.py  # my_main.py == new generated python prog
+        /cfg/*.cfg      # configuration file(s)
+        /lib/*.py       # some py modules
+        /log/*.log      # log-files
+        /DataIn         # DataIn dir (proposal)
+        /DataOut        # DataOut dir (proposal)
 
     Pyprogen gets its information by two configuration files:
 
     >new_prog.ini<:
     Here You configure the name of the generated python
-    script (default: >y_main.py<) and the extent of its logging (TODO),
-    and the 'prefix', i.e. a letter followed by an underscore, for example 'y_' or 'b_'.
+    script (default: >y_main.py<).
+
+    And the extent of its logging (TODO).
+
+    There is also a 'prefix', i.e. a letter followed by an underscore, for example 'y_' or 'b_'.
     The prefix serves to mark the variables that are automatically generated in the new
     python program. So name conflicts with variables that You are coding yourself are
-    avoided (hopefully).
+    avoided (hopefully). You need not to change this.
+
+    Example:
+    <new_prog.ini>
+    [properties]
+    main_name  = my_program
+    # do not change this
+    patterns   = patterns.py
+    prefix     = x_
+    </new_prog.ini>
+
 
     >new_prog_args.cfg<:
     Here You configure the commandline arguments of >y_main.py< and their defaults.
@@ -57,13 +71,21 @@ __date__   = "$05.05.2015 21:55:22$"
     arguments and configuration files simultaneously.
 
     Example:
-    <new_prog.ini>
+    <new_prog_args.cfg>
+        parser.add_argument('-a', '--aaaa', default='aaaa_def_val', help = ' help aaaa')
+        parser.add_argument('-b', '--bbbb', default='bbbb_def_val', help = ' help bbbb')
+    </new_prog_args.cfg>
 
-    [properties]
-    main_name  = s_my_new_program
-    prefix     = s_
+    Executing >pyprogen.py< will generate: >my_program.py< and some dirs
+    and files, for example >./cfg/my_program.cfg<
 
-    </new_prog.ini>
+    You may call >my_program.py< with commandline arguments:
+    >my_program.py -a AaAaA --bbbb BbBbBbB
+    Then it will evaluate the cmdline arguments >a< and >b<.
+
+    Or you call it via:
+    >my_program.py -c ./cfg/my_program.cfg
+    Then it will evaluate the config file >./cfg/my_program.cfg<
 
 """
     # >ConfArgParse< is able to read and to write configuration files.

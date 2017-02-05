@@ -19,8 +19,10 @@ confargs = lib.xx_glbls.arg_ns
 
 y_main[04] = """
 def evaluate(arg):
-    print 'do something with: >' + str(arg) + '<'
-    return arg
+    msge = 'Do something with: >' + str(arg) + '<'
+    print msge
+    p_log_this(msge)
+
 """
 
 y_main[10] = """ """
@@ -128,7 +130,7 @@ except:
 args = None
 
 def args_log (args):
-    # Copy args name-space to xx_glbls.arg_ns
+    # log args in >y_main.log<
     for key, value in vars(args).iteritems():
         if hasattr(xx_glbls.arg_ns, key):
             p_log_this(str(key) + ' = ' + str(value))
@@ -157,7 +159,7 @@ CA_Parser[44] = """
 CA_Parser[48] = """
     global args
     # log default args
-    p_log_this('cmdline or default args:')
+    p_log_this()
     # args = parser.parse_args()
     # args_log (args)
 
