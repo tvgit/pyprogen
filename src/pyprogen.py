@@ -14,8 +14,6 @@
 # Filetypes association:
 # File > Settings > Editor > File Types ... (ie: *.cfg like *.ini)
 #
-# git-credential-winstore.exe
-#
 # äöüÄÖÜß
 #
 
@@ -23,12 +21,7 @@ __author__ = "rh"
 __date__   = "$05.05.2015 21:55:22$"
 
 """
-in p_utils make examples how to open files, scan dirs etc ...
-"""
-
-"""
-    0.
-    First do a >pip install ConfArgParse< (as admin in windows)
+    0. First do a >pip install ConfArgParse< (as admin in windows)
 
     pyprogen:
     generates a very simple python program, that offers a basic functionality,
