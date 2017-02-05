@@ -433,8 +433,6 @@ def p_delete_recent_files_in_list(list_of_paths):
         list_to_sort.append(tpl)
 
     sorted_list = sorted(list_to_sort, key=lambda x: x[0])
-    # for tpl in sorted_list:
-    #     ppg_utils.p_terminal_mssge_note_this(str(tpl))
 
     len_sorted_list = len(sorted_list)
     if len_sorted_list >= 1:
@@ -447,14 +445,13 @@ def p_delete_recent_files_in_list(list_of_paths):
         mssge = 'List of files with identical hash value is void?'
         ppg_utils.p_terminal_mssge_error(mssge)
         exit
-
     return oldest
 
 
 def p_eval_confargs_make_code():
     # create code of function >eval_confargs()< in: >y_main.py<
     # make code txt for >if<'s for >confarg_vars< as of >new_prog_args.cfg<
-    txt = '\n'
+    txt  = '\n'
     txt += 'def eval_confargs():\n'
     txt += '    p_log_this()\n'
     txt += '    # xx_glbls.print_arg_ns()\n'
@@ -484,7 +481,7 @@ def p_main_make_code():
     # xx_CAParser.xx_parser('--conf-file', 'ppg_glbls.cfg_path')
     # (and adjust dir of config-file by removing highest dir level:)
     adjusted_cfg_path = adjust_cfg_path(ppg_glbls.cfg_path)
-    txt = ' ' * 4 + "# optional reading of cfg-file: (r' == raw string) \n"
+    txt  = ' ' * 4 + "# optional reading of cfg-file: (r' == raw string) \n"
     txt += ' ' * 4 + "# xx_CAParser.xx_parser('--conf-file', r'"
     txt += str(adjusted_cfg_path)
     txt += "')" + '\n'
@@ -548,17 +545,13 @@ def p_calc_hash_add_hash_str(code_lines):
 
 def p_code_make():
     """ create >./y_main/y_main.py< or >./y_main/eval_confargs.py< """
-
-    # ppg_glbls.main_dir is dir of >y_main.py< AND of >eval_confargs.py<
-    f_dir = ppg_glbls.main_dir
-
     # First run: there is no >y_main.py<
     if not ppg_utils.p_file_exists(ppg_glbls.main_path):
-        ppg_glbls.main_new_name = ppg_glbls.main_name          # x = z
-        ppg_glbls.main_new_path = ppg_glbls.main_path          # x = z
+        ppg_glbls.code_new_name = ppg_glbls.main_new_name = ppg_glbls.main_name
+        ppg_glbls.code_new_path = ppg_glbls.main_new_path = ppg_glbls.main_path
 
-        ppg_glbls.code_new_path = ppg_glbls.main_new_path      # y = z
-        ppg_glbls.code_new_name = ppg_glbls.main_new_name      # y = z
+        # ppg_glbls.code_new_name = ppg_glbls.main_new_name
+        # ppg_glbls.code_new_path = ppg_glbls.main_new_path
 
         ppg_glbls.main_changed = True
 
@@ -567,16 +560,13 @@ def p_code_make():
         code_dict, hash_of_new_codelines = p_calc_hash_add_hash_str(code_lines)
         p_write_code(code_dict, ppg_glbls.code_new_path)
     else:
-        ppg_glbls.confarg_new_name = ppg_glbls.confarg_name
-        ppg_glbls.confarg_new_path = ppg_glbls.confarg_path
+        ppg_glbls.code_new_name = ppg_glbls.confarg_new_name = ppg_glbls.confarg_name
+        ppg_glbls.code_new_path = ppg_glbls.confarg_new_path = ppg_glbls.confarg_path
 
-        ppg_glbls.code_new_name = ppg_glbls.confarg_name
-        ppg_glbls.code_new_path = ppg_glbls.confarg_path
+        # ppg_glbls.code_new_name = ppg_glbls.confarg_name
+        # ppg_glbls.code_new_path = ppg_glbls.confarg_path
 
-        if not ppg_utils.p_file_exists(ppg_glbls.confarg_path):
-            ppg_glbls.confarg_changed = True
-        else:
-            ppg_glbls.confarg_changed  = p_check_via_hash_if_modified(ppg_glbls.confarg_path)
+        ppg_glbls.confarg_changed  = p_check_via_hash_if_modified(ppg_glbls.confarg_path)
 
         p_log_this('creating: ' + ppg_glbls.confarg_path)
         code_lines = p_eval_confargs_make_code()
