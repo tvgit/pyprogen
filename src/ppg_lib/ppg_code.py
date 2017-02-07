@@ -253,7 +253,7 @@ def p_cfg_write_section_option(path, section, option, option_value):
         p_log_this('creating section: [' + section + ']')
     try:
         parser.set(section, option, option_value)
-        p_log_this('setting in section: [' + section + '] option >' + option + '< to >' + option_value + '<')
+        p_log_this('setting in section: [' + section + '] option >' + option + '< to >' + str(option_value) + '<')
         parser.write(open(path, "w"))
     except ConfigParser.Error:
         p_log_this("Error writing %s, %s, %s in: >" % (section, option, option_value) + path + '< !')
@@ -350,8 +350,8 @@ def p_cfg_clear_versions():
         # hash_of_new_opts = hash in >y_main_tmp.cfg<
         hash_of_new_opts = p_cfg_read_section_option(ppg_glbls.cfg_path_tmp, 'signature', 'hash')
 
-        p_log_this('hash_of_old_opts =' + hash_of_old_opts)
-        p_log_this('hash_of_new_opts =' + hash_of_new_opts)
+        p_log_this('hash_of_old_opts =' + str(hash_of_old_opts))
+        p_log_this('hash_of_new_opts =' + str(hash_of_new_opts))
 
         # if (hash_of_new_opts == hash_of_old_opts )
         if (hash_of_old_opts == hash_of_new_opts):

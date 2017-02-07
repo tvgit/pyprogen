@@ -122,7 +122,7 @@ CA_Parser[02] = """
 import confargparse
 import sys
 try:
-    from lib.ppg_log   import p_log_init, p_log_start, p_log_this, p_log_end
+    from lib.ppg_log import p_log_init, p_log_start, p_log_this, p_log_end
     from lib.p_utils import p_file_exists
 except:
     pass
