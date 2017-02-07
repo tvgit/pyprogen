@@ -127,7 +127,7 @@ def p_inform_about_paths_and_filenames():
     mssge += '\n Filename of new code is:       ' + ' ' * len_dir_main + ppg_glbls.code_new_name
     mssge += '\n Dir  of new code is:           ' + os.path.join(ppg_glbls.main_dir, '')
     mssge += '\n Path of new code is:           ' + ppg_glbls.code_new_path
-    # cfg_path_tmp
+    # cfg_path
     mssge += '\n'
     len_cfg_dir = len(os.path.dirname(ppg_glbls.cfg_path)) + 1
     mssge += '\n Path of valid cfg-file is:     ' + ppg_glbls.cfg_path
@@ -437,9 +437,11 @@ def p_eval_confargs_make_code():
     txt += '    # eval cmd-line args and/or conf-file args (always read by ConfArgParser):\n'
 
     for arg in ppg_glbls.opt_arg_vars:
+        txt += '\n'
         txt += '    if ' + 'confargs.' + arg + ' == confargs.' + arg + ':\n'
         txt += '        evaluate(confargs.' + arg + ')\n'
-        txt += '\n'
+
+    txt += '\n'
     return txt
 
 

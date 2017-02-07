@@ -56,6 +56,9 @@ y_main[86] = """
     # p_utils.p_terminal_mssge_error()
     p_utils.p_exit()
 
+    # You may use >pyinstaller.exe< to dist your program:
+    # pyinstaller.exe --onefile xx_main.py
+
 """
 
 ## NB working with the confargs namespace:
@@ -115,7 +118,11 @@ else:
 CA_Parser = dict()
 # import argparse
 
-CA_Parser[02] = """
+# coding & date-time:
+CA_Parser[10] = """
+"""
+
+CA_Parser[20] = """
 # Ad ConfArgParse
 # https://pypi.python.org/pypi/ConfArgParse
 
@@ -151,6 +158,9 @@ def xx_parser(command = '', cfg_path_tmp=''):
     # if (command <> '--export-conf-file') and (command <> 'ignore_pos_args'):
     #     pass
 """
+
+# Add arguments to parser, i.e.:
+# parser.add_argument('-d', '--dir', default='.', help = ' help dddd') etc ...
 
 CA_Parser[44] = """
 """
@@ -211,7 +221,9 @@ if __name__ == "__main__":
         print mssge ; p_log_this(mssge)
     else:
         mssge = '| output path for cfg-file:            ' + str(cfg_path_tmp)
-        print mssge ; p_log_this(mssge)
+        print mssge ; p_log_this(" ".join(mssge.split()))
+        # mssge = " ".join(mssge.split())
+        # p_log_this(mssge)
     xx_parser('--export-conf-file', cfg_path_tmp)
     # NOTE: in func >xx_parser()<
     # calling >parser.parse_args('--export-conf-file' ...)
@@ -219,5 +231,6 @@ if __name__ == "__main__":
 else:
     import lib.xx_glbls as xx_glbls
     pass
+
 """
 

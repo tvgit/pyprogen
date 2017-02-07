@@ -2,6 +2,7 @@
 #  its dirs and cfg-, log-, util-files etc via this module
 #
 import os.path
+import string
 
 main_name         = 'def_y_main.py' # default name of (new) main program, configure in: >new_prog.ini<
 main_dir          = ''              # default dir
@@ -70,9 +71,9 @@ def print_p_cfg_and_args(print_args=True):
     len_cfg_dir = len(cfg_dir) + 1
     print ' cfg_fn        = '   + ' '*len_cfg_dir + cfg_fn
     print ' cfg_path      = '   + os.path.join(cfg_dir, cfg_fn)
-    print
-    print ' cfg_file_new  = '     + ' '*len_cfg_dir + os.path.basename(cfg_path_tmp)
-    print ' cfg_path_tmp  = ' + cfg_path_tmp
+    # print
+    # print ' cfg_file_new  = '     + ' '*len_cfg_dir + os.path.basename(cfg_path_tmp)
+    # print ' cfg_path_tmp  = ' + cfg_path_tmp
     print
     len_lib_dir = len(lib_dir) + 1
     print ' CAParser_fn   = '   + ' '*len_lib_dir + CAParser_fn
@@ -91,10 +92,14 @@ def print_p_cfg_and_args(print_args=True):
 
     if print_args:
         print
+        cnt = 0
         for arg in sorted(opt_arg_vars):
-            print '  Opt. command line variable: ' + arg
+            cnt += 1
+            print string.rjust(str(cnt), 2, ' ') + '  Opt. command line variable: ' + arg
+        cnt = 0
         for arg in sorted(pos_arg_vars):
-            print '  Opt. positional arguments variable: ' + arg
+            cnt += 1
+            print string.rjust(str(cnt), 2, ' ') + '  Opt. positional arguments variable: ' + arg
 
     print
     print_headline()

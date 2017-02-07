@@ -174,7 +174,7 @@ def ca_parser_run():
     p_log_this("subprocess_path   = " + subprocess_path)
     # http://pymotw.com/2/subprocess/
     # start new ConfArgParser to create cfg-file (aka >cfg_path_tmp<) for >y_main.py<
-    cfg_path_tmp = p_glbls.cfg_path_tmp         # == >y_main_TimeStamp.cfg<
+    cfg_path_tmp = p_glbls.cfg_path_tmp         # == >y_main_Tmp.cfg<
     p_log_this("cfg_path_tmp      = " + cfg_path_tmp)
     subprocess.call([subprocess_path, cfg_path_tmp], shell=True)
 
@@ -195,7 +195,7 @@ def pyprogen():
     copy_p_utils()                # copy some utilities to ./y_main/lib
     #
     ca_parser_make()              # make ./y_main/lib/y_CAParser.py
-    ca_parser_run()               # run: y_CAParser.py => create: >y_main_TimeStamp.cfg<
+    ca_parser_run()               # run: y_CAParser.py => create: >y_main_Tmp.cfg<
 
     p_code.p_cfg_clear_versions() # check (via hash) if there are yet identical versions of >y_main_*.cfg<
     p_code.p_glbls_create()       # create modul ./y_main/lib/y_glbls.py
