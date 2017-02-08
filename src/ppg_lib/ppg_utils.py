@@ -210,9 +210,29 @@ def p_check_filename_pattern():
     regObj = re.compile(regex)
     pass
 
+
+def p_dir_traverse_to_level(path = '.', level=1):
+    """http://stackoverflow.com/questions/7159607/list-directories-with-a-specified-depth-in-python"""
+    #import os, string
+    path = os.path.normpath(path)
+    p_log_this(path)
+    res = []
+    for root, dirs, files in os.walk(path, topdown=True):
+        depth = root[len(path) + len(os.path.sep):].count(os.path.sep)
+        p_log_this(str(depth) + '  '  + str(dirs) + '  '  + str(files) )
+        if depth == level:
+            # We're currently two directories in, so all subdirs have depth 3
+            res += [os.path.join(root, d) for d in dirs]
+            dirs[:] = []  # Don't recurse any deeper
+    print res
+    return res
+    pass
+
+
+
 def p_dir_traverse_recursively(path):
     """http://stackoverflow.com/questions/7012921/recursive-grep-using-python"""
-    msg = (p_here('', 2) + ' traversing dir: >' + path )
+    msg = (p_here('', 2) + ' traversing dir: >' + path + '<')
     p_log_this(msg)
 
     result_list = []
