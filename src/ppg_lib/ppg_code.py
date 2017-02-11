@@ -138,11 +138,11 @@ def p_inform_about_paths_and_filenames():
     mssge += '\n Filename of valid cfg-file is: ' + ' ' * len_cfg_dir + os.path.basename(ppg_glbls.cfg_path)
     # mssge += ' The new files have a timestamp  >' + ppg_glbls.main_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
     mssge += '\n'
-    mssge += '\n You may configure the comand line _args_     of >' + ppg_glbls.main_name + '<  via:  >new_prog_args.cfg<'
-    mssge += '\n  ... but run >pyprogen.py< again! And, use >eval_confargs.py< as pattern to evaluate the args.'
+    mssge += '\n You may configure the comand line _args_ of >' + ppg_glbls.main_name + '<  via:  >new_prog_args.cfg<'
+    mssge += '\n  ... but run >pyprogen.py< again! >' + cfg_path + '<  will be preserved. '
+    mssge += '\n  Use >eval_confargs.py< as stub to evaluate the new defined args.'
     mssge += '\n'
-    mssge += '\n You may configure the comand line _defaults_ of >' + ppg_glbls.main_name + '<  via:  >' + cfg_path + '<'
-    mssge += '\n >' + cfg_path + '<  will be preserved, if changed. '
+    mssge += '\n You may configure the _defaults_ of these comand line args via:  >' + cfg_path + '<'
     mssge += '\n'
     # mssge += '\n newer generated files will have a timestamp in their filename: >' + ppg_glbls.main_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
     # mssge += '\n'
@@ -289,7 +289,7 @@ def p_log_or_print_cfg_mssges(do_print=False, do_log=False):
         mssges.append('renaming:      ' + ppg_glbls.cfg_path_tmp)
         mssges.append('to:            ' + ppg_glbls.cfg_path)
     else:
-        mssges.append('There is already a          >' + ppg_glbls.cfg_path + '< ')
+        mssges.append('There is already a    >' + ppg_glbls.cfg_path + '< ')
         if ppg_glbls.cfg_changed:
             mssges.append('Since vars in [defaults] in >' + ppg_glbls.cfg_path + '<      have changed:')
             mssges.append(' => 1)     config file:     >' + ppg_glbls.cfg_path + '<      stays unchanged.')
@@ -297,7 +297,8 @@ def p_log_or_print_cfg_mssges(do_print=False, do_log=False):
             if ppg_glbls.main_changed:
                 mssges.append('    3) corresponding new version of main: >' + ppg_glbls.main_new_name + '<.')
         else:  # ppg_glbls.cfg_changed == False
-            mssges.append('vars in [defaults] in >' + ppg_glbls.cfg_path + '< are not changed =>')
+            mssges.append('args in [defaults] in >' + ppg_glbls.cfg_path + '< are not changed.')
+            mssges.append('(You may have changed their values.)')
 
     if do_log:
         for mssge in mssges:
@@ -521,7 +522,6 @@ def p_batch_make_code():
 
 def p_check_via_hash_if_modified(file_path):
     """ check if >file_to_check< was modified ==  (hash != hash_str in line 3) """
-    print file_path
     file_to_check = ppg_utils.p_file_open(file_path, mode='r')
     if not file_to_check:
         return False
