@@ -139,7 +139,7 @@ def p_inform_about_paths_and_filenames():
     # mssge += ' The new files have a timestamp  >' + ppg_glbls.main_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
     mssge += '\n'
     mssge += '\n You may configure the comand line _args_     of >' + ppg_glbls.main_name + '<  via:  >new_prog_args.cfg<'
-    mssge += '\n  ... but run >pyprogen.py< again!'
+    mssge += '\n  ... but run >pyprogen.py< again! And, use >eval_confargs.py< as pattern to evaluate the args.'
     mssge += '\n'
     mssge += '\n You may configure the comand line _defaults_ of >' + ppg_glbls.main_name + '<  via:  >' + cfg_path + '<'
     mssge += '\n >' + cfg_path + '<  will be preserved, if changed. '
