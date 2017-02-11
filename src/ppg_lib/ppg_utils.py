@@ -210,18 +210,18 @@ def p_regex_filename():
 
 
 def p_dir_return_paths_of_level(path ='.', level=1, do_log=False):
-    res = p_dirtree_return(mode=path_mode, path='.', level=1, do_log=False)
+    res = p_dirtree_return(path_mode, path, level, do_log)
     return res
 
 
 def p_dir_return_dirs_of_level(path ='.', level=1, do_log=False):
-    res = p_dirtree_return(mode=dir_mode, path='.', level=1, do_log=False)
+    res = p_dirtree_return(dir_mode, path, level, do_log)
     return res
 
 
 def p_dir_return_files_of_level(path ='.', level=1, do_log=False):
     """http://stackoverflow.com/questions/7159607/list-directories-with-a-specified-depth-in-python"""
-    res = p_dirtree_return(mode=file_mode, path='.', level=1, do_log=False)
+    res = p_dirtree_return(file_mode, path, level, do_log)
     return res
 
 

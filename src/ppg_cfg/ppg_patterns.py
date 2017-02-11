@@ -25,34 +25,41 @@ def evaluate(arg):
 
 """
 
-# examples
 y_main[10] = """
+"""
+# examples
+y_main[20] = """
 def inspire_some_file_operations():
     path = '.'
     res = p_utils.p_dir_return_paths_of_level(path ='.', level=1, do_log=False)
+    # res = p_utils.p_dir_return_paths_of_level(path ='.', level=1, do_log=True)
     res = p_utils.p_dir_return_dirs_of_level(path ='.', level=1, do_log=False)
     res = p_utils.p_dir_return_files_of_level(path ='.', level=1, do_log=False)
     #
-    res = p_dir_traverse_recursively(path ='.', do_log=False)
+    #res = p_utils.p_dir_traverse_recursively(path ='.', do_log=True)
+    res = p_utils.p_dir_traverse_recursively(path ='.', do_log=False)
     #
     # file open & close (is logged)
     fn = 'dummy_fn'
     if p_utils.p_file_exists (fn, print_message = False):
-        f = p_file_open(fn, mode = 'r')
-        p_file_close(f)
+        f = p_utils.p_file_open(fn, mode = 'r')
+        p_utils.p_file_close(f)
     else:
         pass
-
+    #
     # dir make & subdir make (is logged)
-    res_dir = p_utils.p_dir_make(dir)
-    res_dir = p_utils.p_subdir_make(dir)
-
+    dir_name = 'dummy_dir'
+    res_dir = p_utils.p_dir_make(dir_name)
+    res_dir = p_utils.p_subdir_make(dir_name)
+    #
+    txt_line = ''
     #
     regex = p_utils.p_regex_path_unix()
     result = regex.search(txt_line)
     #
     regex = p_utils.p_regex_filename()
     result = regex.search(txt_line)
+    return
 
 """
 
@@ -60,6 +67,7 @@ y_main[60] = """
 def main():
     p_log_this('begin')
     eval_confargs()
+    # inspire_some_file_operations()
     p_log_this('end')
 """
 
