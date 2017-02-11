@@ -5,7 +5,7 @@ import os.path
 import string
 
 main_name         = 'def_y_main.py' # default name of (new) main program, configure in: >new_prog.ini<
-main_dir          = ''              # default dir
+main_dir          = ''              # main dir: >./y_main<, where >y_main.py< and >eval_confargs.py< are living
 main_path         = ''              # default path
 main_changed      = False           # y_main.py changed?
 main_new_name     = ''              # name of new version: >y_main.py< or >y_main_TIMESTAMP.py<
@@ -19,14 +19,19 @@ confarg_changed   = False           # file: >eval_confargs.py< changed?
 confarg_new_name  = ''              # name of new version: >eval_confargs_TIMESTAMP<
 confarg_new_path  = ''              # corresponding path
 
+# batch file for >pyinstaller.exe<
+batch_name        = 'def_y_main.bat'# default name bat-file calling: >pyinstaller.exe<
+batch_path        = ''              # default path of bat-file
+
 # name of file with new code: >y_main.py< or >eval_confargs.py< or >eval_confargs_TIMESTAMP.py<
 code_new_name     = ''              #
 code_new_path     = ''              #
 
+
 prefix    = None     # common prefix of y_main-specific dirs, paths, modules, functions, vars ...
 arg_prefix= None     # common prefix of vars storing values of cmd-line args
 
-main_dir  = None     # main dir: >./y_main<, where >y_main.py< and >eval_confargs.py< are living
+# main_dir= None     # main dir: >./y_main<, see above
 cfg_dir   = None     # subdir  : >./y_main/cfg<, config files for >y_main.py<
 lib_dir   = None     # subdir  : >./y_main/lib<, utilities for >y_main.py<
 log_dir   = None     # subdir  : >./y_main/log<, log-files for >y_main.py<
@@ -61,7 +66,10 @@ def print_headline():
 
 def print_p_cfg_and_args(print_args=True):
     print ' main_name     =   ' + main_name
-    print ' prefix        =   '   + prefix
+    print ' prefix        =   ' + prefix
+
+    print ' batch_name    =   ' + batch_name
+
     print
     print ' main_dir      = ' + main_dir
     print ' lib_dir       = ' + lib_dir
