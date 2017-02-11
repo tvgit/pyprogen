@@ -116,13 +116,15 @@ else:
 # -------------- p_pyinstaller_make
 
 y_pyinst = dict()
-y_pyinst[02] = """
-REM One liner to run >pyinstaller< to create exe-file from python
-"""
+y_pyinst[02] = """REM One liner to run >pyinstaller< to create exe-file from python"""
 
 y_pyinst[04] = """
+
 """
 
+y_pyinst[80] = """
+
+REM """
 # -------------- y_CAParser.py
 
 CA_Parser = dict()

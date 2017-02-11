@@ -69,6 +69,7 @@ def print_p_cfg_and_args(print_args=True):
     print ' prefix        =   ' + prefix
 
     print ' batch_name    =   ' + batch_name
+    print ' batch_path    =   ' + batch_path
 
     print
     print ' main_dir      = ' + main_dir
