@@ -79,7 +79,7 @@ def scriptinfo():
     scr_dict ={"name": trc, "source": trc, "dir": scriptdir}
     return scr_dict
 
-def program_name_and_dir_print():
+def p_program_name_and_dir_print():
     prog_name = p_program_name_get()
     prog_dir  = p_program_dir_rtrn()
     print '-' * 8
@@ -106,6 +106,29 @@ def p_current_module_path_rtrn():
     path = os.path.abspath(__file__)
     dir_path = os.path.dirname(path)
     return dir_path
+
+
+def p_regex_path_unix(txt='akjsdflkjh.exe'):
+    """ thx to: http://txt2re.com"""
+
+    #  https://pythonconquerstheuniverse.wordpress.com/2008/06/04/gotcha-%E2%80%94-backslashes-in-windows-filenames/
+
+    re1='((?:[a-z][a-z\\.\\d_]+)\\.(?:[a-z\\d]{3}))(?![\\w\\.])'	# File Name 1
+    rg = re.compile(re1,re.IGNORECASE|re.DOTALL)
+    m = rg.search(txt)
+    if m:
+        file1=m.group(1)
+        print "("+file1+")"+"\n"
+
+
+def p_regex_filename(txt = 'akjsdflkjh.exe'):
+    """ thx to: http://txt2re.com"""
+    re1 = '((?:[a-z][a-z\\.\\d_]+)\\.(?:[a-z\\d]{3}))(?![\\w\\.])'  # File Name 1
+    rg = re.compile(re1, re.IGNORECASE | re.DOTALL)
+    m = rg.search(txt)
+    if m:
+        file1 = m.group(1)
+        print "(" + file1 + ")" + "\n"
 
 
 def p_datetime_str_rtrn(txt_line):
@@ -190,19 +213,6 @@ def p_subdir_make(dir):
     return dir
 
 
-# def p_dir_traverse_recursively(path, regex):
-#     """http://stackoverflow.com/questions/7012921/recursive-grep-using-python"""
-#     # http: // txt2re.com
-#     # regex = "(.+?)(\.[^.]*$|$)"  # == filename
-#     # regObj = re.compile(regex)
-#     # http://codereview.stackexchange.com/questions/19103/python-function-to-match-filenames-with-extension-names
-#     result_list = []
-#     for root, dirs, fnames in os.walk(path):
-#         for fname in fnames:
-#             if regObj.match(fname):
-#                 result_list.append(os.path.join(root, fname))
-#     return sorted(result_list)
-
 def p_check_filename_pattern():
     # http: // txt2re.com
     # http://codereview.stackexchange.com/questions/19103/python-function-to-match-filenames-with-extension-names
@@ -211,22 +221,49 @@ def p_check_filename_pattern():
     pass
 
 
-def p_dir_traverse_to_level(path = '.', level=1):
+def p_dir_return_paths_of_level(path ='.', level=1, do_log=False):
+    res = p_dirtree_return(mode=path_mode, path='.', level=1, do_log=False)
+    return res
+
+
+def p_dir_return_dirs_of_level(path ='.', level=1, do_log=False):
+    res = p_dirtree_return(mode=dir_mode, path='.', level=1, do_log=False)
+    return res
+
+
+def p_dir_return_files_of_level(path ='.', level=1, do_log=False):
     """http://stackoverflow.com/questions/7159607/list-directories-with-a-specified-depth-in-python"""
-    #import os, string
+    res = p_dirtree_return(mode=file_mode, path='.', level=1, do_log=False)
+    return res
+
+
+path_mode, dir_mode, file_mode = range (3)
+def p_dirtree_return(mode=path_mode, path='.', level=1, do_log=False):
+    """http://stackoverflow.com/questions/7159607/list-directories-with-a-specified-depth-in-python"""
     path = os.path.normpath(path)
-    p_log_this(path)
+    if do_log:
+        p_log_this('path: >' + path + '<, level: >' + str(level) + '<' )
     res = []
     for root, dirs, files in os.walk(path, topdown=True):
-        depth = root[len(path) + len(os.path.sep):].count(os.path.sep)
-        p_log_this(str(depth) + '  '  + str(dirs) + '  '  + str(files) )
-        if depth == level:
-            # We're currently two directories in, so all subdirs have depth 3
-            res += [os.path.join(root, d) for d in dirs]
+        # root_depth = root[len(path) + len(os.path.sep):]
+        depth = root[len(path) :].count(os.path.sep)
+        mssge = (str(depth) + ' root: >' + root + '<  dirs: >' + str(dirs) + '< files: >' + str(files) + '<')
+        if do_log:
+            p_log_this(mssge)
+        if depth == level - 1:
+            if mode == path_mode:
+                res += [os.path.normpath(os.path.join(root, fn)) for fn in files]
+            elif mode == dir_mode:
+                res += [os.path.normpath(os.path.join(root, d)) for d in dirs]
+            elif mode == file_mode:
+                res += [os.path.normpath(os.path.join('', fn)) for fn in files]
+            else:
+                exit()
             dirs[:] = []  # Don't recurse any deeper
-    print res
-    return res
-    pass
+    if (mode == path_mode) or (mode == dir_mode):
+        return sorted(res)
+    else:
+        return res
 
 
 
@@ -242,6 +279,7 @@ def p_dir_traverse_recursively(path):
             # if regObj.match(fname):
             #     result_list.append(os.path.join(root, fname))
     return sorted(result_list)
+
 
 def grep_in_file(filepath, regex):
     """http://stackoverflow.com/questions/7012921/recursive-grep-using-python"""
