@@ -136,16 +136,14 @@ def p_inform_about_paths_and_filenames():
     len_cfg_dir = len(os.path.dirname(ppg_glbls.cfg_path)) + 1
     mssge += '\n Path of valid cfg-file is:     ' + ppg_glbls.cfg_path
     mssge += '\n Filename of valid cfg-file is: ' + ' ' * len_cfg_dir + os.path.basename(ppg_glbls.cfg_path)
-    # mssge += ' The new files have a timestamp  >' + ppg_glbls.main_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
     mssge += '\n'
-    mssge += '\n You may configure the comand line _args_ of >' + ppg_glbls.main_name + '<  via:  >new_prog_args.cfg<'
-    mssge += '\n  ... but run >pyprogen.py< again! >' + cfg_path + '<  will be preserved. '
-    mssge += '\n  Use >eval_confargs.py< as stub to evaluate the new defined args.'
+    mssge += '\n You may re-define the command line _args_ of >' + ppg_glbls.main_name + '<  by modifying:  >new_prog_args.cfg<'
+    mssge += '\n  ... but run >pyprogen.py< again!'
+    mssge += '\n  Then the old >' + cfg_path + '< will be preserved as: >' + cfg_path[:-4] + '_TIMESTAMP_cfg<.'
+    mssge += '\n  Make use of >eval_confargs.py< as stub for evaluating the new defined args.'
     mssge += '\n'
-    mssge += '\n You may configure the _defaults_ of these comand line args via:  >' + cfg_path + '<'
+    mssge += '\n You may configure the _defaults_ of these command line args via:  >' + cfg_path + '<'
     mssge += '\n'
-    # mssge += '\n newer generated files will have a timestamp in their filename: >' + ppg_glbls.main_name[:-3] + '_YYYY_MM_DD-hh_mm_ss.py<.'
-    # mssge += '\n'
     mssge += '\n Do not change the >' + ppg_glbls.lib_dir + '\*.py< files!'
     mssge += '\n'
     # mssge += '\n'
@@ -298,7 +296,7 @@ def p_log_or_print_cfg_mssges(do_print=False, do_log=False):
                 mssges.append('    3) corresponding new version of main: >' + ppg_glbls.main_new_name + '<.')
         else:  # ppg_glbls.cfg_changed == False
             mssges.append('args in [defaults] in >' + ppg_glbls.cfg_path + '< are not changed.')
-            mssges.append('(You may have changed their values.)')
+            mssges.append('(Nonetheless You may have changed their default values.)')
 
     if do_log:
         for mssge in mssges:
