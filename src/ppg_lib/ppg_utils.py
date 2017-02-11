@@ -108,28 +108,6 @@ def p_current_module_path_rtrn():
     return dir_path
 
 
-def p_regex_path_unix(txt='akjsdflkjh.exe'):
-    """ thx to: http://txt2re.com"""
-
-    #  https://pythonconquerstheuniverse.wordpress.com/2008/06/04/gotcha-%E2%80%94-backslashes-in-windows-filenames/
-
-    re1='((?:[a-z][a-z\\.\\d_]+)\\.(?:[a-z\\d]{3}))(?![\\w\\.])'	# File Name 1
-    rg = re.compile(re1,re.IGNORECASE|re.DOTALL)
-    m = rg.search(txt)
-    if m:
-        file1=m.group(1)
-        print "("+file1+")"+"\n"
-
-
-def p_regex_filename(txt = 'akjsdflkjh.exe'):
-    """ thx to: http://txt2re.com"""
-    re1 = '((?:[a-z][a-z\\.\\d_]+)\\.(?:[a-z\\d]{3}))(?![\\w\\.])'  # File Name 1
-    rg = re.compile(re1, re.IGNORECASE | re.DOTALL)
-    m = rg.search(txt)
-    if m:
-        file1 = m.group(1)
-        print "(" + file1 + ")" + "\n"
-
 
 def p_datetime_str_rtrn(txt_line):
     """ thx to: http://txt2re.com"""
@@ -206,6 +184,7 @@ def p_dir_make(dir):
         p_log_this(' dir exists : >' + dir + '<')
     return dir
 
+
 def p_subdir_make(dir):
     """ creates sub_dir """
     dir = p_path_abs_is(dir)
@@ -213,12 +192,21 @@ def p_subdir_make(dir):
     return dir
 
 
-def p_check_filename_pattern():
+def p_regex_path_unix():
+    """ thx to: http://txt2re.com"""
+    # https://pythonconquerstheuniverse.wordpress.com/2008/06/04/gotcha-%E2%80%94-backslashes-in-windows-filenames/
+    # File Name 1
+    regex = '((?:[a-z][a-z\\.\\d_]+)\\.(?:[a-z\\d]{3}))(?![\\w\\.])'
+    regObj = re.compile(regex,re.IGNORECASE|re.DOTALL)
+    return regObj
+
+
+def p_regex_filename():
     # http: // txt2re.com
     # http://codereview.stackexchange.com/questions/19103/python-function-to-match-filenames-with-extension-names
     regex = "(.+?)(\.[^.]*$|$)"  # == filename
     regObj = re.compile(regex)
-    pass
+    return regObj
 
 
 def p_dir_return_paths_of_level(path ='.', level=1, do_log=False):
@@ -266,11 +254,11 @@ def p_dirtree_return(mode=path_mode, path='.', level=1, do_log=False):
         return res
 
 
-
-def p_dir_traverse_recursively(path):
+def p_dir_traverse_recursively(path, do_log=False):
     """http://stackoverflow.com/questions/7012921/recursive-grep-using-python"""
-    msg = (p_here('', 2) + ' traversing dir: >' + path + '<')
-    p_log_this(msg)
+    if do_log:
+        mssge = (p_here('', 2) + ' traversing dir: >' + path + '<')
+        p_log_this(mssge)
 
     result_list = []
     for root, dirs, fnames in os.walk(path):
