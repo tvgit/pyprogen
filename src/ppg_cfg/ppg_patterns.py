@@ -232,7 +232,7 @@ CA_Parser[48] = """
     elif ((command == '--conf-file') and str(cfg_path_tmp != '')):
         # read conf-file:
         param_list = [command, cfg_path_tmp]
-        p_log_this('Trying to read from: >' + str(cfg_path_tmp)) + '<'
+        p_log_this('Trying to read from: >' + str(cfg_path_tmp) + '<')
         args = parser.parse_args(param_list)
         args_to_glbls (args)  # set values in >xx_glbls.arg_ns<
     else:

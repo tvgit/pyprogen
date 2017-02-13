@@ -99,6 +99,11 @@ http://stackoverflow.com/questions/642154/how-to-convert-strings-into-integers-i
     >my_program.py -c ./cfg/my_program.cfg
     Then it will evaluate the config file >./cfg/my_program.cfg<
 
+    ATTENTION:
+      If you want a path as parameter in your config file, use raw strings:
+      r'C:\path\to\my\file' !!
+      Otherwise the path may not be read properly!
+
 """
     # >ConfArgParse< is able to read and to write configuration files.
     # This latter ability is used by >pyprogen<:
