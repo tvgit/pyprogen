@@ -19,6 +19,18 @@
 
 __author__ = "rh"
 __date__   = "$05.05.2015 21:55:22$"
+"""
+
+http://stackoverflow.com/questions/379906/parse-string-to-float-or-int
+def num(s):
+    try:
+        return int(s)
+    except ValueError:
+        return float(s)
+
+http://stackoverflow.com/questions/642154/how-to-convert-strings-into-integers-in-python
+"""
+
 
 """
     pyprogen needs >ConfArgParse<. So first of all do a

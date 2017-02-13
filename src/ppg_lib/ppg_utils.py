@@ -107,6 +107,11 @@ def p_current_module_path_rtrn():
     dir_path = os.path.dirname(path)
     return dir_path
 
+def p_regex_integer():
+    # http: // txt2re.com
+    regex = '(\\d+)'  # Integer Number 1
+    regObj = re.compile(regex)
+    return regObj
 
 
 def p_datetime_str_rtrn(txt_line):
