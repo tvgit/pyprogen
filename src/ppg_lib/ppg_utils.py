@@ -111,6 +111,7 @@ def p_regex_integer():
     # http: // txt2re.com
     regex = '(\\d+)'  # Integer Number 1
     regObj = re.compile(regex)
+    # m = regObj.search('some_text')
     return regObj
 
 
