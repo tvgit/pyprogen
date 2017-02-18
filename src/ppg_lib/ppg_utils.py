@@ -310,8 +310,8 @@ def p_file_open(fn, mode = 'r'):
             p_log_this(msg, '', False)
             return f_open
     elif (mode == 'w'):
-        open(fn, 'w').close()
         try:
+            # open(fn, 'w').close()
             f_open = open(fn, mode)
         except EnvironmentError:
             msg = (p_here('', 2) + 'unable to open file : >' + fn + '< EnvironmentError!')
