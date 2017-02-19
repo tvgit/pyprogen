@@ -16,6 +16,13 @@
 #
 # äöüÄÖÜß
 #
+# PyCharm how to get rid of lens mode?? :
+#  move cursor on right scroll bar >
+#  yellow rectangle appears
+#  move cursor on rectangle
+#  right click
+#  uncheck: "show code lens ..."
+#
 
 __author__ = "rh"
 __date__   = "$05.05.2015 21:55:22$"
@@ -31,8 +38,7 @@ def num(s):
 http://stackoverflow.com/questions/642154/how-to-convert-strings-into-integers-in-python
 """
 
-
-"""
+doct_text = r"""
     pyprogen needs >ConfArgParse<. So first of all do a
     >pip install ConfArgParse< (as admin in windows).
 
@@ -140,7 +146,7 @@ def maindir_make(prog_path) :
 def subdirs_make(prog_path):
     """ """
     p_log_this()
-    # p_utils.p_terminal_mssge_note_this()  # some visible sign
+    # p_utils.p_terminal_mssge_note_this()  # Give some visible sign
 
     p_glbls.cfg_dir     = p_utils.p_subdir_make(os.path.join(prog_path, 'cfg'))
     p_glbls.cfg_fn      = p_glbls.main_name[:-3] + '.cfg'   # cfg-file of new y_main.py
@@ -177,7 +183,6 @@ def ca_parser_make():
     confargparser == >y_CAParser.py< for the new program >y_main.py<.
     Configure it according to >new_prog_args.cfg<
     """
-    p_log_this()
     p_create_ConfArgParser('./new_prog_args.cfg') # create confargparser for >y_main.py<
 
 def ca_parser_run():
@@ -224,8 +229,6 @@ def pyprogen():
     p_code.p_inform_about_paths_and_filenames()   # dwyns
 
     p_code.p_pyinstaller_make()   # make bat-file: "pyinstaller.exe --onefile w_main.py"
-
-
 
 
 if __name__ == "__main__":

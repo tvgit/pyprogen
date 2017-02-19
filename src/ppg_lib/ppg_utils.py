@@ -176,28 +176,6 @@ def p_path_abs_is(path):
     if (path == ''): path = '.'
     return path
 
-def p_dir_make(dir):
-    """ if dir does not exist -> make dir """
-    dir = os.path.normpath(dir)
-    if not os.path.exists(dir):
-        try:
-            os.makedirs(dir)
-            p_log_this(' creating dir: ' + dir )
-        except IOError:
-            mssge = (' creating dir: ' + dir + ' failed!')
-            p_log_this(mssge) ; print mssge
-    else:
-        p_log_this(' dir exists : >' + dir + '<')
-    return dir
-
-
-def p_subdir_make(dir):
-    """ creates sub_dir """
-    dir = p_path_abs_is(dir)
-    p_dir_make(dir)
-    return dir
-
-
 def p_regex_path_unix():
     """ thx to: http://txt2re.com"""
     # https://pythonconquerstheuniverse.wordpress.com/2008/06/04/gotcha-%E2%80%94-backslashes-in-windows-filenames/
@@ -234,6 +212,14 @@ def p_dir_return_files_of_level(path ='.', level=1, do_log=False):
 path_mode, dir_mode, file_mode = range (3)
 def p_dirtree_return(mode=path_mode, path='.', level=1, do_log=False):
     """http://stackoverflow.com/questions/7159607/list-directories-with-a-specified-depth-in-python"""
+    # false  # denn:
+    # wenn >path_mode< dann wird
+    #    os.path.normpath(os.path.join(root, fn)) for fn in files]
+    # nur dann den gesamten path anzeigen, wenn die Tiefe == 1
+    # ansosnten fehlen die Zwischendirs.
+    # Ebesno Feheler bei dir_mode:
+    # Hier wird ein path zurückgeliefert, und nicht nur die Namen der subdirs
+    # im entsprechendne level.
     path = os.path.normpath(path)
     if do_log:
         p_log_this('path: >' + path + '<, level: >' + str(level) + '<' )
@@ -275,15 +261,41 @@ def p_dir_traverse_recursively(path, do_log=False):
     return sorted(result_list)
 
 
-def grep_in_file(filepath, regex):
-    """http://stackoverflow.com/questions/7012921/recursive-grep-using-python"""
-    regObj = re.compile(regex)
-    result_list = []
-    with open(filepath) as f:
-        for line in f:
-            if regObj.match(line):
-                result_list.append(line)
-    return result_list
+def p_dir_make(dir):
+    """ if dir does not exist -> make dir """
+    dir = os.path.normpath(dir)
+    if not os.path.exists(dir):
+        try:
+            os.makedirs(dir)
+            p_log_this(' creating dir: ' + dir )
+        except IOError:
+            mssge = (' creating dir: ' + dir + ' failed!')
+            p_log_this(mssge) ; print mssge
+    else:
+        p_log_this(' dir exists : >' + dir + '<')
+    return dir
+
+
+def p_subdir_make(dir):
+    """ creates sub_dir """
+    dir = p_path_abs_is(dir)
+    p_dir_make(dir)
+    return dir
+
+
+def p_dir_if_void_remove(dir):
+    """ if dir is empty -> remove dir """
+    success = False
+    dir = os.path.normpath(dir)
+    if os.path.exists(dir):
+        try:
+            os.rmdir(dir)
+            p_log_this('dir removed: >' + dir + '<')
+            success = True
+        except IOError:
+            mssge = (' removing dir >' + dir + '< failed!')
+            p_log_this(mssge) ; print mssge
+    return success
 
 
 def p_file_exists (fn, print_message = False):
@@ -294,6 +306,24 @@ def p_file_exists (fn, print_message = False):
         msg = (' file : >' + fn + '< does not exist')
         p_log_this(msg, 'error')
         if print_message: print msg
+        return False
+
+
+def p_file_make (fn, print_message = False):
+    """ make file """
+    if os.path.isfile(fn):
+        return True
+    else:
+        try:
+            open(fn, 'a').close()
+            msg = (' file : >' + fn + '< created')
+            p_log_this(msg)
+            if print_message: print msg
+        except IOError:
+            mssge = (' creating file: >' + fn + '< failed!')
+            p_log_this(mssge) ; print mssge
+
+
         return False
 
 
@@ -331,6 +361,7 @@ def p_file_close(f):
     file.close(f)
     p_log_this(msg, '', False) ; #print msg
 
+
 def p_file_delete(fn):
     # level = 2
     # mssge = inspect.stack()[level][3] + ': '
@@ -345,6 +376,18 @@ def p_file_delete(fn):
     else:
         msg = ("file not existing: " + fn + " !!")
         p_log_this(msg, '', False); print msg
+
+
+def grep_in_file(filepath, regex):
+    """http://stackoverflow.com/questions/7012921/recursive-grep-using-python"""
+    regObj = re.compile(regex)
+    result_list = []
+    with open(filepath) as f:
+        for line in f:
+            if regObj.match(line):
+                result_list.append(line)
+    return result_list
+
 
 def p_exit(txt=''):
     """ gentle program p_exit  """
