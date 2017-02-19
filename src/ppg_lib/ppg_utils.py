@@ -194,30 +194,30 @@ def p_regex_filename():
 
 
 def p_dir_return_paths_of_level(path ='.', level=1, do_log=False):
-    res = p_dirtree_return(path_mode, path, level, do_log)
+    res = p_dirtree_return(paths, path, level, do_log)
     return res
 
 
 def p_dir_return_dirs_of_level(path ='.', level=1, do_log=False):
-    res = p_dirtree_return(dir_mode, path, level, do_log)
+    res = p_dirtree_return(dirs, path, level, do_log)
     return res
 
 
 def p_dir_return_files_of_level(path ='.', level=1, do_log=False):
     """http://stackoverflow.com/questions/7159607/list-directories-with-a-specified-depth-in-python"""
-    res = p_dirtree_return(file_mode, path, level, do_log)
+    res = p_dirtree_return(files, path, level, do_log)
     return res
 
 
-path_mode, dir_mode, file_mode = range (3)
-def p_dirtree_return(mode=path_mode, path='.', level=1, do_log=False):
+paths, dirs, files = range (3)
+def p_dirtree_return(mode=paths, path='.', level=1, do_log=False):
     """http://stackoverflow.com/questions/7159607/list-directories-with-a-specified-depth-in-python"""
     # false  # denn:
-    # wenn >path_mode< dann wird
+    # wenn >paths< dann wird
     #    os.path.normpath(os.path.join(root, fn)) for fn in files]
     # nur dann den gesamten path anzeigen, wenn die Tiefe == 1
     # ansosnten fehlen die Zwischendirs.
-    # Ebesno Feheler bei dir_mode:
+    # Ebesno Feheler bei dirs:
     # Hier wird ein path zurückgeliefert, und nicht nur die Namen der subdirs
     # im entsprechendne level.
     path = os.path.normpath(path)
@@ -231,19 +231,87 @@ def p_dirtree_return(mode=path_mode, path='.', level=1, do_log=False):
         if do_log:
             p_log_this(mssge)
         if depth == level - 1:
-            if mode == path_mode:
-                res += [os.path.normpath(os.path.join(root, fn)) for fn in files]
-            elif mode == dir_mode:
+            if mode == paths:
                 res += [os.path.normpath(os.path.join(root, d)) for d in dirs]
-            elif mode == file_mode:
+            elif mode == dirs:
+                res += [os.path.normpath(os.path.join(d)) for d in dirs]
+            elif mode == files:
                 res += [os.path.normpath(os.path.join('', fn)) for fn in files]
             else:
                 exit()
             dirs[:] = []  # Don't recurse any deeper
-    if (mode == path_mode) or (mode == dir_mode):
+    if (mode == paths) or (mode == dirs):
         return sorted(res)
     else:
         return res
+
+def test_p_dirtree_return_OUTPUT(mode=paths, level=2, path='.'):
+    print '\ntest_p_dirtree_return_OUTPUT:'
+
+    if mode == paths:
+        print 'paths: p_dir_return_paths_of_level, level: ' + str(level) + '   ' + path
+        fns = p_utils.p_dirtree_return(mode=paths, path=path, level=level, do_log=False)
+    elif mode == dirs:
+        print 'dirs: p_dir_return_dirs_of_level, level: ' + str(level) + '   ' + path
+        fns = p_utils.p_dirtree_return(mode=dirs, path=path, level=level, do_log=False)
+    elif mode == files:
+        print 'files: p_dir_return_files_of_level, level: ' + str(level) + '   ' + path
+        fns = p_utils.p_dirtree_return(mode=files, path=path, level=level, do_log=False)
+
+    # fns = p_utils.p_dir_return_dirs_of_level(path=path, level=level, do_log=False)
+    for fn in fns:
+        print fn,
+    print '\ntest_p_dirtree_return_OUTPUT end\n '
+    pass
+
+def test_p_dirtree_return():
+    dir_name_0 = os.path.join('.', 'test_dir')
+    for level_1 in range(3):
+        str_level_1 = str(level_1)
+        dir_name_1 = os.path.join(dir_name_0, 'a_' + str_level_1)
+        p_utils.p_subdir_make(dir_name_1)
+        for level_2 in range(3):
+            str_level_2 = str(level_2)
+            dir_name_2 = os.path.join(dir_name_1, 'a_' + str_level_2)
+            # print dir_name_2 + '  ',
+            p_utils.p_subdir_make(dir_name_2)
+        # print '\n'
+
+    path = dir_name_0
+
+    level = 1
+    test_p_dirtree_return_OUTPUT(mode=dirs, level=level, path=path)
+    res = p_utils.p_dir_return_dirs_of_level(path=path, level=level, do_log=False)
+    for fn in res: print fn,
+    print
+
+    level = 2
+    test_p_dirtree_return_OUTPUT(mode=dirs, level=level, path=path)
+    res = p_utils.p_dir_return_dirs_of_level(path=path, level=level, do_log=False)
+    for fn in res: print fn,
+    print
+
+    level = 1
+    test_p_dirtree_return_OUTPUT(mode=paths, level=level, path=path)
+    res = p_utils.p_dir_return_paths_of_level(path=path, level=level, do_log=False)
+    for fn in res: print fn,
+    print
+    level = 2
+    test_p_dirtree_return_OUTPUT(mode=paths, level=level, path=path)
+    res = p_utils.p_dir_return_paths_of_level(path=path, level=level, do_log=False)
+    for fn in res: print fn,
+    print
+    #
+    level = 1
+    test_p_dirtree_return_OUTPUT(mode=files, level=level, path=path)
+    res = p_utils.p_dir_return_files_of_level(path=path, level=level, do_log=False)
+    for fn in res: print fn,
+    print
+    level = 2
+    test_p_dirtree_return_OUTPUT(mode=files, level=level, path=path)
+    res = p_utils.p_dir_return_files_of_level(path=path, level=level, do_log=False)
+    for fn in res: print fn,
+    print
 
 
 def p_dir_traverse_recursively(path, do_log=False):
