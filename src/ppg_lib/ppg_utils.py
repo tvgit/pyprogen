@@ -367,7 +367,7 @@ def p_dir_if_void_remove(dir):
 
 
 def p_file_exists (fn, print_message = False):
-    """ open files if file exists - error otherwise """
+    """ True if file exists - False/error otherwise """
     if os.path.isfile(fn):
         return True
     else:
