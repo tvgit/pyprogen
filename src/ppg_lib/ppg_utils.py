@@ -257,8 +257,8 @@ def p_dirtree_return(mode=paths, path='.', level=1, do_log=False):
         else:
             return res
     else:
-        mssge = (' dir: ' + path + ' does not exist!')
-        p_log_this(mssge);
+        mssge = (' dir: >' + path + '< does not exist!')
+        p_log_this(mssge)
         print mssge
 
 def test_p_dirtree_return():
