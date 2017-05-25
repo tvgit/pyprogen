@@ -239,12 +239,12 @@ def p_dirtree_return(mode=paths, path='.', level=1, do_log=False):
                 p_log_this(mssge)
 
             if depth == level - 1:
-                if mode == paths:
-                    res += [os.path.normpath(os.path.join(root, d)) for d in dirs]
-                elif mode == dirs:
+                if mode == dirs:
                     res += [os.path.normpath(os.path.join(d)) for d in dirs]
+                elif mode == paths:
+                    res += [os.path.normpath(os.path.join(root, fn)) for fn in files]
                 elif mode == file_names:
-                    res += [os.path.normpath(os.path.join('', fn)) for fn in files]
+                    res += [os.path.normpath(os.path.join('', fn))   for fn in files]
                 else:
                     sys.exit('unknown mode => exit')
                 dirs[:] = []  # Don't recurse any deeper
