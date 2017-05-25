@@ -83,16 +83,16 @@ doct_text = r"""
 
 
     >new_prog_args.cfg<:
-    Here You configure the commandline arguments of >y_main.py< and their defaults.
-    Your new program (>y_main.py<) will use >ConfArgParse<, a python library to handle
+    Here one configures the commandline arguments of >y_main.py< and their defaults.
+    The new program (>y_main.py<) will use >ConfArgParse<, a python library to handle
     commandline arguments. This module offers an easy way to combine command line
     arguments and configuration files simultaneously.
 
-    Example:
-    <new_prog_args.cfg>
+    Example of configuration file (new_prog_args.cfg):
+    ...
         parser.add_argument('-a', '--aaaa', default='aaaa_def_val', help = ' help aaaa')
         parser.add_argument('-b', '--bbbb', default='bbbb_def_val', help = ' help bbbb')
-    </new_prog_args.cfg>
+    ...
 
     Executing >pyprogen.py< will generate: >my_program.py< and some dirs
     and files, for example >./cfg/my_program.cfg<
