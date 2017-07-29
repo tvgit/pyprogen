@@ -13,16 +13,31 @@ import sys
 
 import datetime
 import difflib
+import glob
 import inspect
 import re
 
 
 from   ppg_log   import p_log_init, p_log_start, p_log_this, p_log_end
 
+def system_and_environment():
+    print "sys.argv:", sys.argv
+    print "os.environ:"
+    for v in os.environ.keys():
+        print "    %-15s => %s" % (v, os.environ[v])
+    print "sys.platform: \t", sys.platform
+    print "os.getcwd:\t\t", os.getcwd()
+    print "os.listdir('.'):\t", os.listdir('.')
+    print "glob.glob('*.py'):\t", glob.glob('*.py')
+    print "sys:\t\t\t", dir(sys)
+    print "os:\t\t\t\t", dir(os)
+    print
+    os.system('ls -l')
 
 def print_format_table():
     """
-    prints table of formatted text format options
+    prints table of colored formatted text 
+    to see coloring possibilities
     """
     for style in range(8):
         for fg in range(30,38):
@@ -436,7 +451,7 @@ def p_file_delete(fn):
             msg = ("file removed: " + fn)
             p_log_this(msg, '', False);  # print msg
         except OSError, err:
-            msg = ("Error: %s - %s." % (err.fn, err.strerror))
+            msg = ("Error: %s - %s." % (err.filename, err.strerror))
             p_log_this(msg, '', False);  # print msg
     else:
         msg = ("file not existing: " + fn + " !!")
@@ -478,6 +493,7 @@ if __name__ == "__main__":
     prog_info = scriptinfo()
     prog_name = prog_info['name']
     print '\n' + '__main__ : ' + prog_name + '\n'
+    system_and_environment()
     p_exit('Program gentle exiting')
 else:
     # logger = p_log_init(log_fn='default')
