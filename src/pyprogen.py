@@ -49,61 +49,58 @@ doct_text = r"""
     The generated python program may be initialised via command line arguments
     and/or via a configuration file (*.cfg).
 
-    Assume the name of the new program is >my_main.py<.
+    Assume the name of the new program is >my_program_name.py<.
     Then the generated directory structure is:
 
-    my_main/my_main.py  # my_main.py == new generated python prog
-        /cfg/*.cfg      # configuration file(s)
-        /lib/*.py       # some py modules
-        /log/*.log      # log-files
-        /DataIn         # DataIn dir (proposal)
-        /DataOut        # DataOut dir (proposal)
+    my_program_name/my_program_name.py      # my_program_name.py == new generated python prog
+    my_program_name/cfg/*.cfg               # configuration file(s)
+    my_program_name/lib/*.py                # some py modules
+    my_program_name/log/*.log               # log-files
+    my_program_name/DataIn                  # DataIn dir  (by default/optional)
+    my_program_name/DataOut                 # DataOut dir (by default/optional)
 
     Pyprogen gets its information by two configuration files:
 
     >new_prog.ini<:
-    Here You configure the name of the generated python
-    script (default: >y_main.py<).
+        - Configuration of the name of the generated python script (default: >y_main.py<).
+        - Extent of logging (TODO).
+        - There is also a 'prefix', i.e. a letter followed by an underscore, for example 'y_' or 'b_'.
+          The prefix serves to mark the variables that are automatically generated in the new
+          python program. So name conflicts with variables that You are coding yourself are
+          avoided (hopefully). You need not to change this.
 
-    And the extent of its logging (TODO).
-
-    There is also a 'prefix', i.e. a letter followed by an underscore, for example 'y_' or 'b_'.
-    The prefix serves to mark the variables that are automatically generated in the new
-    python program. So name conflicts with variables that You are coding yourself are
-    avoided (hopefully). You need not to change this.
-
-    Example:
-    <new_prog.ini>
-    [properties]
-    main_name  = my_program
-    # do not change this
-    patterns   = patterns.py
-    prefix     = x_
-    </new_prog.ini>
+        Example:
+        <new_prog.ini>
+        [properties]
+        main_name  = my_program_name
+        # do not change this
+        patterns   = patterns.py
+        prefix     = x_
+        </new_prog.ini>
 
 
     >new_prog_args.cfg<:
-    Here one configures the commandline arguments of >y_main.py< and their defaults.
-    The new program (>y_main.py<) will use >ConfArgParse<, a python library to handle
-    commandline arguments. This module offers an easy way to combine command line
-    arguments and configuration files simultaneously.
+        Configuration of the commandline arguments of >my_program_name.py< and their defaults.
+        [The new program (>my_program_name.py<) will use >ConfArgParse<, a python library to handle
+        commandline arguments. This module offers an easy way to combine command line arguments and 
+        configuration files simultaneously.]
+    
+        Example of configuration file (new_prog_args.cfg):
+        ...
+            parser.add_argument('-a', '--aaaa', default='aaaa_def_val', help = ' help aaaa')
+            parser.add_argument('-b', '--bbbb', default='bbbb_def_val', help = ' help bbbb')
+        ...
 
-    Example of configuration file (new_prog_args.cfg):
-    ...
-        parser.add_argument('-a', '--aaaa', default='aaaa_def_val', help = ' help aaaa')
-        parser.add_argument('-b', '--bbbb', default='bbbb_def_val', help = ' help bbbb')
-    ...
+    Executing >pyprogen.py< will generate: >my_program_name.py< and some dirs
+    and files, for example >./cfg/my_program_name.cfg<
 
-    Executing >pyprogen.py< will generate: >my_program.py< and some dirs
-    and files, for example >./cfg/my_program.cfg<
-
-    You may call >my_program.py< with commandline arguments:
-    >my_program.py -a AaAaA --bbbb BbBbBbB
+    You may call >my_program_name.py< with commandline arguments:
+    >my_program_name.py -a AaAaA --bbbb BbBbBbB
     Then it will evaluate the cmdline arguments >a< and >b<.
 
     Or you call it via:
-    >my_program.py -c ./cfg/my_program.cfg
-    Then it will evaluate the config file >./cfg/my_program.cfg<
+    >my_program_name.py -c ./cfg/my_program_name.cfg
+    Then it will evaluate the config file >./cfg/my_program_name.cfg<
 
     ATTENTION:
       If you want a path as parameter in your config file, use raw strings:
