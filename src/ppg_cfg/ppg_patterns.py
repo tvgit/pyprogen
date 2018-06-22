@@ -207,7 +207,7 @@ def xx_parser(command = '', cfg_path_tmp=''):
     # if (command <> '--export-conf-file') and (command <> 'ignore_pos_args'):
     #     pass
     #
-    # DO NOT FORGET DEFINITION OF GLOBAL VARS >arg_ns< IN >./lib/x_globals.py<  !!
+    # DO NOT FORGET: THE DECLARATION OF THE GLOBAL VARS >arg_ns< IS IN >./lib/x_globals.py<  !!
     #
 
 """
