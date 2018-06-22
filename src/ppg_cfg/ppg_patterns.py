@@ -206,6 +206,10 @@ def xx_parser(command = '', cfg_path_tmp=''):
     # exclude positional args when exporting conf-file
     # if (command <> '--export-conf-file') and (command <> 'ignore_pos_args'):
     #     pass
+    #
+    # DO NOT FORGET DEFINITION OF GLOBAL VARS >arg_ns< IN >./lib/x_globals.py<  !!
+    #
+
 """
 
 # Add arguments to parser, i.e.:
